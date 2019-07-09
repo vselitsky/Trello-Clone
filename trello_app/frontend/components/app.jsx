@@ -9,9 +9,11 @@ import LogInFormContainer from "./session_form/login_form_container";
 import BoardsIndexContainer from "./board/board_index_container";
 import NavBarContainer from "./nav_bar/nav_bar_container";
 import ShowBoardContainer from "./board/show_board_container";
+import Modal from "./modal/modal";
 
 const App = () => (
   <div>
+    <Modal />
     <Switch>
       <AuthRoute path="/signup" component={SignUpFormContainer} />
       <AuthRoute path="/login" component={LogInFormContainer} />

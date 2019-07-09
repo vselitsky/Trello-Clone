@@ -1,9 +1,9 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 
 class BoardForm extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
 
     this.state = { title: "" };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -16,8 +16,10 @@ class BoardForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const board = Object.assign({}, this.state);
-    this.props.createBoard(board);
-    this.props.closePopup();
+    this.props
+      .createBoard(board)
+      .then(this.props.closeModal())
+      .then(() => this.props.history.push("/"));
   }
 
   render() {
@@ -37,4 +39,4 @@ class BoardForm extends React.Component {
   }
 }
 
-export default BoardForm;
+export default withRouter(BoardForm);

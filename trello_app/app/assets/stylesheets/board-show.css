@@ -1,0 +1,35 @@
+.board-wrapper {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.content-board {
+  flex-grow: 1;
+  overflow-y: auto;
+  outline: none;
+  position: relative;
+}
+
+.board-main-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 0;
+  transition: margin 0.1s ease-in;
+}
+
+.board-header {
+  flex: none;
+  height: auto;
+  padding: 8px 4px 8px 8px;
+  position: relative;
+  transition: padding 0.1s ease-in;
+}
+
+.board-canvas {
+  position: relative;
+  flex-grow: 1;
+}

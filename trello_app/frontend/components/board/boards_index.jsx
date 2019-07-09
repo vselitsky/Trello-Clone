@@ -44,7 +44,7 @@ class BoardsIndex extends React.Component {
     ));
     const recentBoards = this.state.recentBoards.slice(-4).map((board, i) => (
       <li className="boards-list-item">
-        <Link className="board-tile" key={board.id} to={"/boards"}>
+        <Link className="board-tile" key={board.id} to={`/boards/${board.id}`}>
           <span className="board-tile-fade" />
           <div className="board-tile-details">
             <div className="board-tile-details-name">{board.title}</div>
@@ -96,7 +96,7 @@ class BoardsIndex extends React.Component {
                         </div>
                         <ul className="boards-page-board-section-list">
                           {allBoards}
-                          <CreateNewBoardContainer />
+                          {this.props.createNewBoard}
                         </ul>
                       </div>
                     </div>
