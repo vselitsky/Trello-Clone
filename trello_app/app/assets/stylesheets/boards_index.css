@@ -1,0 +1,173 @@
+.home-container {
+  min-height: calc(100vh - 40px);
+}
+
+.home-sticky-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#content {
+  position: relative;
+  overflow-y: auto;
+  outline: none;
+  flex-grow: 1;
+}
+
+.member-boards-view {
+  margin: auto;
+  flex-grow: 1;
+  width: 100%;
+  background-color: #fafbfc;
+}
+
+.all-boards {
+  width: 0;
+  flex: 1 1 100%;
+  min-width: 352px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 40px;
+}
+
+.home-left-sidebar-container {
+  margin-top: 40px;
+  width: 210px;
+}
+
+.content-all-boards {
+  padding-left: 64px;
+}
+
+.recently-viewed-container {
+  margin: 0 0 0 40px;
+  padding: 0 0 11px;
+  position: relative;
+  display: flex;
+}
+
+.recently-viwed-icon {
+  left: -40px;
+  position: absolute;
+  top: 0;
+}
+
+.icon-clock {
+  height: 32px;
+  line-height: 32px;
+  width: 32px;
+  color: #42526e;
+}
+
+.recently-viewed-title {
+  display: inline-block;
+  line-height: 24px;
+  margin: 4px -10px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #172b4d;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+}
+.boards-page-board-section {
+  margin: 0 auto;
+  max-width: 1250px;
+  padding: 0 0 20px;
+}
+
+.boards-page-board-section-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.boards-list-item {
+  width: 20%;
+  margin-right: 2%;
+  padding: 0;
+  margin: 0 2% 8px 0;
+  transform: translate(0);
+  box-sizing: border-box;
+  position: relative;
+  cursor: pointer;
+}
+
+.board-tile {
+  margin-right: 0;
+  border-radius: 3px;
+  display: block;
+  background-size: cover;
+  background-position: 50%;
+  color: #fff;
+  line-height: 20px;
+  padding: 8px;
+  position: relative;
+  text-decoration: none;
+  background-color: rgb(0, 174, 204);
+}
+
+.board-tile-fade {
+  background-color: rgba(0, 0, 0, 0.15);
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-radius: 3px;
+  display: block;
+}
+
+.board-tile-details {
+  display: flex;
+  height: 80px;
+  position: relative;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.board-tile-details-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  color: #fff;
+  line-height: 20px;
+}
+
+.board-tile.mod-add {
+  background-color: rgba(9, 30, 66, 0.04);
+  box-shadow: none;
+  border: none;
+  color: #172b4d;
+  display: table-cell;
+  height: 80px;
+  font-weight: 400;
+  text-align: center;
+  vertical-align: middle;
+  width: inherit;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+}
+
+.add-board {
+  color: black;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  line-height: 20px;
+  text-align: center;
+  justify-content: center;
+  margin-top: 35px;
+}

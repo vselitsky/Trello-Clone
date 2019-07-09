@@ -1,0 +1,29 @@
+* `Component Organization`
+    * `Root`
+        * `App`
+            * `NavBar`
+            * `Main Component`
+                * `List Component`
+                        * `Card Component`
+
+
+`Routes`
+
+* `/` `when not logged in`
+    * `Splash`
+* `/` `when logged in`
+    * `All Boards`
+* `signup`
+    * `Sign-up Form`
+* `login`
+    * `Session Form`
+* `/boards/new`
+    * `Board Form`
+* `/boards/edit`
+    * `Edit Board`
+* `/boards/:boardId`
+    * `Board Show
+* `/boards/:listID/:new`
+    * `List Form
+* `/boards/:listID/cards/:new`
+    * `Card Form
