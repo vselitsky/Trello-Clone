@@ -27,14 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // const store = configureStore();
 
   // TESTING START
-  window.getState = store.getState;
-  window.dispatch = store.dispatch;
-  window.createBoard = createBoard;
-  window.fetchAllBoards = fetchAllBoards;
-  window.fetchBoard = fetchBoard;
-  window.deleteBoard = deleteBoard;
-  window.receiveBoards = receiveBoards;
-  window.receiveBoard = receiveBoard;
+  // window.getState = store.getState;
+  // window.dispatch = store.dispatch;
+  // window.createBoard = createBoard;
+  // window.fetchAllBoards = fetchAllBoards;
+  // window.fetchBoard = fetchBoard;
+  // window.deleteBoard = deleteBoard;
+  // window.receiveBoards = receiveBoards;
+  // window.receiveBoard = receiveBoard;
   // TESTING END
 
   const root = document.getElementById("root");

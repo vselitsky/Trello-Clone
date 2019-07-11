@@ -1,24 +1,25 @@
-export const fetchAllBoards = () =>
+export const createList = list =>
   $.ajax({
-    method: "GET",
-    url: `/api/boards`
+    method: "POST",
+    url: `/api/lists`,
+    data: { list }
+  });
+
+export const deleteList = id =>
+  $.ajax({
+    method: "DELETE",
+    url: `/api/lists/${id}`
+  });
+
+export const editList = list =>
+  $.ajax({
+    method: "Patch",
+    url: `/api/lists/${id}`,
+    data: { list }
   });
 
 export const fetchBoard = id =>
   $.ajax({
     method: "GET",
-    url: `/api/boards/${id}`
-  });
-
-export const createBoard = board =>
-  $.ajax({
-    method: "POST",
-    url: `/api/boards/`,
-    data: { board }
-  });
-
-export const deleteBoard = id =>
-  $.ajax({
-    method: "DELETE",
     url: `/api/boards/${id}`
   });

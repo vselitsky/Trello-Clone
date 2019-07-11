@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import NewBoardPopup from "./new_board_popup";
+
 import CreateNewBoardContainer from "./create_new_board_container";
 import NavBarContainer from "../nav_bar/nav_bar_container";
 //import BoardIndexItem from "./board_index_item";

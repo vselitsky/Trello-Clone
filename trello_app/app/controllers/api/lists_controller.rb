@@ -10,9 +10,9 @@ class Api::ListsController < ApplicationController
     end
 
      def create
-        @list = List.new(board_params)
+        @list = List.new(list_params)
     
-        if @list.save!
+        if @list.save
             render :show    
     else
             render json: @list.errors.full_messages, status: 422 

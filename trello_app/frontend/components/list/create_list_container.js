@@ -1,15 +1,13 @@
 import { connect } from "react-redux";
-import { createBoard } from "../../actions/board_actions";
+import { createList } from "../../actions/lists_actions";
 import { openModal, closeModal } from "../../actions/modal_actions";
-import BoardForm from "./board_form";
+import ListForm from "./list_form";
 
-const msp = ({ errors }) => {
-  return { errors: errors.boardErrors };
-};
+const msp = state => {};
 
 const mdp = dispatch => {
   return {
-    createBoard: board => dispatch(createBoard(board)),
+    createList: list => dispatch(createList(board)),
     closeModal: () => dispatch(closeModal())
   };
 };
@@ -21,4 +19,4 @@ const mdp = dispatch => {
 export default connect(
   msp,
   mdp
-)(BoardForm);
+)(ListForm);
