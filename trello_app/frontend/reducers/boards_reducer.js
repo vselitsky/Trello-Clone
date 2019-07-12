@@ -20,7 +20,8 @@ const boardsReducer = (obj = {}, action) => {
       delete nextState[action.boardId];
       return nextState;
     case DRAG_HAPPENED: {
-      const { board } = action.payload;
+      const { boardID } = action.payload;
+      const board = obj[boardID];
       const lists = board.lists;
       const {
         droppableIndexEnd,

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import TrelloCard from "./TrelloCard";
+import TrelloCard from "../card/trello_card.jsx";
 import TrelloCreate from "../trello_create";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
@@ -97,12 +97,37 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
             {...provided.dragHandleProps}
             ref={provided.innerRef}
           >
-            <div>
-              <TitleContainer onClick={() => setIsEditing(true)}>
-                <ListTitle>{listTitle}</ListTitle>
-                <DeleteButton onClick={handleDeleteList}>delete</DeleteButton>
-              </TitleContainer>
-            </div>
+            <Droppable droppableId={String(listID)} type="card">
+              {provided => (
+                <div>
+                  <div>
+                    {isEditing ? (
+                      renderEditInput()
+                    ) : (
+                      <TitleContainer onClick={() => setIsEditing(true)}>
+                        <ListTitle>{listTitle}</ListTitle>
+                        <DeleteButton onClick={handleDeleteList}>
+                          delete
+                        </DeleteButton>
+                      </TitleContainer>
+                    )}
+                  </div>
+                  <div {...provided.droppableProps} ref={provided.innerRef}>
+                    {cards.map((card, index) => (
+                      <TrelloCard
+                        key={card.id}
+                        title={card.title}
+                        id={card.id}
+                        index={index}
+                        listID={listID}
+                      />
+                    ))}
+                    {provided.placeholder}
+                    <TrelloCreate listID={listID} />
+                  </div>
+                </div>
+              )}
+            </Droppable>
           </ListContainer>
         )}
       </Draggable>
@@ -110,7 +135,15 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
   );
 };
 
+// const msp = state => {
+//   return {
+//     cards: state.entities.lists.cards
+//   };
+// };
+
 export default connect()(TrelloList);
+// msp,
+// null
 {
   /* <Droppable droppableId={String(listID)} type="card">
             {provided => (

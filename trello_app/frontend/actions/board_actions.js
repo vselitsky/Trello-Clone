@@ -5,6 +5,7 @@ export const RECEIVE_BOARD = "RECEIVE_BOARD";
 export const REMOVE_BOARD = "REMOVE_BOARD";
 export const RECEIVE_BOARD_ERRORS = "RECEIVE_BOARD_ERRORS";
 export const CLEAR_BOARD_ERRORS = "CLEAR_BOARD_ERRORS";
+export const SET_ACTIVE_BOARD = "SET_ACTIVE_BOARD";
 
 export const fetchAllBoards = () => dispatch =>
   APIUtil.fetchAllBoards().then(payload => dispatch(receiveBoards(payload)));
@@ -45,3 +46,10 @@ export const clearErrors = () => ({
   errors: [],
   type: CLEAR_BOARD_ERRORS
 });
+
+export const setActiveBoard = id => {
+  return {
+    type: SET_ACTIVE_BOARD,
+    payload: id
+  };
+};

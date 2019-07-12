@@ -18,8 +18,8 @@ class BoardForm extends React.Component {
     const board = Object.assign({}, this.state);
     this.props
       .createBoard(board)
-      .then(this.props.closeModal())
-      .then(() => this.props.history.push("/"));
+      // .then(this.props.closeModal())
+      .then(board => this.props.history.push(`/boards/${board.id}`));
   }
 
   render() {

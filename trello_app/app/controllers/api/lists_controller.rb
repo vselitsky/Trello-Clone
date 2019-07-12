@@ -2,8 +2,9 @@ class Api::ListsController < ApplicationController
     before_action :require_logged_in
 
     def index
-        @board = Board.find(params[:board_id])
-        @lists = @board.lists
+        # @board = Board.find(params[:board_id])
+        # @lists = @board.lists
+         @lists = List.all.where(board_id: params[:board_id])
 
         render :index
 

@@ -8,6 +8,9 @@ import {
   fetchBoard,
   deleteBoard
 } from "./util/board_api_util.js";
+import { fetchAllLists } from "./actions/lists_actions";
+import { createCard } from "./util/card_api_util.js";
+
 import { receiveBoards, receiveBoard } from "./actions/board_actions";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -36,6 +39,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // window.receiveBoards = receiveBoards;
   // window.receiveBoard = receiveBoard;
   // TESTING END
+  window.store = store;
+  window.fetchAllLists = fetchAllLists;
+  window.createCard = createCard;
 
   const root = document.getElementById("root");
   ReactDOM.render(<Root store={store} />, root);

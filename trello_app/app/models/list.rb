@@ -1,4 +1,5 @@
 class List < ApplicationRecord
+    validates :title, uniqueness: true
     has_many :cards,
     foreign_key: :list_id,
     class_name: :Card

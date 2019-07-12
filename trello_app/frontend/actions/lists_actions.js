@@ -2,6 +2,7 @@ import * as APIUtil from "../util/list_api_util";
 
 export const RECEIVE_LIST = "RECEIVE_LIST";
 export const DRAG_HAPPENED = "DRAG_HAPPENED";
+export const RECEIVE_LISTS = "RECEIVE_LISTS";
 
 const receiveList = list => ({
   type: RECEIVE_LIST,
@@ -17,10 +18,10 @@ export const sort = (
   droppableIndexStart,
   droppableIndexEnd,
   draggableId,
-  type,
-  id
-) => dispatch =>
-  APIUtil.fetchBoard(id).then(board =>
+  type
+) => {
+  return (dispatch, getState) => {
+    const boardID = getState().activeBoard;
     dispatch({
       type: DRAG_HAPPENED,
       payload: {
@@ -30,10 +31,11 @@ export const sort = (
         droppableIndexStart,
         draggableId,
         type,
-        board
+        boardID
       }
-    })
-  );
+    });
+  };
+};
 
 // export const addList = title => {
 //     return (dispatch, getState) => {
@@ -93,3 +95,14 @@ export const sort = (
 //         });
 //     };
 // };
+
+export const fetchAllLists = id => dispatch => {
+  return APIUtil.fetchAllLists(id).then(payload =>
+    dispatch(receiveLists(payload))
+  );
+};
+
+export const receiveLists = lists => ({
+  type: RECEIVE_LISTS,
+  lists
+});
