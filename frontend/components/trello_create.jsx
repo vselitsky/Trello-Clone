@@ -3,6 +3,7 @@ import Icon from "@material-ui/core/Icon";
 import TrelloButton from "./trello_button";
 import { connect } from "react-redux";
 import { createList } from "../actions/lists_actions";
+import { createCard } from "../actions/cards_actions";
 import styled from "styled-components";
 import TrelloForm from "./trello_form";
 import TrelloOpenForm from "./trello_open_form";
@@ -63,13 +64,13 @@ class TrelloCreate extends React.Component {
 
   handleAddCard() {
     const { dispatch, listID } = this.props;
-    const { text } = this.state;
+    const title = this.state.text;
 
     if (text) {
       this.setState({
         text: ""
       });
-      dispatch(addCard(listID, text));
+      dispatch(createCard(listID, title));
     }
   }
 
@@ -118,9 +119,7 @@ class TrelloCreate extends React.Component {
         </TrelloButton>
       </TrelloForm>
     ) : (
-      <TrelloOpenForm list={list} onClick={this.openForm}>
-        {list ? "Add another list" : "Add another card"}
-      </TrelloOpenForm>
+      <TrelloOpenForm list={list} onClick={this.openForm} />
     );
   }
 }

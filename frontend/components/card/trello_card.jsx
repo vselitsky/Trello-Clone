@@ -32,20 +32,20 @@ const EditButton = styled(Icon)`
   }
 `;
 
-const DeleteButton = styled(Icon)`
-  position: absolute;
-  display: none;
-  right: 5px;
-  bottom: 5px;
-  opacity: 0.5;
-  ${CardContainer}:hover & {
-    display: block;
-    cursor: pointer;
-  }
-  &:hover {
-    opacity: 0.8;
-  }
-`;
+// const DeleteButton = styled(Icon)`
+//   position: absolute;
+//   display: none;
+//   right: 5px;
+//   bottom: 5px;
+//   opacity: 0.5;
+//   ${CardContainer}:hover & {
+//     display: block;
+//     cursor: pointer;
+//   }
+//   &:hover {
+//     opacity: 0.8;
+//   }
+// `;
 
 const TrelloCard = React.memo(({ text, id, listID, index, dispatch }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -95,9 +95,9 @@ const TrelloCard = React.memo(({ text, id, listID, index, dispatch }) => {
               >
                 edit
               </EditButton>
-              <DeleteButton fontSize="small" onMouseDown={handleDeleteCard}>
+              {/* <DeleteButton fontSize="small" onMouseDown={handleDeleteCard}>
                 delete
-              </DeleteButton>
+              </DeleteButton> */}
 
               <CardContent>
                 <Typography>{text}</Typography>
