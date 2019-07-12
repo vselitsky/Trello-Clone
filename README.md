@@ -6,7 +6,7 @@
 
 ## Description
 
-Trellapp, a Trello clone, is an app where users can create multiple boards where they will keep track of a single projects lists and cards.
+Yello, a Trello clone, is a web app that helps users to organize their projects through different boards that contain lists of todo items they need to complete
 
 ## Technologies Used
 
@@ -23,57 +23,41 @@ Trellapp, a Trello clone, is an app where users can create multiple boards where
 
 Boards contain lists which contain cards. Cards have a title and description. Cards can be moved from one list to another
 
-![wireframes](https://github.com/jprpich/trellapp/blob/master/boards-index.png)
-
-To move positions, trellapp integrates the react-bautiful-dnd library to the applications functionality.
-
-![](https://github.com/jprpich/trellapp/blob/master/second.gif)
+![Wireframe](https://user-images.githubusercontent.com/41927284/61153507-4d4b1680-a4a0-11e9-810e-c868684ecfa7.png)
 
 ```js
-onDragEnd(result) {
-    const { destination, source, draggableId } = result;
-    if(!destination){
-      return;
-    }
 
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
+        <DragDropContext onDragEnd={this.onDragEnd.bind(this)}>
+          <Link to="/boards">Go Back</Link>
+          <h2>{board.title}</h2>
+          <Droppable droppableId="all-lists" direction="horizontal" type="list">
+            {provided => (
+              <ListsContainer
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {listOrder.map((list, index) => {
 
-    const start = this.state.lists[source.droppableId];
-    const finish = this.state.lists[destination.droppableId];
+                  if (list) {
+                    const listCards = list.cards;
 
-    if (start === finish){
-      const newCardIds = Array.from(start.cardIds);
-
-      newCardIds.splice(source.index, 1);
-      newCardIds.splice(destination.index, 0, draggableId);
-
-      const newList = {
-        ...start,
-        cardIds: newCardIds
-      };
-
-      const newState = {
-        ...this.state,
-        lists: {
-          ...this.state.lists,
-          [newList.id]: newList
-        }
-      }
-
-      this.props.updateCardOrds({
-        id: draggableId,
-        ord: destination.index
-      })
-
-      this.setState(newState)
-      return;
-
-    }
+                    return (
+                      <TrelloList
+                        listID={list.id}
+                        key={list.id}
+                        title={list.title}
+                        cards={listCards}
+                        index={index}
+                      />
+                    );
+                  }
+                })}
+                {provided.placeholder}
+                <TrelloCreate list />
+              </ListsContainer>
+            )}
+          </Droppable>
+        </DragDropContext>
 }
 ```
 

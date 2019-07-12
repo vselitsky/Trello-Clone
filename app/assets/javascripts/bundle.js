@@ -574,9 +574,8 @@ function (_React$Component) {
 
       e.preventDefault();
       var board = Object.assign({}, this.state);
-      this.props.createBoard(board) // .then(this.props.closeModal())
-      .then(function (board) {
-        return _this2.props.history.push("/boards/".concat(board.id));
+      this.props.createBoard(board).then(this.props.closeModal()).then(function (board) {
+        return _this2.props.history.push("/boards/");
       });
     }
   }, {
