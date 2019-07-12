@@ -23,7 +23,7 @@ Yello, a Trello clone, is an app where users can create multiple boards where th
 
 Boards
 
-To move positions, trellapp integrates the react-bautiful-dnd library to the applications functionality.
+To move positions, Yello integrates the react-bautiful-dnd library to the applications functionality.
 
 
 ### New account creation, login, and guest/demo login
