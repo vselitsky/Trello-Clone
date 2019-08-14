@@ -16,10 +16,18 @@ class BoardForm extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const board = Object.assign({}, this.state);
-    this.props
-      .createBoard(board)
-      .then(this.props.closeModal())
-      .then(board => this.props.history.push(`/boards/`));
+    const createBoard = board =>
+      $.ajax({
+        method: "POST",
+        url: `/api/boards/`,
+        data: { board }
+      });
+    // .then(() => this.props.closeModal())
+    createBoard(board)
+      .then(board => this.props.history.push(`/boards/${board.id}`))
+      .then(() => this.props.closeModal());
+
+    console.log(this.props);
   }
 
   render() {

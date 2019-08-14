@@ -55,6 +55,8 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(title);
 
+  console.log(isEditing);
+
   const renderEditInput = () => {
     return (
       <form onSubmit={handleFinishEditing}>
@@ -89,31 +91,31 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
   };
 
   return (
-    <div>
-      <Draggable draggableId={String(listID)} index={index}>
-        {provided => (
-          <ListContainer
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-          >
-            <Droppable droppableId={String(listID)} type="card">
-              {provided => (
+    <Draggable draggableId={String(listID)} index={index}>
+      {provided => (
+        <ListContainer
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          <Droppable droppableId={String(listID)} type="card">
+            {provided => (
+              <div>
                 <div>
-                  <div>
-                    {isEditing ? (
-                      renderEditInput()
-                    ) : (
-                      <TitleContainer onClick={() => setIsEditing(true)}>
-                        <ListTitle>{listTitle}</ListTitle>
-                        <DeleteButton onClick={handleDeleteList}>
-                          delete
-                        </DeleteButton>
-                      </TitleContainer>
-                    )}
-                  </div>
-                  <div {...provided.droppableProps} ref={provided.innerRef}>
-                    {cards.map((card, index) => (
+                  {isEditing ? (
+                    renderEditInput()
+                  ) : (
+                    <TitleContainer onClick={() => setIsEditing(true)}>
+                      <ListTitle>{listTitle}</ListTitle>
+                      <DeleteButton onClick={handleDeleteList}>
+                        delete
+                      </DeleteButton>
+                    </TitleContainer>
+                  )}
+                </div>
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {cards.map((card, index) => {
+                    return (
                       <TrelloCard
                         key={card.id}
                         title={card.title}
@@ -121,17 +123,17 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
                         index={index}
                         listID={listID}
                       />
-                    ))}
-                    {provided.placeholder}
-                    <TrelloCreate listID={listID} />
-                  </div>
+                    );
+                  })}
+                  {provided.placeholder}
+                  <TrelloCreate listID={listID} />
                 </div>
-              )}
-            </Droppable>
-          </ListContainer>
-        )}
-      </Draggable>
-    </div>
+              </div>
+            )}
+          </Droppable>
+        </ListContainer>
+      )}
+    </Draggable>
   );
 };
 
@@ -144,6 +146,7 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
 export default connect()(TrelloList);
 // msp,
 // null
+
 {
   /* <Droppable droppableId={String(listID)} type="card">
             {provided => (
@@ -172,3 +175,5 @@ export default connect()(TrelloList);
                   ))} */
 }
 //    </Droppable > * /}
+
+// change_column_null :table_name, :column_name, false

@@ -1,11 +1,11 @@
 
 
-json.extract! @board, :title, :owner_id, :id 
+json.extract! @board, :title, :owner_id, :id, :list_positions 
 json.lists do
- json.array! @board.lists.each do |list|
- json.cards list.cards
- 
- json.extract! list, :id, :board_id, :title
-
+  json.array! @board.lists.each do |list|
+        json.extract! list, :id, :position
+                
         end
 end
+
+

@@ -90,7 +90,7 @@
 /*!*******************************************!*\
   !*** ./frontend/actions/board_actions.js ***!
   \*******************************************/
-/*! exports provided: RECEIVE_BOARDS, RECEIVE_BOARD, REMOVE_BOARD, RECEIVE_BOARD_ERRORS, CLEAR_BOARD_ERRORS, SET_ACTIVE_BOARD, fetchAllBoards, fetchBoard, createBoard, deleteBoard, receiveBoards, receiveBoard, clearErrors, setActiveBoard */
+/*! exports provided: RECEIVE_BOARDS, RECEIVE_BOARD, REMOVE_BOARD, RECEIVE_BOARD_ERRORS, CLEAR_BOARD_ERRORS, SET_ACTIVE_BOARD, fetchAllBoards, fetchBoard, createBoard, deleteBoard, receiveBoards, receiveBoard, clearErrors */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -108,7 +108,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveBoards", function() { return receiveBoards; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveBoard", function() { return receiveBoard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clearErrors", function() { return clearErrors; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setActiveBoard", function() { return setActiveBoard; });
 /* harmony import */ var _util_board_api_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/board_api_util */ "./frontend/util/board_api_util.js");
 
 var RECEIVE_BOARDS = "RECEIVE_BOARDS";
@@ -179,13 +178,12 @@ var clearErrors = function clearErrors() {
     errors: [],
     type: CLEAR_BOARD_ERRORS
   };
-};
-var setActiveBoard = function setActiveBoard(id) {
-  return {
-    type: SET_ACTIVE_BOARD,
-    payload: id
-  };
-};
+}; // export const setActiveBoard = id => {
+//   return {
+//     type: SET_ACTIVE_BOARD,
+//     payload: id
+//   };
+// };
 
 /***/ }),
 
@@ -574,9 +572,24 @@ function (_React$Component) {
 
       e.preventDefault();
       var board = Object.assign({}, this.state);
-      this.props.createBoard(board).then(this.props.closeModal()).then(function (board) {
-        return _this2.props.history.push("/boards/");
+
+      var createBoard = function createBoard(board) {
+        return $.ajax({
+          method: "POST",
+          url: "/api/boards/",
+          data: {
+            board: board
+          }
+        });
+      }; // .then(() => this.props.closeModal())
+
+
+      createBoard(board).then(function (board) {
+        return _this2.props.history.push("/boards/".concat(board.id));
+      }).then(function () {
+        return _this2.props.closeModal();
       });
+      console.log(this.props);
     }
   }, {
     key: "render",
@@ -850,12 +863,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_board_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/board_actions */ "./frontend/actions/board_actions.js");
 /* harmony import */ var _actions_modal_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../actions/modal_actions */ "./frontend/actions/modal_actions.js");
 /* harmony import */ var _board_form__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./board_form */ "./frontend/components/board/board_form.jsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _util_board_api_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../util/board_api_util */ "./frontend/util/board_api_util.js");
 
 
 
 
 
-var msp = function msp(_ref) {
+
+
+var msp = function msp(_ref, ownProps) {
   var errors = _ref.errors;
   return {
     errors: errors.boardErrors
@@ -922,6 +939,16 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\n  overflow-x: scroll;\n  overflow-y: hidden;\n  white-space: nowrap;\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n  display: flex;\n  flex-direction: row;\n"]);
 
@@ -947,6 +974,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 var ListsContainer = styled_components__WEBPACK_IMPORTED_MODULE_9__["default"].div(_templateObject());
+var StyledWrapper = styled_components__WEBPACK_IMPORTED_MODULE_9__["default"].div(_templateObject2());
 
 var BoardShow =
 /*#__PURE__*/
@@ -965,12 +993,9 @@ function (_React$Component) {
       var _this = this;
 
       this.props.fetchBoard(this.props.match.params.boardId).then(function () {
-        return _this.props.setActiveBoard(_this.props.match.params.boardId);
-      }).then(function () {
-        return _this.props.fetchAllLists({
-          board_id: _this.props.match.params.boardId
-        });
-      });
+        return _this.props.fetchAllLists(_this.props.match.params.boardId);
+      }); // .then(() => this.props.setActiveBoard(this.props.match.params.boardId));
+      // this.props.fetchAllLists(this.props.match.params.boardId);
     } // componentDidUpdate(prevProps) {
     //   if (
     //     prevProps.board &&
@@ -993,17 +1018,36 @@ function (_React$Component) {
       }
 
       this.props.sort(source.droppableId, destination.droppableId, source.index, destination.index, draggableId, type);
-    }
+    } //   compare(a, b) {
+    //   // Use toUpperCase() to ignore character casing
+    //   const idA = a.id
+    //   const idB = b.id
+    //   let comparison = 0;
+    //   if (idA & gt; idB) {
+    //     comparison = 1;
+    //   } else if (idB & lt; idA) {
+    //     comparison = -1;
+    //   }
+    //   return comparison;
+    // }
+
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var board = this.props.board;
 
       if (!board) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Board not found");
-      }
+      } // const sortedLists = board.lists.sort((a, b) =>
+      //   a.position > b.position ? 1 : -1
+      // );
 
-      var listOrder = board.lists;
+
+      var listOrder = board.list_positions; //console.log(sortedLists);
+
+      console.log(listOrder);
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_nav_bar_nav_bar_container__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_5__["DragDropContext"], {
         onDragEnd: this.onDragEnd.bind(this)
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__["Link"], {
@@ -1015,9 +1059,9 @@ function (_React$Component) {
       }, function (provided) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ListsContainer, _extends({}, provided.droppableProps, {
           ref: provided.innerRef
-        }), listOrder.map(function (list, index) {
-          // const list = board.lists[listID];
-          // console.log(listID);
+        }), listOrder.map(function (listID, index) {
+          var list = _this2.props.lists[listID];
+
           if (list) {
             var listCards = list.cards;
             return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_list_trello_list__WEBPACK_IMPORTED_MODULE_8__["default"], {
@@ -1029,7 +1073,8 @@ function (_React$Component) {
             });
           }
         }), provided.placeholder, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_trello_create__WEBPACK_IMPORTED_MODULE_10__["default"], {
-          list: true
+          list: true,
+          listLength: listOrder.length
         }));
       })));
     }
@@ -1710,6 +1755,8 @@ var TrelloList = function TrelloList(_ref) {
       listTitle = _useState4[0],
       setListTitle = _useState4[1];
 
+  console.log(isEditing);
+
   var renderEditInput = function renderEditInput() {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
       onSubmit: handleFinishEditing
@@ -1741,7 +1788,7 @@ var TrelloList = function TrelloList(_ref) {
     dispatch(deleteList(listID));
   };
 
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_3__["Draggable"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_3__["Draggable"], {
     draggableId: String(listID),
     index: index
   }, function (provided) {
@@ -1771,7 +1818,7 @@ var TrelloList = function TrelloList(_ref) {
         listID: listID
       })));
     }));
-  }));
+  });
 }; // const msp = state => {
 //   return {
 //     cards: state.entities.lists.cards
@@ -1809,6 +1856,7 @@ var TrelloList = function TrelloList(_ref) {
                   />
                 ))} */
 //    </Droppable > * /}
+// change_column_null :table_name, :column_name, false
 
 /***/ }),
 
@@ -2314,7 +2362,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
 function _templateObject() {
   var data = _taggedTemplateLiteral(["\n  && {\n    color: white;\n    background: #5aac44;\n  }\n"]);
 
@@ -2330,7 +2378,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
-var StyledButton = Object(styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"])(_templateObject());
+var StyledButton = Object(styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__["default"])(_templateObject());
 
 var TrelloButton = function TrelloButton(_ref) {
   var children = _ref.children,
@@ -2417,12 +2465,13 @@ function (_React$Component) {
     _classCallCheck(this, TrelloCreate);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(TrelloCreate).call(this, props));
+    console.log(_this.props);
     _this.state = {
       formOpen: false,
       text: ""
     };
-    _this.openForm = _this.openForm.bind(_assertThisInitialized(_this));
-    _this.handleAddCard = _this.handleAddCard.bind(_assertThisInitialized(_this));
+    _this.openForm = _this.openForm.bind(_assertThisInitialized(_this)); //this.handleAddCard = this.handleAddCard.bind(this);
+
     _this.handleAddList = _this.handleAddList.bind(_assertThisInitialized(_this));
     return _this;
   }
@@ -2451,9 +2500,12 @@ function (_React$Component) {
   }, {
     key: "handleAddList",
     value: function handleAddList() {
-      var dispatch = this.props.dispatch;
+      var _this$props = this.props,
+          dispatch = _this$props.dispatch,
+          listLength = _this$props.listLength;
       var text = this.state.text;
       var boardId = parseInt(this.props.match.params.boardId);
+      var position = listLength + 1;
 
       if (text) {
         this.setState({
@@ -2461,28 +2513,24 @@ function (_React$Component) {
         });
         var list = Object.assign({}, {
           board_id: boardId,
-          title: this.state.text
+          title: this.state.text,
+          position: listLength
         });
         dispatch(Object(_actions_lists_actions__WEBPACK_IMPORTED_MODULE_4__["createList"])(list));
       }
 
       return;
-    }
-  }, {
-    key: "handleAddCard",
-    value: function handleAddCard() {
-      var _this$props = this.props,
-          dispatch = _this$props.dispatch,
-          listID = _this$props.listID;
-      var title = this.state.text;
+    } // handleAddCard() {
+    //   const { dispatch, listID } = this.props;
+    //   const title = this.state.text;
+    //   if (text) {
+    //     this.setState({
+    //       text: ""
+    //     });
+    //     dispatch(createCard(listID, title));
+    //   }
+    // }
 
-      if (text) {
-        this.setState({
-          text: ""
-        });
-        dispatch(Object(_actions_cards_actions__WEBPACK_IMPORTED_MODULE_5__["createCard"])(listID, title));
-      }
-    }
   }, {
     key: "renderOpenForm",
     value: function renderOpenForm() {
@@ -2537,8 +2585,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-/* harmony import */ var _material_ui_core_Icon__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Icon */ "./node_modules/@material-ui/core/esm/Icon/index.js");
-/* harmony import */ var react_textarea_autosize__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-textarea-autosize */ "./node_modules/react-textarea-autosize/dist/react-textarea-autosize.esm.browser.js");
+/* harmony import */ var _material_ui_core_Icon__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Icon */ "./node_modules/@material-ui/core/esm/Icon/index.js");
+/* harmony import */ var react_textarea_autosize__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-textarea-autosize */ "./node_modules/react-textarea-autosize/dist/react-textarea-autosize.esm.browser.js");
 /* harmony import */ var _material_ui_core_Card__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Card */ "./node_modules/@material-ui/core/esm/Card/index.js");
 function _templateObject5() {
   var data = _taggedTemplateLiteral(["\n  margin-left: 8px;\n  cursor: pointer;\n"]);
@@ -2599,9 +2647,9 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 var Container = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject());
 var StyledCard = Object(styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(_material_ui_core_Card__WEBPACK_IMPORTED_MODULE_4__["default"])(_templateObject2());
-var StyledTextArea = Object(styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(react_textarea_autosize__WEBPACK_IMPORTED_MODULE_5__["default"])(_templateObject3());
+var StyledTextArea = Object(styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(react_textarea_autosize__WEBPACK_IMPORTED_MODULE_3__["default"])(_templateObject3());
 var ButtonContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject4());
-var StyledIcon = Object(styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(_material_ui_core_Icon__WEBPACK_IMPORTED_MODULE_3__["default"])(_templateObject5());
+var StyledIcon = Object(styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(_material_ui_core_Icon__WEBPACK_IMPORTED_MODULE_2__["default"])(_templateObject5());
 var TrelloForm = react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(function (_ref) {
   var list = _ref.list,
       _ref$text = _ref.text,
@@ -2609,6 +2657,7 @@ var TrelloForm = react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(function (_re
       _onChange = _ref.onChange,
       closeForm = _ref.closeForm,
       children = _ref.children;
+  console.log(list);
   var placeholder = list ? "Enter list title..." : "Enter a title for this card...";
   return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Container, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(StyledCard, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(StyledTextArea, {
     placeholder: placeholder,
@@ -2748,9 +2797,9 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_board_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/board_actions */ "./frontend/actions/board_actions.js");
-/* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash/merge */ "./node_modules/lodash/merge.js");
-/* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash_merge__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _actions_lists_actions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../actions/lists_actions */ "./frontend/actions/lists_actions.js");
+/* harmony import */ var _actions_lists_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../actions/lists_actions */ "./frontend/actions/lists_actions.js");
+/* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash/merge */ "./node_modules/lodash/merge.js");
+/* harmony import */ var lodash_merge__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash_merge__WEBPACK_IMPORTED_MODULE_2__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -2765,6 +2814,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var boardsReducer = function boardsReducer() {
   var obj = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var action = arguments.length > 1 ? arguments[1] : undefined;
@@ -2772,23 +2822,35 @@ var boardsReducer = function boardsReducer() {
 
   switch (action.type) {
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_BOARDS"]:
-      return lodash_merge__WEBPACK_IMPORTED_MODULE_1___default()({}, action.boards);
+      return lodash_merge__WEBPACK_IMPORTED_MODULE_2___default()({}, action.boards);
 
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_BOARD"]:
-      var newBoard = _defineProperty({}, action.board.id, action.board);
+      var newBoard = action.board;
+      var allLists = newBoard.lists.slice().sort(function (a, b) {
+        return a.position > b.position ? 1 : -1;
+      });
+      newBoard.lists = allLists;
 
-      return lodash_merge__WEBPACK_IMPORTED_MODULE_1___default()({}, obj, newBoard);
+      var newBoardtoReturn = _defineProperty({}, newBoard.id, newBoard);
+
+      return lodash_merge__WEBPACK_IMPORTED_MODULE_2___default()({}, obj, newBoardtoReturn);
 
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_0__["REMOVE_BOARD"]:
-      var nextState = lodash_merge__WEBPACK_IMPORTED_MODULE_1___default()({}, obj);
+      var nextState = lodash_merge__WEBPACK_IMPORTED_MODULE_2___default()({}, obj);
       delete nextState[action.boardId];
       return nextState;
 
-    case _actions_lists_actions__WEBPACK_IMPORTED_MODULE_2__["DRAG_HAPPENED"]:
+    case _actions_lists_actions__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_LIST"]:
+      var board = obj[action.list.board_id];
+      var newList = action.list.id;
+      board.list_positions.push(newList);
+      return lodash_merge__WEBPACK_IMPORTED_MODULE_2___default()({}, obj, board);
+
+    case _actions_lists_actions__WEBPACK_IMPORTED_MODULE_1__["DRAG_HAPPENED"]:
       {
         var boardID = action.payload.boardID;
-        var board = obj[boardID];
-        var lists = board.lists;
+        var _board = obj[boardID];
+        var lists = _board.lists;
         var _action$payload = action.payload,
             droppableIndexEnd = _action$payload.droppableIndexEnd,
             droppableIndexStart = _action$payload.droppableIndexStart,
@@ -2797,11 +2859,11 @@ var boardsReducer = function boardsReducer() {
         if (type === "list") {
           var pulledOutList = lists.splice(droppableIndexStart, 1);
           lists.splice.apply(lists, [droppableIndexEnd, 0].concat(_toConsumableArray(pulledOutList)));
-          board.lists = lists;
-          return lodash_merge__WEBPACK_IMPORTED_MODULE_1___default()(obj, _defineProperty({}, board.id, board));
+          _board.lists = lists;
+          return lodash_merge__WEBPACK_IMPORTED_MODULE_2___default()({}, obj, _board);
         }
 
-        return lodash_merge__WEBPACK_IMPORTED_MODULE_1___default()({}, obj);
+        return lodash_merge__WEBPACK_IMPORTED_MODULE_2___default()({}, obj);
       }
 
     default:
@@ -3228,7 +3290,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _util_board_api_util_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./util/board_api_util.js */ "./frontend/util/board_api_util.js");
-/* harmony import */ var _actions_lists_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./actions/lists_actions */ "./frontend/actions/lists_actions.js");
+/* harmony import */ var _util_list_api_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./util/list_api_util */ "./frontend/util/list_api_util.js");
 /* harmony import */ var _util_card_api_util_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./util/card_api_util.js */ "./frontend/util/card_api_util.js");
 /* harmony import */ var _actions_board_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./actions/board_actions */ "./frontend/actions/board_actions.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -3271,7 +3333,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   window.store = store;
-  window.fetchAllLists = _actions_lists_actions__WEBPACK_IMPORTED_MODULE_5__["fetchAllLists"];
+  window.fetchAllLists = _util_list_api_util__WEBPACK_IMPORTED_MODULE_5__["fetchAllLists"];
   window.createCard = _util_card_api_util_js__WEBPACK_IMPORTED_MODULE_6__["createCard"];
   var root = document.getElementById("root");
   react_dom__WEBPACK_IMPORTED_MODULE_0___default.a.render(react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_components_root__WEBPACK_IMPORTED_MODULE_2__["default"], {

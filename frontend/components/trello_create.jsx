@@ -12,12 +12,13 @@ import { withRouter } from "react-router-dom";
 class TrelloCreate extends React.Component {
   constructor(props) {
     super(props);
+    console.log(this.props);
     this.state = {
       formOpen: false,
       text: ""
     };
     this.openForm = this.openForm.bind(this);
-    this.handleAddCard = this.handleAddCard.bind(this);
+    //this.handleAddCard = this.handleAddCard.bind(this);
     this.handleAddList = this.handleAddList.bind(this);
   }
 
@@ -40,19 +41,21 @@ class TrelloCreate extends React.Component {
   }
 
   handleAddList() {
-    const { dispatch } = this.props;
+    const { dispatch, listLength } = this.props;
     const { text } = this.state;
     const boardId = parseInt(this.props.match.params.boardId);
+    const position = listLength + 1;
 
     if (text) {
       this.setState({
         text: ""
       });
-      const list = Object.assign(
+      let list = Object.assign(
         {},
         {
           board_id: boardId,
-          title: this.state.text
+          title: this.state.text,
+          position: listLength
         }
       );
 
@@ -62,17 +65,17 @@ class TrelloCreate extends React.Component {
     return;
   }
 
-  handleAddCard() {
-    const { dispatch, listID } = this.props;
-    const title = this.state.text;
+  // handleAddCard() {
+  //   const { dispatch, listID } = this.props;
+  //   const title = this.state.text;
 
-    if (text) {
-      this.setState({
-        text: ""
-      });
-      dispatch(createCard(listID, title));
-    }
-  }
+  //   if (text) {
+  //     this.setState({
+  //       text: ""
+  //     });
+  //     dispatch(createCard(listID, title));
+  //   }
+  // }
 
   renderOpenForm() {
     const { list } = this.props;

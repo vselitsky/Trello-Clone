@@ -47,9 +47,9 @@ export const clearErrors = () => ({
   type: CLEAR_BOARD_ERRORS
 });
 
-export const setActiveBoard = id => {
-  return {
-    type: SET_ACTIVE_BOARD,
-    payload: id
-  };
-};
+// export const setActiveBoard = id => {
+//   return {
+//     type: SET_ACTIVE_BOARD,
+//     payload: id
+//   };
+// };

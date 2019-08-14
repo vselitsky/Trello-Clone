@@ -8,7 +8,7 @@ import {
   fetchBoard,
   deleteBoard
 } from "./util/board_api_util.js";
-import { fetchAllLists } from "./actions/lists_actions";
+import { fetchAllLists } from "./util/list_api_util";
 import { createCard } from "./util/card_api_util.js";
 
 import { receiveBoards, receiveBoard } from "./actions/board_actions";

@@ -3,6 +3,8 @@ import {
   RECEIVE_BOARD,
   REMOVE_BOARD
 } from "../actions/board_actions";
+
+import { RECEIVE_LIST } from "../actions/lists_actions";
 import merge from "lodash/merge";
 import { DRAG_HAPPENED } from "../actions/lists_actions";
 
@@ -13,16 +15,28 @@ const boardsReducer = (obj = {}, action) => {
     case RECEIVE_BOARDS:
       return merge({}, action.boards);
     case RECEIVE_BOARD:
-      let newBoard = { [action.board.id]: action.board };
-      return merge({}, obj, newBoard);
+      const newBoard = action.board;
+      const allLists = newBoard.lists
+        .slice()
+        .sort((a, b) => (a.position > b.position ? 1 : -1));
+      newBoard.lists = allLists;
+      let newBoardtoReturn = { [newBoard.id]: newBoard };
+      return merge({}, obj, newBoardtoReturn);
     case REMOVE_BOARD:
       let nextState = merge({}, obj);
       delete nextState[action.boardId];
       return nextState;
+    case RECEIVE_LIST:
+      const board = obj[action.list.board_id];
+      const newList = action.list.id;
+      board.list_positions.push(newList);
+
+      return merge({}, obj, board);
     case DRAG_HAPPENED: {
       const { boardID } = action.payload;
       const board = obj[boardID];
       const lists = board.lists;
+
       const {
         droppableIndexEnd,
         droppableIndexStart,
@@ -33,10 +47,11 @@ const boardsReducer = (obj = {}, action) => {
       // draggin lists around
       if (type === "list") {
         const pulledOutList = lists.splice(droppableIndexStart, 1);
+
         lists.splice(droppableIndexEnd, 0, ...pulledOutList);
         board.lists = lists;
 
-        return merge(obj, { [board.id]: board });
+        return merge({}, obj, board);
       }
       return merge({}, obj);
     }

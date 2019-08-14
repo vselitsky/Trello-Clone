@@ -16,6 +16,12 @@ const ListsContainer = styled.div`
   flex-direction: row;
 `;
 
+const StyledWrapper = styled.div`
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+`;
+
 class BoardShow extends React.Component {
   constructor(props) {
     super(props);
@@ -24,10 +30,10 @@ class BoardShow extends React.Component {
   componentDidMount() {
     this.props
       .fetchBoard(this.props.match.params.boardId)
-      .then(() => this.props.setActiveBoard(this.props.match.params.boardId))
-      .then(() =>
-        this.props.fetchAllLists({ board_id: this.props.match.params.boardId })
-      );
+      .then(() => this.props.fetchAllLists(this.props.match.params.boardId));
+    // .then(() => this.props.setActiveBoard(this.props.match.params.boardId));
+
+    // this.props.fetchAllLists(this.props.match.params.boardId);
   }
 
   // componentDidUpdate(prevProps) {
@@ -55,13 +61,34 @@ class BoardShow extends React.Component {
     );
   }
 
+  //   compare(a, b) {
+  //   // Use toUpperCase() to ignore character casing
+  //   const idA = a.id
+  //   const idB = b.id
+
+  //   let comparison = 0;
+  //   if (idA & gt; idB) {
+  //     comparison = 1;
+  //   } else if (idB & lt; idA) {
+  //     comparison = -1;
+  //   }
+  //   return comparison;
+  // }
+
   render() {
     const { board } = this.props;
     if (!board) {
       return <p>Board not found</p>;
     }
 
-    const listOrder = board.lists;
+    // const sortedLists = board.lists.sort((a, b) =>
+    //   a.position > b.position ? 1 : -1
+    // );
+
+    const listOrder = board.list_positions;
+    //console.log(sortedLists);
+    console.log(listOrder);
+
     return (
       <div>
         <NavBarContainer />
@@ -74,9 +101,8 @@ class BoardShow extends React.Component {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
               >
-                {listOrder.map((list, index) => {
-                  // const list = board.lists[listID];
-                  // console.log(listID);
+                {listOrder.map((listID, index) => {
+                  const list = this.props.lists[listID];
                   if (list) {
                     const listCards = list.cards;
 
@@ -92,7 +118,7 @@ class BoardShow extends React.Component {
                   }
                 })}
                 {provided.placeholder}
-                <TrelloCreate list />
+                <TrelloCreate list listLength={listOrder.length} />
               </ListsContainer>
             )}
           </Droppable>

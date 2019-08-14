@@ -2,8 +2,10 @@ import { connect } from "react-redux";
 import { createBoard } from "../../actions/board_actions";
 import { openModal, closeModal } from "../../actions/modal_actions";
 import BoardForm from "./board_form";
+import { withRouter } from "react-router-dom";
+import * as APIUtil from "../../util/board_api_util";
 
-const msp = ({ errors }) => {
+const msp = ({ errors }, ownProps) => {
   return { errors: errors.boardErrors };
 };
 
