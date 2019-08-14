@@ -16,6 +16,15 @@ class Api::BoardsController < ApplicationController
         render :index
     end
 
+    def update 
+        @board = Board.find(params[:id])
+            if @board.update(board_params)
+                render :show 
+            else
+                render json: @board.errors.full_messages, status: 422 
+     end
+  end
+
     def show
         @board = Board.find(params[:id])
         render :show
@@ -30,7 +39,7 @@ class Api::BoardsController < ApplicationController
 
     private
     def board_params
-    params.require(:board).permit(:title)
+    params.require(:board).permit(:title, {:list_positions => []}, :id)
 
     end
 end

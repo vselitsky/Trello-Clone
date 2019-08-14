@@ -6,7 +6,7 @@ import {
 import merge from "lodash/merge";
 
 const listsReducer = (state = {}, action) => {
-  // Object.freeze(state);
+  Object.freeze(state);
   switch (action.type) {
     case RECEIVE_LIST:
       let newList = { [action.list.id]: action.list };

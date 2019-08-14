@@ -18,6 +18,11 @@ export const createBoard = board => dispatch =>
     board => dispatch(receiveBoard(board)),
     errors => dispatch(receiveErrors(errors))
   );
+export const updateBoard = board => dispatch =>
+  APIUtil.updateBoard(board).then(
+    board => dispatch(receiveBoard(board)),
+    errors => dispatch(receiveErrors(errors))
+  );
 
 export const deleteBoard = boardId => dispatch =>
   APIUtil.deleteBoard(boardId).then(board => dispatch(removeBoard(boardId)));
@@ -47,9 +52,9 @@ export const clearErrors = () => ({
   type: CLEAR_BOARD_ERRORS
 });
 
-// export const setActiveBoard = id => {
-//   return {
-//     type: SET_ACTIVE_BOARD,
-//     payload: id
-//   };
-// };
+export const setActiveBoard = id => {
+  return {
+    type: SET_ACTIVE_BOARD,
+    payload: id
+  };
+};

@@ -1,7 +1,11 @@
 import React, { PureComponent } from "react";
 import NavBarContainer from "../nav_bar/nav_bar_container";
 import { connect } from "react-redux";
-import { fetchBoard, setActiveBoard } from "../../actions/board_actions";
+import {
+  fetchBoard,
+  setActiveBoard,
+  updateBoard
+} from "../../actions/board_actions";
 import { fetchAllLists } from "../../actions/lists_actions";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import CreateListContainer from "../list/create_list_container";
@@ -10,6 +14,7 @@ import TrelloList from "../list/trello_list";
 import styled from "styled-components";
 import TrelloCreate from "../trello_create";
 import { sort } from "../../actions/lists_actions";
+import { Tgch } from "styled-icons/crypto";
 
 const ListsContainer = styled.div`
   display: flex;
@@ -25,15 +30,28 @@ const StyledWrapper = styled.div`
 class BoardShow extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      title: this.props.board.title,
+      list_positions: this.props.board.list_positions,
+      id: this.props.board.id
+    };
   }
 
   componentDidMount() {
     this.props
       .fetchBoard(this.props.match.params.boardId)
+      .then(() => this.props.setActiveBoard(this.props.match.params.boardId))
       .then(() => this.props.fetchAllLists(this.props.match.params.boardId));
-    // .then(() => this.props.setActiveBoard(this.props.match.params.boardId));
 
     // this.props.fetchAllLists(this.props.match.params.boardId);
+  }
+
+  componentWillUnmount() {
+    const board = this.props.board;
+    console.log(board);
+
+    this.props.updateBoard(board);
   }
 
   // componentDidUpdate(prevProps) {
@@ -88,6 +106,7 @@ class BoardShow extends React.Component {
     const listOrder = board.list_positions;
     //console.log(sortedLists);
     console.log(listOrder);
+    console.log(this.props.board);
 
     return (
       <div>
@@ -137,6 +156,7 @@ const msp = (state, ownProps) => {
 
 const mdp = dispatch => ({
   fetchBoard: id => dispatch(fetchBoard(id)),
+  updateBoard: board => dispatch(updateBoard(board)),
   fetchAllLists: id => dispatch(fetchAllLists(id)),
   setActiveBoard: id => dispatch(setActiveBoard(id)),
   sort: (

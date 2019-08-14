@@ -15,12 +15,7 @@ const boardsReducer = (obj = {}, action) => {
     case RECEIVE_BOARDS:
       return merge({}, action.boards);
     case RECEIVE_BOARD:
-      const newBoard = action.board;
-      const allLists = newBoard.lists
-        .slice()
-        .sort((a, b) => (a.position > b.position ? 1 : -1));
-      newBoard.lists = allLists;
-      let newBoardtoReturn = { [newBoard.id]: newBoard };
+      let newBoardtoReturn = { [action.board.id]: action.board };
       return merge({}, obj, newBoardtoReturn);
     case REMOVE_BOARD:
       let nextState = merge({}, obj);
@@ -28,14 +23,16 @@ const boardsReducer = (obj = {}, action) => {
       return nextState;
     case RECEIVE_LIST:
       const board = obj[action.list.board_id];
-      const newList = action.list.id;
-      board.list_positions.push(newList);
-
-      return merge({}, obj, board);
+      // const newList = action.list.id;
+      const listOrder = board.list_positions;
+      listOrder.push(action.list.id);
+      board.list_positions = listOrder;
+      const newBoard = { [board.id]: board };
+      return merge({}, obj, newBoard);
     case DRAG_HAPPENED: {
       const { boardID } = action.payload;
       const board = obj[boardID];
-      const lists = board.lists;
+      const lists = board.list_positions;
 
       const {
         droppableIndexEnd,
@@ -49,9 +46,10 @@ const boardsReducer = (obj = {}, action) => {
         const pulledOutList = lists.splice(droppableIndexStart, 1);
 
         lists.splice(droppableIndexEnd, 0, ...pulledOutList);
-        board.lists = lists;
+        board.list_positions = lists;
+        const newBoard = { [board.id]: board };
 
-        return merge({}, obj, board);
+        return merge({}, obj, newBoard);
       }
       return merge({}, obj);
     }
@@ -61,3 +59,15 @@ const boardsReducer = (obj = {}, action) => {
 };
 
 export default boardsReducer;
+
+// const newBoard = action.board;
+// const allLists = newBoard.lists
+//   .slice()
+//   .sort((a, b) => (a.position > b.position ? 1 : -1));
+// newBoard.lists = allLists;
+
+// json.lists do
+//   json.array! @board.lists.each do | list |
+//     json.extract! list, : id, : position
+
+// end

@@ -10,6 +10,13 @@ export const fetchBoard = id =>
     url: `/api/boards/${id}`
   });
 
+export const updateBoard = board =>
+  $.ajax({
+    url: `api/boards/${board.id}`,
+    method: "PATCH",
+    data: { board }
+  });
+
 export const createBoard = board =>
   $.ajax({
     method: "POST",
