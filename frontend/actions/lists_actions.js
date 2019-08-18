@@ -18,24 +18,21 @@ export const sort = (
   droppableIndexStart,
   droppableIndexEnd,
   draggableId,
-  type
-) => {
-  return (dispatch, getState) => {
-    const boardID = getState().activeBoard;
-    dispatch({
-      type: DRAG_HAPPENED,
-      payload: {
-        droppableIdStart,
-        droppableIdEnd,
-        droppableIndexEnd,
-        droppableIndexStart,
-        draggableId,
-        type,
-        boardID
-      }
-    });
-  };
-};
+  type,
+  boardID
+) => dispatch =>
+  dispatch({
+    type: DRAG_HAPPENED,
+    payload: {
+      droppableIdStart,
+      droppableIdEnd,
+      droppableIndexEnd,
+      droppableIndexStart,
+      draggableId,
+      type,
+      boardID
+    }
+  });
 
 // export const addList = title => {
 //     return (dispatch, getState) => {
@@ -96,10 +93,8 @@ export const sort = (
 //     };
 // };
 
-export const fetchAllLists = id => dispatch => {
-  return APIUtil.fetchAllLists(id).then(payload =>
-    dispatch(receiveLists(payload))
-  );
+export const fetchAllLists = () => dispatch => {
+  APIUtil.fetchAllLists().then(payload => dispatch(receiveLists(payload)));
 };
 
 export const receiveLists = lists => ({

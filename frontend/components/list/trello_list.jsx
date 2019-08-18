@@ -51,11 +51,17 @@ const ListTitle = styled.h4`
   }
 `;
 
-const TrelloList = ({ title, cards, listID, index, dispatch }) => {
+const TrelloList = ({
+  title,
+  cardPositions,
+  allCards,
+  listID,
+  index,
+  cards,
+  dispatch
+}) => {
   const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(title);
-
-  console.log(isEditing);
 
   const renderEditInput = () => {
     return (
@@ -90,6 +96,14 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
     dispatch(deleteList(listID));
   };
 
+  console.log(allCards);
+
+  const cards2 = cardPositions.map(pos => {
+    return allCards[pos];
+  });
+
+  console.log(cards2);
+
   return (
     <Draggable draggableId={String(listID)} index={index}>
       {provided => (
@@ -114,17 +128,15 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
                   )}
                 </div>
                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                  {cards.map((card, index) => {
-                    return (
-                      <TrelloCard
-                        key={card.id}
-                        title={card.title}
-                        id={card.id}
-                        index={index}
-                        listID={listID}
-                      />
-                    );
-                  })}
+                  {cards.map((card, index) => (
+                    <TrelloCard
+                      key={card.id}
+                      title={card.title}
+                      id={card.id}
+                      index={index}
+                      listID={listID}
+                    />
+                  ))}
                   {provided.placeholder}
                   <TrelloCreate listID={listID} />
                 </div>
@@ -137,15 +149,16 @@ const TrelloList = ({ title, cards, listID, index, dispatch }) => {
   );
 };
 
-// const msp = state => {
-//   return {
-//     cards: state.entities.lists.cards
-//   };
-// };
+const msp = state => {
+  return {
+    allCards: state.entities.cards
+  };
+};
 
-export default connect()(TrelloList);
-// msp,
-// null
+export default connect(
+  msp,
+  null
+)(TrelloList);
 
 {
   /* <Droppable droppableId={String(listID)} type="card">

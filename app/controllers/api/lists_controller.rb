@@ -4,7 +4,7 @@ class Api::ListsController < ApplicationController
     def index
         # @board = Board.find(params[:board_id])
         # @lists = @board.lists
-         @lists = List.all.where(board_id: params[:board_id])
+         @lists = List.all
 
         render :index
 

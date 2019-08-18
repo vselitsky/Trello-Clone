@@ -24,10 +24,9 @@ export const fetchBoard = id =>
     url: `/api/boards/${id}`
   });
 
-export const fetchAllLists = board_id => {
+export const fetchAllLists = () => {
   return $.ajax({
     method: "get",
-    url: `api/lists`,
-    data: { board_id }
+    url: `api/lists`
   });
 };

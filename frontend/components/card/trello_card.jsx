@@ -47,9 +47,9 @@ const EditButton = styled(Icon)`
 //   }
 // `;
 
-const TrelloCard = React.memo(({ text, id, listID, index, dispatch }) => {
+const TrelloCard = React.memo(({ title, id, listID, index, dispatch }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [cardText, setText] = useState(text);
+  const [cardText, setText] = useState(title);
 
   const closeForm = e => {
     setIsEditing(false);
@@ -100,7 +100,7 @@ const TrelloCard = React.memo(({ text, id, listID, index, dispatch }) => {
               </DeleteButton> */}
 
               <CardContent>
-                <Typography>{text}</Typography>
+                <Typography>{title}</Typography>
               </CardContent>
             </Card>
           </CardContainer>

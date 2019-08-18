@@ -4,7 +4,7 @@ class Api::BoardsController < ApplicationController
     def create
         @board = Board.new(board_params)
         @board.owner_id = current_user.id
-        if @board.save!
+        if @board.save
             render :show    
     else
             render json: @board.errors.full_messages, status: 422 

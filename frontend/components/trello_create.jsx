@@ -12,13 +12,13 @@ import { withRouter } from "react-router-dom";
 class TrelloCreate extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
+
     this.state = {
       formOpen: false,
       text: ""
     };
     this.openForm = this.openForm.bind(this);
-    //this.handleAddCard = this.handleAddCard.bind(this);
+    this.handleAddCard = this.handleAddCard.bind(this);
     this.handleAddList = this.handleAddList.bind(this);
   }
 
@@ -65,17 +65,26 @@ class TrelloCreate extends React.Component {
     return;
   }
 
-  // handleAddCard() {
-  //   const { dispatch, listID } = this.props;
-  //   const title = this.state.text;
+  handleAddCard() {
+    const { dispatch, listID } = this.props;
+    // const title = this.state.text;
+    const { text } = this.state;
 
-  //   if (text) {
-  //     this.setState({
-  //       text: ""
-  //     });
-  //     dispatch(createCard(listID, title));
-  //   }
-  // }
+    if (text) {
+      this.setState({
+        text: ""
+      });
+      let card = Object.assign(
+        {},
+        {
+          list_id: listID,
+          title: this.state.text
+        }
+      );
+      dispatch(createCard(card));
+    }
+    return;
+  }
 
   renderOpenForm() {
     const { list } = this.props;

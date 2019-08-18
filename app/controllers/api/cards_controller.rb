@@ -1,6 +1,15 @@
 class Api::CardsController < ApplicationController
     before_action :require_logged_in
 
+    def index
+        # @board = Board.find(params[:board_id])
+        # @lists = @board.lists
+         @cards = Card.all
+
+        render :index
+
+    end
+
      def create
         @card = Card.new(card_params)
     
@@ -32,7 +41,7 @@ class Api::CardsController < ApplicationController
 
      private
     def card_params
-    params.require(:card).permit(:title, :list_id)
+    params.require(:card).permit(:title, :list_id, :body)
 
     end
     

@@ -24,10 +24,9 @@ export const fetchCard = id =>
     url: `/api/cards/${id}`
   });
 
-export const fetchAllCards = card_id => {
+export const fetchAllCards = () => {
   return $.ajax({
     method: "get",
-    url: `api/cards`,
-    data: { card_id }
+    url: `api/cards`
   });
 };

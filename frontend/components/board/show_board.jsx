@@ -31,28 +31,26 @@ class BoardShow extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      title: this.props.board.title,
-      list_positions: this.props.board.list_positions,
-      id: this.props.board.id
-    };
+    // this.state = {
+    //   title: this.props.board.title,
+    //   list_positions: this.props.board.list_positions,
+    //   id: this.props.board.id
+    // };
   }
 
   componentDidMount() {
-    this.props
-      .fetchBoard(this.props.match.params.boardId)
-      .then(() => this.props.setActiveBoard(this.props.match.params.boardId))
-      .then(() => this.props.fetchAllLists(this.props.match.params.boardId));
+    this.props.fetchBoard(this.props.match.params.boardId);
+    // .then(() => this.props.setActiveBoard(this.props.match.params.boardId));
 
     // this.props.fetchAllLists(this.props.match.params.boardId);
   }
 
-  componentWillUnmount() {
-    const board = this.props.board;
-    console.log(board);
+  // componentWillUnmount() {
+  //   const board = this.props.board;
+  //   console.log(board);
 
-    this.props.updateBoard(board);
-  }
+  //   this.props.updateBoard(board);
+  // }
 
   // componentDidUpdate(prevProps) {
   //   if (
@@ -65,6 +63,8 @@ class BoardShow extends React.Component {
 
   onDragEnd(result) {
     const { destination, source, draggableId, type } = result;
+    const boardID = this.props.match.params.boardId;
+    console.log(boardID);
     if (!destination) {
       return;
     }
@@ -75,8 +75,18 @@ class BoardShow extends React.Component {
       source.index,
       destination.index,
       draggableId,
-      type
+      type,
+      boardID
     );
+  }
+
+  getCards(list) {
+    let allCards = this.props.cards;
+    let cards = list.card_positions.map(position => {
+      allCards[position];
+    });
+
+    return cards;
   }
 
   //   compare(a, b) {
@@ -107,7 +117,8 @@ class BoardShow extends React.Component {
     //console.log(sortedLists);
     console.log(listOrder);
     console.log(this.props.board);
-
+    console.log(this.props);
+    const allCards = this.props.cards;
     return (
       <div>
         <NavBarContainer />
@@ -123,14 +134,19 @@ class BoardShow extends React.Component {
                 {listOrder.map((listID, index) => {
                   const list = this.props.lists[listID];
                   if (list) {
-                    const listCards = list.cards;
-
+                    console.log(list);
+                    const cards = list.card_positions.map(pos => {
+                      return this.props.cards[pos];
+                    });
+                    console.log(cards);
                     return (
                       <TrelloList
                         listID={list.id}
                         key={list.id}
                         title={list.title}
-                        cards={listCards}
+                        cardPositions={list.card_positions}
+                        //allCards={allCards}
+                        cards={cards}
                         index={index}
                       />
                     );
@@ -150,7 +166,8 @@ class BoardShow extends React.Component {
 const msp = (state, ownProps) => {
   return {
     board: state.entities.boards[ownProps.match.params.boardId],
-    lists: state.entities.lists
+    lists: state.entities.lists,
+    cards: state.entities.cards
   };
 };
 
@@ -165,7 +182,8 @@ const mdp = dispatch => ({
     droppableIndexStart,
     droppableIndexEnd,
     draggableId,
-    type
+    type,
+    boardID
   ) =>
     dispatch(
       sort(
@@ -174,7 +192,8 @@ const mdp = dispatch => ({
         droppableIndexStart,
         droppableIndexEnd,
         draggableId,
-        type
+        type,
+        boardID
       )
     )
 });
