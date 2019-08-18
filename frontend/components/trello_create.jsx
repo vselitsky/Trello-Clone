@@ -41,10 +41,9 @@ class TrelloCreate extends React.Component {
   }
 
   handleAddList() {
-    const { dispatch, listLength } = this.props;
+    const { dispatch } = this.props;
     const { text } = this.state;
     const boardId = parseInt(this.props.match.params.boardId);
-    const position = listLength + 1;
 
     if (text) {
       this.setState({
@@ -54,8 +53,7 @@ class TrelloCreate extends React.Component {
         {},
         {
           board_id: boardId,
-          title: this.state.text,
-          position: listLength
+          title: this.state.text
         }
       );
 

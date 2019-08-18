@@ -252,7 +252,7 @@ var receiveCards = function receiveCards(cards) {
 /*!*******************************************!*\
   !*** ./frontend/actions/lists_actions.js ***!
   \*******************************************/
-/*! exports provided: RECEIVE_LIST, DRAG_HAPPENED, RECEIVE_LISTS, createList, sort, fetchAllLists, receiveLists */
+/*! exports provided: RECEIVE_LIST, DRAG_HAPPENED, RECEIVE_LISTS, receiveList, createList, editList, sort, fetchAllLists, receiveLists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -260,7 +260,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_LIST", function() { return RECEIVE_LIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DRAG_HAPPENED", function() { return DRAG_HAPPENED; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_LISTS", function() { return RECEIVE_LISTS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveList", function() { return receiveList; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createList", function() { return createList; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "editList", function() { return editList; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sort", function() { return sort; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchAllLists", function() { return fetchAllLists; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveLists", function() { return receiveLists; });
@@ -269,17 +271,22 @@ __webpack_require__.r(__webpack_exports__);
 var RECEIVE_LIST = "RECEIVE_LIST";
 var DRAG_HAPPENED = "DRAG_HAPPENED";
 var RECEIVE_LISTS = "RECEIVE_LISTS";
-
 var receiveList = function receiveList(list) {
   return {
     type: RECEIVE_LIST,
     list: list
   };
 };
-
 var createList = function createList(list) {
   return function (dispatch) {
     return _util_list_api_util__WEBPACK_IMPORTED_MODULE_0__["createList"](list).then(function (list) {
+      return dispatch(receiveList(list));
+    });
+  };
+};
+var editList = function editList(list) {
+  return function (dispatch) {
+    return _util_list_api_util__WEBPACK_IMPORTED_MODULE_0__["editList"](list).then(function (list) {
       return dispatch(receiveList(list));
     });
   };
@@ -1268,8 +1275,7 @@ function (_React$Component) {
             });
           }
         }), provided.placeholder, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_trello_create__WEBPACK_IMPORTED_MODULE_10__["default"], {
-          list: true,
-          listLength: listOrder.length
+          list: true
         }));
       })));
     }
@@ -2702,12 +2708,9 @@ function (_React$Component) {
   }, {
     key: "handleAddList",
     value: function handleAddList() {
-      var _this$props = this.props,
-          dispatch = _this$props.dispatch,
-          listLength = _this$props.listLength;
+      var dispatch = this.props.dispatch;
       var text = this.state.text;
       var boardId = parseInt(this.props.match.params.boardId);
-      var position = listLength + 1;
 
       if (text) {
         this.setState({
@@ -2715,8 +2718,7 @@ function (_React$Component) {
         });
         var list = Object.assign({}, {
           board_id: boardId,
-          title: this.state.text,
-          position: listLength
+          title: this.state.text
         });
         dispatch(Object(_actions_lists_actions__WEBPACK_IMPORTED_MODULE_4__["createList"])(list));
       }
@@ -2726,9 +2728,9 @@ function (_React$Component) {
   }, {
     key: "handleAddCard",
     value: function handleAddCard() {
-      var _this$props2 = this.props,
-          dispatch = _this$props2.dispatch,
-          listID = _this$props2.listID; // const title = this.state.text;
+      var _this$props = this.props,
+          dispatch = _this$props.dispatch,
+          listID = _this$props.listID; // const title = this.state.text;
 
       var text = this.state.text;
 
@@ -3531,15 +3533,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! redux-logger */ "./node_modules/redux-logger/dist/redux-logger.js");
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(redux_logger__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _util_board_api_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/board_api_util */ "./frontend/util/board_api_util.js");
-/* harmony import */ var _actions_board_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../actions/board_actions */ "./frontend/actions/board_actions.js");
-/* harmony import */ var _reducers_root_reducer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../reducers/root_reducer */ "./frontend/reducers/root_reducer.js");
+/* harmony import */ var _util_list_api_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/list_api_util */ "./frontend/util/list_api_util.js");
+/* harmony import */ var _actions_board_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../actions/board_actions */ "./frontend/actions/board_actions.js");
+/* harmony import */ var _actions_lists_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../actions/lists_actions */ "./frontend/actions/lists_actions.js");
+/* harmony import */ var _reducers_root_reducer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../reducers/root_reducer */ "./frontend/reducers/root_reducer.js");
 
 
 
 
 
 
-var persistenceActionTypes = ["DRAG_HAPPENED"]; // notPersistenceActionTypes = ['ADD_ITEM_TO_CART', 'REMOVE_ITEM_FROM_CART', 'NAVIGATE']
+
+
+var persistenceActionTypes = ["DRAG_HAPPENED", "RECEIVE_LIST", "RECEIVE_CARD"]; // notPersistenceActionTypes = ['ADD_ITEM_TO_CART', 'REMOVE_ITEM_FROM_CART', 'NAVIGATE']
 
 var persistenceMiddleware = function persistenceMiddleware(store) {
   return function (dispatch) {
@@ -3549,9 +3555,27 @@ var persistenceMiddleware = function persistenceMiddleware(store) {
       if (persistenceActionTypes.indexOf(action.type) > -1) {
         // or maybe you could filter by the payload. Ex:
         // if (action.timestamp) {
-        if (action.payload.type === "list") {
+        if (action.type === "RECEIVE_LIST") {
           var newState = store.getState();
-          sendToBackend(action, newState);
+          saveUpdatedBoard(action, newState);
+        } else if (action.type === "RECEIVE_CARD") {
+          var _newState = store.getState();
+
+          saveUpdatedList(action, _newState);
+        } else {
+          if (action.payload.type === "list") {
+            var _newState2 = store.getState();
+
+            sendToBackendBoard(action, _newState2);
+          } else if (action.payload.droppableIdStart === action.payload.droppableIdEnd && action.payload.type === "card") {
+            var _newState3 = store.getState();
+
+            sendToBackendSameList(action, _newState3);
+          } else if (action.payload.droppableIdStart !== action.payload.droppableIdEnd && action.payload.type === "card") {
+            var _newState4 = store.getState();
+
+            sendToBackendDifferentLists(action, _newState4);
+          }
         }
       }
 
@@ -3560,17 +3584,70 @@ var persistenceMiddleware = function persistenceMiddleware(store) {
   };
 };
 
-var sendToBackend = function sendToBackend(action, newState) {
+var saveUpdatedList = function saveUpdatedList(action, newState) {
+  var updatedList3 = store.getState().entities.lists[action.card.list_id];
+  var list3 = Object.assign({}, {
+    id: updatedList3.id,
+    card_positions: updatedList3.card_positions
+  });
+  _util_list_api_util__WEBPACK_IMPORTED_MODULE_4__["updateList"](list3);
+};
+
+var saveUpdatedBoard = function saveUpdatedBoard(action, newState) {
+  var updatedBoard1 = store.getState().entities.boards[action.list.board_id];
+  var board1 = Object.assign({}, {
+    id: updatedBoard1.id,
+    list_positions: updatedBoard1.list_positions
+  }); // déjà vu
+
+  _util_board_api_util__WEBPACK_IMPORTED_MODULE_3__["updateBoard"](board1); // .then(checkStatus)
+  // .then(response => response.json())
+  // .then(board => {
+  //     store.dispatch(receiveBoard(board));
+  // });
+  // .catch(error => {
+  //   console.error(error);
+  //   store.dispatch(actionCreators.receiveErrors(error));
+  // });
+};
+
+var sendToBackendDifferentLists = function sendToBackendDifferentLists(action, newState) {
+  var updatedList1 = store.getState().entities.lists[action.payload.droppableIdStart];
+  var updatedList2 = store.getState().entities.lists[action.payload.droppableIdEnd];
+  var list = Object.assign({}, {
+    id: updatedList1.id,
+    card_positions: updatedList1.card_positions
+  });
+  var list2 = Object.assign({}, {
+    id: updatedList2.id,
+    card_positions: updatedList2.card_positions
+  });
+  _util_list_api_util__WEBPACK_IMPORTED_MODULE_4__["updateList"](list);
+  _util_list_api_util__WEBPACK_IMPORTED_MODULE_4__["updateList"](list2);
+};
+
+var sendToBackendSameList = function sendToBackendSameList(action, newState) {
+  var updatedList = store.getState().entities.lists[action.payload.droppableIdStart];
+  var list = Object.assign({}, {
+    id: updatedList.id,
+    card_positions: updatedList.card_positions
+  });
+  _util_list_api_util__WEBPACK_IMPORTED_MODULE_4__["updateList"](list); //   .then(list => {
+  //     store.dispatch(receiveList(list));
+  //   });
+};
+
+var sendToBackendBoard = function sendToBackendBoard(action, newState) {
   var updatedBoard = store.getState().entities.boards[action.payload.boardID];
-  var board = {
+  var board = Object.assign({}, {
     id: updatedBoard.id,
     list_positions: updatedBoard.list_positions
-  }; // déjà vu
+  }); // déjà vu
 
   _util_board_api_util__WEBPACK_IMPORTED_MODULE_3__["updateBoard"](board) // .then(checkStatus)
   // .then(response => response.json())
   .then(function (board) {
-    store.dispatch(Object(_actions_board_actions__WEBPACK_IMPORTED_MODULE_4__["receiveBoard"])(board));
+    store.dispatch(Object(_actions_board_actions__WEBPACK_IMPORTED_MODULE_5__["receiveBoard"])(board));
   }); // .catch(error => {
   //   console.error(error);
   //   store.dispatch(actionCreators.receiveErrors(error));
@@ -3579,7 +3656,7 @@ var sendToBackend = function sendToBackend(action, newState) {
 
 var configureStore = function configureStore() {
   var preloadedState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_5__["default"], preloadedState, Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"], redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a, persistenceMiddleware));
+  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_7__["default"], preloadedState, Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"], redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a, persistenceMiddleware));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (configureStore);
@@ -3765,14 +3842,14 @@ var fetchAllCards = function fetchAllCards() {
 /*!****************************************!*\
   !*** ./frontend/util/list_api_util.js ***!
   \****************************************/
-/*! exports provided: createList, deleteList, editList, fetchBoard, fetchAllLists */
+/*! exports provided: createList, deleteList, updateList, fetchBoard, fetchAllLists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createList", function() { return createList; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deleteList", function() { return deleteList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "editList", function() { return editList; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateList", function() { return updateList; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchBoard", function() { return fetchBoard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchAllLists", function() { return fetchAllLists; });
 var createList = function createList(list) {
@@ -3790,10 +3867,10 @@ var deleteList = function deleteList(id) {
     url: "/api/lists/".concat(id)
   });
 };
-var editList = function editList(list) {
+var updateList = function updateList(list) {
   return $.ajax({
     method: "Patch",
-    url: "/api/lists/".concat(id),
+    url: "/api/lists/".concat(list.id),
     data: {
       list: list
     }

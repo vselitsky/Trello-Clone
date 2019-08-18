@@ -11,10 +11,10 @@ export const deleteList = id =>
     url: `/api/lists/${id}`
   });
 
-export const editList = list =>
+export const updateList = list =>
   $.ajax({
     method: "Patch",
-    url: `/api/lists/${id}`,
+    url: `/api/lists/${list.id}`,
     data: { list }
   });
 

@@ -41,7 +41,7 @@ class Api::ListsController < ApplicationController
 
      private
     def list_params
-    params.require(:list).permit(:title, :board_id, :position)
+    params.require(:list).permit(:title, :board_id, {:card_positions => []}, :id)
 
     end
 end

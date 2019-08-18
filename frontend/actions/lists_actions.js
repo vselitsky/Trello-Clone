@@ -4,13 +4,16 @@ export const RECEIVE_LIST = "RECEIVE_LIST";
 export const DRAG_HAPPENED = "DRAG_HAPPENED";
 export const RECEIVE_LISTS = "RECEIVE_LISTS";
 
-const receiveList = list => ({
+export const receiveList = list => ({
   type: RECEIVE_LIST,
   list
 });
 
 export const createList = list => dispatch =>
   APIUtil.createList(list).then(list => dispatch(receiveList(list)));
+
+export const editList = list => dispatch =>
+  APIUtil.editList(list).then(list => dispatch(receiveList(list)));
 
 export const sort = (
   droppableIdStart,
