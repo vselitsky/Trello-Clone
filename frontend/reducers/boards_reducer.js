@@ -25,7 +25,8 @@ const boardsReducer = (obj = {}, action) => {
       const board = obj[action.list.board_id];
       // const newList = action.list.id;
       const listOrder = board.list_positions;
-      listOrder.push(action.list.id);
+      const newListId = `list-${action.list.id}`;
+      listOrder.push(newListId);
       board.list_positions = listOrder;
       const newBoard = { [board.id]: board };
       return merge({}, obj, newBoard);

@@ -47,7 +47,9 @@ const persistenceMiddleware = store => dispatch => action => {
 };
 
 const saveUpdatedList = (action, newState) => {
-  const updatedList3 = store.getState().entities.lists[action.card.list_id];
+  const updatedList3 = store.getState().entities.lists[
+    `list-${action.card.list_id}`
+  ];
   const list3 = Object.assign(
     {},
     {
@@ -83,10 +85,10 @@ const saveUpdatedBoard = (action, newState) => {
 
 const sendToBackendDifferentLists = (action, newState) => {
   const updatedList1 = store.getState().entities.lists[
-    action.payload.droppableIdStart
+    `list-${action.payload.droppableIdStart}`
   ];
   const updatedList2 = store.getState().entities.lists[
-    action.payload.droppableIdEnd
+    `list-${action.payload.droppableIdEnd}`
   ];
 
   const list = Object.assign(
@@ -110,7 +112,7 @@ const sendToBackendDifferentLists = (action, newState) => {
 
 const sendToBackendSameList = (action, newState) => {
   const updatedList = store.getState().entities.lists[
-    action.payload.droppableIdStart
+    `list-${action.payload.droppableIdStart}`
   ];
   const list = Object.assign(
     {},

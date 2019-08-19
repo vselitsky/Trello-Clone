@@ -3085,7 +3085,8 @@ var boardsReducer = function boardsReducer() {
       var board = obj[action.list.board_id]; // const newList = action.list.id;
 
       var listOrder = board.list_positions;
-      listOrder.push(action.list.id);
+      var newListId = "list-".concat(action.list.id);
+      listOrder.push(newListId);
       board.list_positions = listOrder;
 
       var newBoard = _defineProperty({}, board.id, board);
@@ -3160,15 +3161,28 @@ var cardsReducer = function cardsReducer() {
 
   switch (action.type) {
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_2__["RECEIVE_BOARD"]:
-      if (action.board.lists) {
-        return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, action.board.lists.cards);
+      if (action.board.lists && action.board.lists.cards) {
+        var newReceivedCard = Object.keys(action.board.lists.cards);
+        var newCard2 = {};
+        newReceivedCard.forEach(function (ele) {
+          var numEle = Number(ele);
+          var newCardKey = "card-".concat(ele);
+          newCard2[newCardKey] = action.board.lists.cards[numEle];
+        });
+        return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newCard2);
       } else {
         return state;
       }
 
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_2__["RECEIVE_BOARDS"]:
-      var allReceivedCards = action.boards.lists.cards;
-      return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, allReceivedCards);
+      var newReceivedCard3 = Object.keys(action.boards.lists.cards);
+      var newCard3 = {};
+      newReceivedCard3.forEach(function (ele) {
+        var numEle = Number(ele);
+        var newCardKey = "card-".concat(ele);
+        newCard3[newCardKey] = action.boards.lists.cards[numEle];
+      });
+      return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newCard3);
 
     case _actions_lists_actions__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_LIST"]:
       var allCards = action.list.cards;
@@ -3178,7 +3192,7 @@ var cardsReducer = function cardsReducer() {
       return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, action.cards);
 
     case _actions_cards_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_CARD"]:
-      var newCard = _defineProperty({}, action.card.id, action.card);
+      var newCard = _defineProperty({}, "card-".concat(action.card.id), action.card);
 
       return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newCard);
 
@@ -3279,12 +3293,28 @@ var listsReducer = function listsReducer() {
 
   switch (action.type) {
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_BOARD"]:
-      var allLists = action.board.lists;
-      return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, allLists);
+      if (action.board.lists !== undefined) {
+        var newReceivedList = Object.keys(action.board.lists);
+        var newList2 = {};
+        newReceivedList.forEach(function (ele) {
+          var numEle = Number(ele);
+          var newListKey = "list-".concat(ele);
+          newList2[newListKey] = action.board.lists[numEle];
+        });
+        return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newList2);
+      } else {
+        return state;
+      }
 
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_1__["RECEIVE_BOARDS"]:
-      var allReceivedLists = action.boards.lists;
-      return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, allReceivedLists);
+      var allListsKeys = Object.keys(action.boards.lists);
+      var newLists = {};
+      allListsKeys.forEach(function (ele) {
+        var numEle = Number(ele);
+        var newListKey = "list-".concat(ele);
+        newLists[newListKey] = action.boards.lists[numEle];
+      });
+      return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newLists);
 
     case _actions_lists_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_LISTS"]:
       // const allLists = action.lists
@@ -3294,18 +3324,19 @@ var listsReducer = function listsReducer() {
     case _actions_lists_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_LIST"]:
       var receivedList = action.list;
 
-      var newList = _defineProperty({}, receivedList.id, receivedList);
+      var newList = _defineProperty({}, "list-".concat(receivedList.id), receivedList);
 
       return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newList);
 
     case _actions_cards_actions__WEBPACK_IMPORTED_MODULE_2__["RECEIVE_CARD"]:
-      var list = state[action.card.list_id]; // const newList = action.list.id;
+      var list = state["list-".concat(action.card.list_id)]; // const newList = action.list.id;
 
       var cardOrder = list.card_positions;
-      cardOrder.push(action.card.id);
+      var newCardId = "card-".concat(action.card.id);
+      cardOrder.push(newCardId);
       list.card_positions = cardOrder;
 
-      var updatedList = _defineProperty({}, list.id, list);
+      var updatedList = _defineProperty({}, "list-".concat(list.id), list);
 
       return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, updatedList);
 
@@ -3325,13 +3356,13 @@ var listsReducer = function listsReducer() {
       if (droppableIdStart === droppableIdEnd) {
         var _list$card_positions;
 
-        var _list = state[droppableIdStart];
+        var _list = state["list-".concat(droppableIdStart)];
 
         var card = _list.card_positions.splice(droppableIndexStart, 1);
 
         (_list$card_positions = _list.card_positions).splice.apply(_list$card_positions, [droppableIndexEnd, 0].concat(_toConsumableArray(card)));
 
-        return _objectSpread({}, state, _defineProperty({}, droppableIdStart, _list));
+        return _objectSpread({}, state, _defineProperty({}, "list-".concat(droppableIdStart), _list));
       } // other list
 
 
@@ -3339,16 +3370,16 @@ var listsReducer = function listsReducer() {
         var _listEnd$card_positio, _objectSpread3;
 
         // find the list where the drag happened
-        var listStart = state[droppableIdStart]; // pull out the card from this list
+        var listStart = state["list-".concat(droppableIdStart)]; // pull out the card from this list
 
         var _card = listStart.card_positions.splice(droppableIndexStart, 1); // find the list where the drag ended
 
 
-        var listEnd = state[droppableIdEnd]; // put the card in the new list
+        var listEnd = state["list-".concat(droppableIdEnd)]; // put the card in the new list
 
         (_listEnd$card_positio = listEnd.card_positions).splice.apply(_listEnd$card_positio, [droppableIndexEnd, 0].concat(_toConsumableArray(_card)));
 
-        return _objectSpread({}, state, (_objectSpread3 = {}, _defineProperty(_objectSpread3, droppableIdStart, listStart), _defineProperty(_objectSpread3, droppableIdEnd, listEnd), _objectSpread3));
+        return _objectSpread({}, state, (_objectSpread3 = {}, _defineProperty(_objectSpread3, "list-".concat(droppableIdStart), listStart), _defineProperty(_objectSpread3, "list-".concat(droppableIdEnd), listEnd), _objectSpread3));
       }
 
       return state;
@@ -3617,7 +3648,7 @@ var persistenceMiddleware = function persistenceMiddleware(store) {
 };
 
 var saveUpdatedList = function saveUpdatedList(action, newState) {
-  var updatedList3 = store.getState().entities.lists[action.card.list_id];
+  var updatedList3 = store.getState().entities.lists["list-".concat(action.card.list_id)];
   var list3 = Object.assign({}, {
     id: updatedList3.id,
     card_positions: updatedList3.card_positions
@@ -3644,8 +3675,8 @@ var saveUpdatedBoard = function saveUpdatedBoard(action, newState) {
 };
 
 var sendToBackendDifferentLists = function sendToBackendDifferentLists(action, newState) {
-  var updatedList1 = store.getState().entities.lists[action.payload.droppableIdStart];
-  var updatedList2 = store.getState().entities.lists[action.payload.droppableIdEnd];
+  var updatedList1 = store.getState().entities.lists["list-".concat(action.payload.droppableIdStart)];
+  var updatedList2 = store.getState().entities.lists["list-".concat(action.payload.droppableIdEnd)];
   var list = Object.assign({}, {
     id: updatedList1.id,
     card_positions: updatedList1.card_positions
@@ -3659,7 +3690,7 @@ var sendToBackendDifferentLists = function sendToBackendDifferentLists(action, n
 };
 
 var sendToBackendSameList = function sendToBackendSameList(action, newState) {
-  var updatedList = store.getState().entities.lists[action.payload.droppableIdStart];
+  var updatedList = store.getState().entities.lists["list-".concat(action.payload.droppableIdStart)];
   var list = Object.assign({}, {
     id: updatedList.id,
     card_positions: updatedList.card_positions
