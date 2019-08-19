@@ -30,3 +30,10 @@ export const fetchAllLists = () => {
     url: `api/lists`
   });
 };
+
+export const updateCardPositions = list =>
+  $.ajax({
+    method: "Patch",
+    url: `/api/update_pos/${list.id}`,
+    data: { list }
+  });

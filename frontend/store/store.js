@@ -18,9 +18,6 @@ const persistenceActionTypes = [
 const persistenceMiddleware = store => dispatch => action => {
   const result = dispatch(action);
   if (persistenceActionTypes.indexOf(action.type) > -1) {
-    // or maybe you could filter by the payload. Ex:
-    // if (action.timestamp) {
-
     if (action.type === "RECEIVE_LIST") {
       let newState = store.getState();
       saveUpdatedBoard(action, newState);
@@ -59,7 +56,7 @@ const saveUpdatedList = (action, newState) => {
     }
   );
 
-  APBUtil.updateList(list3);
+  APBUtil.updateCardPositions(list3);
 };
 
 const saveUpdatedBoard = (action, newState) => {
@@ -91,6 +88,7 @@ const sendToBackendDifferentLists = (action, newState) => {
   const updatedList2 = store.getState().entities.lists[
     action.payload.droppableIdEnd
   ];
+
   const list = Object.assign(
     {},
     {
@@ -98,7 +96,6 @@ const sendToBackendDifferentLists = (action, newState) => {
       card_positions: updatedList1.card_positions
     }
   );
-
   const list2 = Object.assign(
     {},
     {
@@ -107,8 +104,8 @@ const sendToBackendDifferentLists = (action, newState) => {
     }
   );
 
-  APBUtil.updateList(list);
-  APBUtil.updateList(list2);
+  APBUtil.updateCardPositions(list);
+  APBUtil.updateCardPositions(list2);
 };
 
 const sendToBackendSameList = (action, newState) => {
@@ -123,7 +120,7 @@ const sendToBackendSameList = (action, newState) => {
     }
   );
 
-  APBUtil.updateList(list);
+  APBUtil.updateCardPositions(list);
 
   //   .then(list => {
   //     store.dispatch(receiveList(list));

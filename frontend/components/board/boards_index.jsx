@@ -11,20 +11,22 @@ const HomeWrapper = styled.div`
   justify-content: center;
   flex-direction: column;
   box-sizing: border-box;
-  min-height: calc(100vh - 40px);
+  // min-height: calc(100vh - 40px);
 `;
 
 const AllBoards = styled.div`
   padding-left: 20px;
   padding-right: 20px;
   margin-top: 40px;
+  margin-left: 200px;
+  margin-right: 200px;
   flex: 1 1 100%;
   height: 50%;
   margin: 0 auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: start;
 
   // width: 0;
   // flex: 1 1 100%;
@@ -77,7 +79,10 @@ class BoardsIndex extends React.Component {
   render() {
     return (
       <HomeWrapper>
-        <AllBoards>{this.renderBoards()}</AllBoards>
+        <AllBoards>
+          {this.renderBoards()}
+          {this.props.createNewBoard}
+        </AllBoards>
       </HomeWrapper>
     );
   }

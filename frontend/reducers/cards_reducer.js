@@ -8,8 +8,11 @@ const initialState = {};
 const cardsReducer = (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_BOARD:
-      const allnewCards = action.board.lists.cards;
-      return merge({}, state, allnewCards);
+      if (action.board.lists) {
+        return merge({}, state, action.board.lists.cards);
+      } else {
+        return state;
+      }
     case RECEIVE_BOARDS:
       const allReceivedCards = action.boards.lists.cards;
       return merge({}, state, allReceivedCards);
