@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import CreateListContainer from "./create_list_container";
 // import { editTitle, deleteList } from "../actions";
 import Icon from "@material-ui/core/Icon";
+import { openModal } from "../../actions/modal_actions";
 
 const ListContainer = styled.div`
   background-color: #dfe3e6;
@@ -58,10 +59,12 @@ const TrelloList = ({
   listID,
   index,
   cards,
+  showCardForm,
   dispatch
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(title);
+  console.log(showCardForm);
 
   const renderEditInput = () => {
     return (
@@ -135,6 +138,7 @@ const TrelloList = ({
                       id={card.id}
                       index={index}
                       listID={listID}
+                      showCardForm={showCardForm}
                     />
                   ))}
                   {provided.placeholder}
@@ -155,9 +159,13 @@ const msp = state => {
   };
 };
 
+const mdp = dispatch => ({
+  showCardForm: () => dispatch(openModal("show card form"))
+});
+
 export default connect(
   msp,
-  null
+  mdp
 )(TrelloList);
 
 {

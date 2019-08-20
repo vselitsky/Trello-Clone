@@ -9,6 +9,8 @@ import TrelloForm from "../trello_form";
 // import { editCard, deleteCard } from "../actions";
 import { connect } from "react-redux";
 import TrelloButton from "../trello_button";
+import ShowCardFormContainer from "./show_card_form_container";
+import { setActiveCard } from "../../actions/cards_actions";
 
 const CardContainer = styled.div`
   margin: 0 0 8px 0;
@@ -47,69 +49,84 @@ const EditButton = styled(Icon)`
 //   }
 // `;
 
-const TrelloCard = React.memo(({ title, id, listID, index, dispatch }) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [cardText, setText] = useState(title);
+const TrelloCard = React.memo(
+  ({ title, id, listID, index, showCardForm, dispatch }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [cardText, setText] = useState(title);
+    const [activeCardID, setActiveCardID] = useState(id);
 
-  const closeForm = e => {
-    setIsEditing(false);
-  };
+    const closeForm = e => {
+      setIsEditing(false);
+    };
 
-  const handleChange = e => {
-    setText(e.target.value);
-  };
+    const handleChange = e => {
+      setText(e.target.value);
+    };
 
-  const saveCard = e => {
-    e.preventDefault();
+    const saveCard = e => {
+      e.preventDefault();
 
-    dispatch(editCard(id, listID, cardText));
-    setIsEditing(false);
-  };
+      dispatch(editCard(id, listID, cardText));
+      setIsEditing(false);
+    };
 
-  const handleDeleteCard = e => {
-    dispatch(deleteCard(id, listID));
-  };
+    const handleClick = id => {
+      // console.log(id);
+      // setActiveCardID(id);
+      // console.log(cardID);
+      dispatch(setActiveCard(id));
+      showCardForm();
+    };
 
-  const renderEditForm = () => {
-    return (
-      <TrelloForm text={cardText} onChange={handleChange} closeForm={closeForm}>
-        <TrelloButton onClick={saveCard}>Save</TrelloButton>
-      </TrelloForm>
-    );
-  };
+    const handleDeleteCard = e => {
+      dispatch(deleteCard(id, listID));
+    };
 
-  const renderCard = () => {
-    return (
-      <Draggable draggableId={String(id)} index={index}>
-        {provided => (
-          <CardContainer
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-            onDoubleClick={() => setIsEditing(true)}
-          >
-            <Card>
-              <EditButton
-                onMouseDown={() => setIsEditing(true)}
-                fontSize="small"
-              >
-                edit
-              </EditButton>
-              {/* <DeleteButton fontSize="small" onMouseDown={handleDeleteCard}>
+    const renderEditForm = () => {
+      return (
+        <TrelloForm
+          text={cardText}
+          onChange={handleChange}
+          closeForm={closeForm}
+        >
+          <TrelloButton onClick={saveCard}>Save</TrelloButton>
+        </TrelloForm>
+      );
+    };
+
+    const renderCard = () => {
+      return (
+        <Draggable draggableId={String(id)} index={index}>
+          {provided => (
+            <CardContainer
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              ref={provided.innerRef}
+              onClick={() => handleClick(id)}
+            >
+              <Card>
+                <EditButton
+                  onMouseDown={() => setIsEditing(true)}
+                  fontSize="small"
+                >
+                  edit
+                </EditButton>
+                {/* <DeleteButton fontSize="small" onMouseDown={handleDeleteCard}>
                 delete
               </DeleteButton> */}
 
-              <CardContent>
-                <Typography>{title}</Typography>
-              </CardContent>
-            </Card>
-          </CardContainer>
-        )}
-      </Draggable>
-    );
-  };
+                <CardContent>
+                  <Typography>{title}</Typography>
+                </CardContent>
+              </Card>
+            </CardContainer>
+          )}
+        </Draggable>
+      );
+    };
 
-  return isEditing ? renderEditForm() : renderCard();
-});
+    return isEditing ? renderEditForm() : renderCard();
+  }
+);
 
 export default connect()(TrelloCard);

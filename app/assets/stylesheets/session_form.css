@@ -127,9 +127,16 @@ section {
   line-height: 1.44em;
 }
 
-input[type="text"],
 input[type="password"],
 input[type="email"] {
+  background: #edeff0;
+  border-radius: 4px;
+  border: 1px solid #cdd2d4;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.signup-form-text-input {
   background: #edeff0;
   border-radius: 4px;
   border: 1px solid #cdd2d4;

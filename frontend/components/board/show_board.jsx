@@ -153,6 +153,7 @@ class BoardShow extends React.Component {
                   }
                 })}
                 {provided.placeholder}
+
                 <TrelloCreate list />
               </ListsContainer>
             )}

@@ -14,7 +14,7 @@ export const deleteCard = id =>
 export const editCard = card =>
   $.ajax({
     method: "Patch",
-    url: `/api/card/${id}`,
+    url: `/api/cards/${card.id}`,
     data: { card }
   });
 

@@ -12,8 +12,8 @@ export const receiveList = list => ({
 export const createList = list => dispatch =>
   APIUtil.createList(list).then(list => dispatch(receiveList(list)));
 
-export const editList = list => dispatch =>
-  APIUtil.editList(list).then(list => dispatch(receiveList(list)));
+export const updateList = list => dispatch =>
+  APIUtil.updateList(list).then(list => dispatch(receiveList(list)));
 
 export const sort = (
   droppableIdStart,

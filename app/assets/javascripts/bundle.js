@@ -203,20 +203,24 @@ var setActiveBoard = function setActiveBoard(id) {
 /*!*******************************************!*\
   !*** ./frontend/actions/cards_actions.js ***!
   \*******************************************/
-/*! exports provided: RECEIVE_CARD, RECEIVE_CARDS, createCard, fetchAllCards, receiveCards */
+/*! exports provided: RECEIVE_CARD, RECEIVE_CARDS, SET_ACTIVE_CARD, createCard, fetchAllCards, editCard, receiveCards, setActiveCard */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_CARD", function() { return RECEIVE_CARD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_CARDS", function() { return RECEIVE_CARDS; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_ACTIVE_CARD", function() { return SET_ACTIVE_CARD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createCard", function() { return createCard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchAllCards", function() { return fetchAllCards; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "editCard", function() { return editCard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveCards", function() { return receiveCards; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setActiveCard", function() { return setActiveCard; });
 /* harmony import */ var _util_card_api_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/card_api_util */ "./frontend/util/card_api_util.js");
 
 var RECEIVE_CARD = "RECEIVE_CARD";
 var RECEIVE_CARDS = "RECEIVE_CARDS";
+var SET_ACTIVE_CARD = "SET_ACTIVE_CARD";
 
 var receiveCard = function receiveCard(card) {
   return {
@@ -239,10 +243,23 @@ var fetchAllCards = function fetchAllCards() {
     });
   };
 };
+var editCard = function editCard(card) {
+  return function (dispatch) {
+    return _util_card_api_util__WEBPACK_IMPORTED_MODULE_0__["editCard"](card).then(function (card) {
+      return dispatch(receiveCard(card));
+    });
+  };
+};
 var receiveCards = function receiveCards(cards) {
   return {
     type: RECEIVE_CARDS,
     cards: cards
+  };
+};
+var setActiveCard = function setActiveCard(id) {
+  return {
+    type: SET_ACTIVE_CARD,
+    payload: "card-".concat(id)
   };
 };
 
@@ -252,7 +269,7 @@ var receiveCards = function receiveCards(cards) {
 /*!*******************************************!*\
   !*** ./frontend/actions/lists_actions.js ***!
   \*******************************************/
-/*! exports provided: RECEIVE_LIST, DRAG_HAPPENED, RECEIVE_LISTS, receiveList, createList, editList, sort, fetchAllLists, receiveLists */
+/*! exports provided: RECEIVE_LIST, DRAG_HAPPENED, RECEIVE_LISTS, receiveList, createList, updateList, sort, fetchAllLists, receiveLists */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -262,7 +279,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_LISTS", function() { return RECEIVE_LISTS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveList", function() { return receiveList; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createList", function() { return createList; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "editList", function() { return editList; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateList", function() { return updateList; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sort", function() { return sort; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchAllLists", function() { return fetchAllLists; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveLists", function() { return receiveLists; });
@@ -284,9 +301,9 @@ var createList = function createList(list) {
     });
   };
 };
-var editList = function editList(list) {
+var updateList = function updateList(list) {
   return function (dispatch) {
-    return _util_list_api_util__WEBPACK_IMPORTED_MODULE_0__["editList"](list).then(function (list) {
+    return _util_list_api_util__WEBPACK_IMPORTED_MODULE_0__["updateList"](list).then(function (list) {
       return dispatch(receiveList(list));
     });
   };
@@ -1367,6 +1384,248 @@ var mdp = function mdp(dispatch) {
 
 /***/ }),
 
+/***/ "./frontend/components/card/show_card_form_container.js":
+/*!**************************************************************!*\
+  !*** ./frontend/components/card/show_card_form_container.js ***!
+  \**************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
+/* harmony import */ var react_textarea_autosize__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-textarea-autosize */ "./node_modules/react-textarea-autosize/dist/react-textarea-autosize.esm.browser.js");
+/* harmony import */ var _actions_cards_actions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../actions/cards_actions */ "./frontend/actions/cards_actions.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _templateObject7() {
+  var data = _taggedTemplateLiteral(["\n  width: 100%;\n  border: none;\n  outline-color: blue;\n  border-radius: 3px;\n  //   margin-bottom: 3px;\n  // padding: 5px;\n  background: #fff;\n  //   border-radius: 3px;\n  box-shadow: none;\n  font-size: 20px;\n  font-weight: 600;\n\n  line-height: 24px;\n  margin: -4px -8px;\n  min-height: 24px;\n  padding: 4px 8px;\n  resize: none;\n  box-shadow: inset 0 0 0 2px #dfe1e6;\n"]);
+
+  _templateObject7 = function _templateObject7() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject6() {
+  var data = _taggedTemplateLiteral(["\n  //   width: 100%;\n  //   height: 100%;\n  //   display: flex;\n  //   justify-content: space-between;\n  //   align-items: center;\n  //   cursor: pointer;\n\n  position: relative;\n\n  // margin: 12px 40px 8px 56px;\n  min-height: 32px;\n  padding: 8px 0 0 8px;\n  //   //cursor: pointer;\n\n  margin: 4px 0 0;\n  //   padding: 8px 0 0;\n"]);
+
+  _templateObject6 = function _templateObject6() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject5() {
+  var data = _taggedTemplateLiteral([""]);
+
+  _templateObject5 = function _templateObject5() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject4() {
+  var data = _taggedTemplateLiteral(["\n  display: inline-block;\n  margin: 4px 8px 4px 2px;\n  color: #6b778c;\n  position: relative;\n"]);
+
+  _templateObject4 = function _templateObject4() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject3() {
+  var data = _taggedTemplateLiteral(["\n  position: relative;\n  margin-right: 4px;\n  transition-property: background-color, border-color, box-shadow;\n  transition-duration: 85ms;\n  transition-timing-function: ease;\n  font-family: Helvetica Neue, sans-serif;\n  font-size: 20px;\n  font-weight: 600;\n  line-height: 24px;\n"]);
+
+  _templateObject3 = function _templateObject3() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject2() {
+  var data = _taggedTemplateLiteral(["\n  margin: 12px 40px 8px 56px;\n  min-height: 32px;\n  position: relative;\n  z-index: 1;\n  justify-content: start;\n"]);
+
+  _templateObject2 = function _templateObject2() {
+    return data;
+  };
+
+  return data;
+}
+
+function _templateObject() {
+  var data = _taggedTemplateLiteral(["\n  display: flex;\n  margin: 36px 8px;\n  height: 600px;\n  color: #172b4d;\n  background-color: #f4f5f7;\n  border-radius: 2px;\n  justify-content: start;\n  //   //   position: relative;\n  //   width: 600px;\n  //   z-index: 20;\n  box-sizing: border-box;\n  //   // justify-content: center;\n"]);
+
+  _templateObject = function _templateObject() {
+    return data;
+  };
+
+  return data;
+}
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+
+var ModalWrapper = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div(_templateObject());
+var HeaderContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div(_templateObject2());
+var CardTitle = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].h2(_templateObject3());
+var ListReference = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div(_templateObject4());
+var FakeFocus = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].a(_templateObject5());
+var TitleContainer = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].div(_templateObject6());
+var StyledInput = styled_components__WEBPACK_IMPORTED_MODULE_2__["default"].input(_templateObject7());
+
+var ShowCardForm =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ShowCardForm, _React$Component);
+
+  function ShowCardForm(props) {
+    var _this;
+
+    _classCallCheck(this, ShowCardForm);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ShowCardForm).call(this, props));
+    _this.state = {
+      title: _this.props.title,
+      isEditing: false
+    };
+    _this.handleFinishEditing = _this.handleFinishEditing.bind(_assertThisInitialized(_this));
+    return _this;
+  }
+
+  _createClass(ShowCardForm, [{
+    key: "handleCloseForm",
+    value: function handleCloseForm(e) {
+      // e.preventDefault();
+      this.setState({
+        isEditing: false
+      });
+    }
+  }, {
+    key: "handleFocus",
+    value: function handleFocus(e) {
+      e.target.select();
+    }
+  }, {
+    key: "handleChange",
+    value: function handleChange(e) {
+      e.preventDefault();
+      this.setState({
+        title: e.currentTarget.value
+      });
+    }
+  }, {
+    key: "handleFinishEditing",
+    value: function handleFinishEditing(e) {
+      e.preventDefault();
+      var newCard = Object.assign({}, {
+        title: this.state.title,
+        id: this.props.id
+      });
+      this.props.editCard(newCard).then(this.setState({
+        isEditing: false
+      }));
+    }
+  }, {
+    key: "renderEditInput",
+    value: function renderEditInput() {
+      var _this2 = this;
+
+      var styles = {
+        overflow: "hidden",
+        overflowWrap: "break-word",
+        height: "32px"
+      };
+      return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
+        onSubmit: this.handleFinishEditing
+      }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(StyledInput, {
+        style: styles,
+        dir: "auto",
+        type: "text",
+        value: this.state.title,
+        onChange: this.handleChange.bind(this),
+        autoFocus: true,
+        onFocus: this.handleFocus,
+        onBlur: this.handleCloseForm.bind(this),
+        onKeyPress: function onKeyPress(event) {
+          if (event.key === "Enter") {
+            _this2.handleFinishEditing;
+          }
+        }
+      }));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      console.log(this.props);
+      var title = this.props.title;
+
+      if (this.state.isEditing === false) {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ModalWrapper, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(HeaderContainer, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(TitleContainer, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(CardTitle, {
+          onClick: function onClick() {
+            return _this3.setState({
+              isEditing: true
+            });
+          }
+        }, title)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ListReference, null, "list ".concat(this.props.list_id)))));
+      } else {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ModalWrapper, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(HeaderContainer, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(TitleContainer, null, this.renderEditInput())));
+      }
+    }
+  }]);
+
+  return ShowCardForm;
+}(react__WEBPACK_IMPORTED_MODULE_1___default.a.Component);
+
+var msp = function msp(state) {
+  var revised = state.activeCard; //console.log(revised);
+
+  var card = state.entities.cards[revised];
+  return card;
+};
+
+var mdp = function mdp(dispatch) {
+  return {
+    editCard: function editCard(card) {
+      return dispatch(Object(_actions_cards_actions__WEBPACK_IMPORTED_MODULE_4__["editCard"])(card));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(msp, mdp)(ShowCardForm));
+
+/***/ }),
+
 /***/ "./frontend/components/card/trello_card.jsx":
 /*!**************************************************!*\
   !*** ./frontend/components/card/trello_card.jsx ***!
@@ -1387,6 +1646,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _trello_form__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../trello_form */ "./frontend/components/trello_form.jsx");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _trello_button__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../trello_button */ "./frontend/components/trello_button.jsx");
+/* harmony import */ var _show_card_form_container__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./show_card_form_container */ "./frontend/components/card/show_card_form_container.js");
+/* harmony import */ var _actions_cards_actions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../actions/cards_actions */ "./frontend/actions/cards_actions.js");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -1430,6 +1691,8 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
+
+
 var CardContainer = styled_components__WEBPACK_IMPORTED_MODULE_5__["default"].div(_templateObject());
 var EditButton = Object(styled_components__WEBPACK_IMPORTED_MODULE_5__["default"])(_material_ui_core_Icon__WEBPACK_IMPORTED_MODULE_6__["default"])(_templateObject2(), CardContainer); // const DeleteButton = styled(Icon)`
 //   position: absolute;
@@ -1451,6 +1714,7 @@ var TrelloCard = react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(function (_re
       id = _ref.id,
       listID = _ref.listID,
       index = _ref.index,
+      showCardForm = _ref.showCardForm,
       dispatch = _ref.dispatch;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
@@ -1462,6 +1726,11 @@ var TrelloCard = react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(function (_re
       _useState4 = _slicedToArray(_useState3, 2),
       cardText = _useState4[0],
       setText = _useState4[1];
+
+  var _useState5 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(id),
+      _useState6 = _slicedToArray(_useState5, 2),
+      activeCardID = _useState6[0],
+      setActiveCardID = _useState6[1];
 
   var closeForm = function closeForm(e) {
     setIsEditing(false);
@@ -1475,6 +1744,14 @@ var TrelloCard = react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(function (_re
     e.preventDefault();
     dispatch(editCard(id, listID, cardText));
     setIsEditing(false);
+  };
+
+  var handleClick = function handleClick(id) {
+    // console.log(id);
+    // setActiveCardID(id);
+    // console.log(cardID);
+    dispatch(Object(_actions_cards_actions__WEBPACK_IMPORTED_MODULE_11__["setActiveCard"])(id));
+    showCardForm();
   };
 
   var handleDeleteCard = function handleDeleteCard(e) {
@@ -1498,8 +1775,8 @@ var TrelloCard = react__WEBPACK_IMPORTED_MODULE_0___default.a.memo(function (_re
     }, function (provided) {
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CardContainer, _extends({}, provided.draggableProps, provided.dragHandleProps, {
         ref: provided.innerRef,
-        onDoubleClick: function onDoubleClick() {
-          return setIsEditing(true);
+        onClick: function onClick() {
+          return handleClick(id);
         }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Card__WEBPACK_IMPORTED_MODULE_1__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(EditButton, {
         onMouseDown: function onMouseDown() {
@@ -1897,6 +2174,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _create_list_container__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./create_list_container */ "./frontend/components/list/create_list_container.js");
 /* harmony import */ var _material_ui_core_Icon__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Icon */ "./node_modules/@material-ui/core/esm/Icon/index.js");
+/* harmony import */ var _actions_modal_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../actions/modal_actions */ "./frontend/actions/modal_actions.js");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
@@ -1968,6 +2246,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
  // import { editTitle, deleteList } from "../actions";
 
 
+
 var ListContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__["default"].div(_templateObject());
 var StyledInput = styled_components__WEBPACK_IMPORTED_MODULE_4__["default"].input(_templateObject2());
 var TitleContainer = styled_components__WEBPACK_IMPORTED_MODULE_4__["default"].div(_templateObject3());
@@ -1981,6 +2260,7 @@ var TrelloList = function TrelloList(_ref) {
       listID = _ref.listID,
       index = _ref.index,
       cards = _ref.cards,
+      showCardForm = _ref.showCardForm,
       dispatch = _ref.dispatch;
 
   var _useState = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
@@ -1992,6 +2272,8 @@ var TrelloList = function TrelloList(_ref) {
       _useState4 = _slicedToArray(_useState3, 2),
       listTitle = _useState4[0],
       setListTitle = _useState4[1];
+
+  console.log(showCardForm);
 
   var renderEditInput = function renderEditInput() {
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
@@ -2053,7 +2335,8 @@ var TrelloList = function TrelloList(_ref) {
           title: card.title,
           id: card.id,
           index: index,
-          listID: listID
+          listID: listID,
+          showCardForm: showCardForm
         });
       }), provided.placeholder, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_trello_create__WEBPACK_IMPORTED_MODULE_2__["default"], {
         listID: listID
@@ -2068,7 +2351,15 @@ var msp = function msp(state) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(msp, null)(TrelloList));
+var mdp = function mdp(dispatch) {
+  return {
+    showCardForm: function showCardForm() {
+      return dispatch(Object(_actions_modal_actions__WEBPACK_IMPORTED_MODULE_8__["openModal"])("show card form"));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(msp, mdp)(TrelloList));
 {}
 /* <Droppable droppableId={String(listID)} type="card">
           {provided => (
@@ -2114,6 +2405,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_modal_actions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../actions/modal_actions */ "./frontend/actions/modal_actions.js");
 /* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 /* harmony import */ var _board_create_new_board_container__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../board/create_new_board_container */ "./frontend/components/board/create_new_board_container.js");
+/* harmony import */ var _card_show_card_form_container__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../card/show_card_form_container */ "./frontend/components/card/show_card_form_container.js");
+
 
 
 
@@ -2132,18 +2425,28 @@ function Modal(_ref) {
   switch (modal) {
     case "create new board":
       component = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_create_new_board_container__WEBPACK_IMPORTED_MODULE_3__["default"], null);
-      break;
-  }
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal-background",
+        onClick: closeModal
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "modal-child",
+        onClick: function onClick(e) {
+          return e.stopPropagation();
+        }
+      }, component));
 
-  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "modal-background",
-    onClick: closeModal
-  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: "modal-child",
-    onClick: function onClick(e) {
-      return e.stopPropagation();
-    }
-  }, component));
+    case "show card form":
+      component = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_card_show_card_form_container__WEBPACK_IMPORTED_MODULE_4__["default"], null);
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "window-overlay",
+        onClick: closeModal
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "window-child",
+        onClick: function onClick(e) {
+          return e.stopPropagation();
+        }
+      }, component));
+  }
 }
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -2160,7 +2463,24 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps)(Modal));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps)(Modal)); // function Modal({ modal, closeModal }) {
+//   if (!modal) {
+//     return null;
+//   }
+//   let component;
+//   switch (modal) {
+//     case "create new board":
+//       component = <CreateNewBoardContainer />;
+//       break;
+//   }
+//   return (
+//     <div className="modal-background" onClick={closeModal}>
+//       <div className="modal-child" onClick={e => e.stopPropagation()}>
+//         {component}
+//       </div>
+//     </div>
+//   );
+// }
 
 /***/ }),
 
@@ -2501,6 +2821,7 @@ function (_React$Component) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
         htmlFor: "name"
       }, " Name "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+        className: "signup-form-text-input",
         type: "text",
         onChange: this.updateUsername.bind(this),
         value: this.state.username,
@@ -2801,6 +3122,7 @@ function (_React$Component) {
       var text = this.state.text;
       var list = this.props.list;
       return this.state.formOpen ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_trello_form__WEBPACK_IMPORTED_MODULE_7__["default"], {
+        list: list,
         text: text,
         onChange: this.handleInputChange.bind(this),
         closeForm: this.closeForm.bind(this)
@@ -2809,7 +3131,7 @@ function (_React$Component) {
       }, list ? "Add List" : "Add Card")) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_trello_open_form__WEBPACK_IMPORTED_MODULE_8__["default"], {
         list: list,
         onClick: this.openForm
-      });
+      }, list ? "Add another list" : "Add another card");
     }
   }]);
 
@@ -3001,6 +3323,38 @@ var activeBoardReducer = function activeBoardReducer() {
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (activeBoardReducer);
+
+/***/ }),
+
+/***/ "./frontend/reducers/active_card_reducer.js":
+/*!**************************************************!*\
+  !*** ./frontend/reducers/active_card_reducer.js ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_cards_actions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../actions/cards_actions */ "./frontend/actions/cards_actions.js");
+
+var initialState = null;
+
+var activeCardReducer = function activeCardReducer() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+  var action = arguments.length > 1 ? arguments[1] : undefined;
+
+  switch (action.type) {
+    case _actions_cards_actions__WEBPACK_IMPORTED_MODULE_0__["SET_ACTIVE_CARD"]:
+      {
+        return action.payload;
+      }
+
+    default:
+      return state;
+  }
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (activeCardReducer);
 
 /***/ }),
 
@@ -3440,6 +3794,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _errors_reducer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./errors_reducer */ "./frontend/reducers/errors_reducer.js");
 /* harmony import */ var _ui_reducer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ui_reducer */ "./frontend/reducers/ui_reducer.js");
 /* harmony import */ var _active_board_reducer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./active_board_reducer */ "./frontend/reducers/active_board_reducer.js");
+/* harmony import */ var _active_card_reducer__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./active_card_reducer */ "./frontend/reducers/active_card_reducer.js");
+
 
 
 
@@ -3451,7 +3807,8 @@ var rootReducer = Object(redux__WEBPACK_IMPORTED_MODULE_0__["combineReducers"])(
   session: _session_reducer__WEBPACK_IMPORTED_MODULE_2__["default"],
   errors: _errors_reducer__WEBPACK_IMPORTED_MODULE_3__["default"],
   ui: _ui_reducer__WEBPACK_IMPORTED_MODULE_4__["default"],
-  activeBoard: _active_board_reducer__WEBPACK_IMPORTED_MODULE_5__["default"]
+  activeBoard: _active_board_reducer__WEBPACK_IMPORTED_MODULE_5__["default"],
+  activeCard: _active_card_reducer__WEBPACK_IMPORTED_MODULE_6__["default"]
 });
 /* harmony default export */ __webpack_exports__["default"] = (rootReducer);
 
@@ -3880,7 +4237,7 @@ var deleteCard = function deleteCard(id) {
 var editCard = function editCard(card) {
   return $.ajax({
     method: "Patch",
-    url: "/api/card/".concat(id),
+    url: "/api/cards/".concat(card.id),
     data: {
       card: card
     }

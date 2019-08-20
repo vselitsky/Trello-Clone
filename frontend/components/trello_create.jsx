@@ -120,6 +120,7 @@ class TrelloCreate extends React.Component {
     const { list } = this.props;
     return this.state.formOpen ? (
       <TrelloForm
+        list={list}
         text={text}
         onChange={this.handleInputChange.bind(this)}
         closeForm={this.closeForm.bind(this)}
@@ -129,7 +130,9 @@ class TrelloCreate extends React.Component {
         </TrelloButton>
       </TrelloForm>
     ) : (
-      <TrelloOpenForm list={list} onClick={this.openForm} />
+      <TrelloOpenForm list={list} onClick={this.openForm}>
+        {list ? "Add another list" : "Add another card"}
+      </TrelloOpenForm>
     );
   }
 }
