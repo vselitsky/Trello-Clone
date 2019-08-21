@@ -13,7 +13,15 @@ const boardsReducer = (obj = {}, action) => {
 
   switch (action.type) {
     case RECEIVE_BOARDS:
-      let allBoards = action.boards;
+      let arr = ["cards", "lists"];
+      let allBoards = {};
+      let receivedBoards = Object.keys(action.boards);
+
+      receivedBoards.forEach(key => {
+        if (arr.indexOf(key) === -1) {
+          allBoards[key] = action.boards[key];
+        }
+      });
       return merge({}, allBoards);
     case RECEIVE_BOARD:
       let newBoardtoReturn = { [action.board.id]: action.board };

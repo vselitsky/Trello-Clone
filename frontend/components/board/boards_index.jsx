@@ -57,7 +57,7 @@ class BoardsIndex extends React.Component {
   }
 
   renderBoards() {
-    const boards = this.props.boards.slice(0, -2);
+    const boards = this.props.boards;
     console.log(boards);
     return boards.map(board => {
       return <BoardIndexItem board={board} key={board.id} />;

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Textarea from "react-textarea-autosize";
 import { editCard } from "../../actions/cards_actions";
+import CardDescriptionForm from "./card_description_form";
 const ModalWrapper = styled.div`
   display: flex;
   margin: 36px 8px;
@@ -114,7 +115,7 @@ class ShowCardForm extends React.Component {
       {},
       {
         title: this.state.title,
-        id: this.props.id
+        id: this.props.card.id
       }
     );
     this.props.editCard(newCard).then(this.setState({ isEditing: false }));
@@ -152,30 +153,28 @@ class ShowCardForm extends React.Component {
     console.log(this.props);
     const { title } = this.props.card;
     const list = this.props.lists[`list-${this.props.card.list_id}`];
-    if (this.state.isEditing === false) {
-      return (
-        <div>
-          <ModalWrapper>
-            <HeaderContainer>
-              <TitleContainer
-                onClick={() => this.setState({ isEditing: true })}
-              >
-                <CardTitle>{title}</CardTitle>
-              </TitleContainer>
-              <ListReference>{`list ${list.title}`}</ListReference>
-            </HeaderContainer>
-          </ModalWrapper>
-        </div>
-      );
-    } else {
-      return (
-        <ModalWrapper>
-          <HeaderContainer>
-            <TitleContainer>{this.renderEditInput()}</TitleContainer>
-          </HeaderContainer>
-        </ModalWrapper>
-      );
-    }
+    const { isEditing } = this.state;
+
+    return (
+      <ModalWrapper>
+        <HeaderContainer>
+          {isEditing ? (
+            this.renderEditInput()
+          ) : (
+            <TitleContainer onClick={() => this.setState({ isEditing: true })}>
+              {" "}
+              <CardTitle>{title}</CardTitle>
+            </TitleContainer>
+          )}
+          <ListReference>{`in list ${list.title}`}</ListReference>
+
+          <CardDescriptionForm
+            card={this.props.card}
+            editCard={this.props.editCard}
+          />
+        </HeaderContainer>
+      </ModalWrapper>
+    );
   }
 }
 

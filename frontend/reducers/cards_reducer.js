@@ -10,6 +10,7 @@ import merge from "lodash/merge";
 const initialState = {};
 
 const cardsReducer = (state = initialState, action) => {
+  Object.freeze(state);
   switch (action.type) {
     case RECEIVE_BOARD:
       if (action.board.lists && action.board.lists.cards) {
@@ -25,14 +26,18 @@ const cardsReducer = (state = initialState, action) => {
         return state;
       }
     case RECEIVE_BOARDS:
-      const newReceivedCard3 = Object.keys(action.boards.cards);
-      const newCard3 = {};
-      newReceivedCard3.forEach(ele => {
-        let numEle = Number(ele);
-        let newCardKey = `card-${ele}`;
-        newCard3[newCardKey] = action.boards.cards[numEle];
-      });
-      return merge({}, state, newCard3);
+      if (action.boards.cards !== undefined) {
+        const newReceivedCard3 = Object.keys(action.boards.cards);
+        const newCard3 = {};
+        newReceivedCard3.forEach(ele => {
+          let numEle = Number(ele);
+          let newCardKey = `card-${ele}`;
+          newCard3[newCardKey] = action.boards.cards[numEle];
+        });
+        return merge({}, state, newCard3);
+      } else {
+        return state;
+      }
     case RECEIVE_LIST:
       const allCards = action.list.cards;
       return merge({}, state, allCards);

@@ -25,15 +25,19 @@ const listsReducer = (state = {}, action) => {
       }
 
     case RECEIVE_BOARDS:
-      const allListsKeys = Object.keys(action.boards.lists);
+      if (action.boards.lists !== undefined) {
+        const allListsKeys = Object.keys(action.boards.lists);
 
-      const newLists = {};
-      allListsKeys.forEach(ele => {
-        let numEle = Number(ele);
-        let newListKey = `list-${ele}`;
-        newLists[newListKey] = action.boards.lists[numEle];
-      });
-      return merge({}, state, newLists);
+        const newLists = {};
+        allListsKeys.forEach(ele => {
+          let numEle = Number(ele);
+          let newListKey = `list-${ele}`;
+          newLists[newListKey] = action.boards.lists[numEle];
+        });
+        return merge({}, state, newLists);
+      } else {
+        return state;
+      }
     case RECEIVE_LISTS:
       // const allLists = action.lists
       // const newAallLists.map
