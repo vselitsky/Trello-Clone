@@ -90,7 +90,7 @@ const StyledInput = styled.input`
 class ShowCardForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { title: this.props.title, isEditing: false };
+    this.state = { title: this.props.card.title, isEditing: false };
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
   }
 
@@ -118,6 +118,7 @@ class ShowCardForm extends React.Component {
       }
     );
     this.props.editCard(newCard).then(this.setState({ isEditing: false }));
+    //   .then((this.props.title = this.state.title));
   }
 
   renderEditInput() {
@@ -137,8 +138,8 @@ class ShowCardForm extends React.Component {
           autoFocus
           onFocus={this.handleFocus}
           onBlur={this.handleCloseForm.bind(this)}
-          onKeyPress={event => {
-            if (event.key === "Enter") {
+          onKeyDown={e => {
+            if (e.charCode == 13) {
               this.handleFinishEditing;
             }
           }}
@@ -149,18 +150,19 @@ class ShowCardForm extends React.Component {
 
   render() {
     console.log(this.props);
-    const { title } = this.props;
+    const { title } = this.props.card;
+    const list = this.props.lists[`list-${this.props.card.list_id}`];
     if (this.state.isEditing === false) {
       return (
         <div>
           <ModalWrapper>
             <HeaderContainer>
-              <TitleContainer>
-                <CardTitle onClick={() => this.setState({ isEditing: true })}>
-                  {title}
-                </CardTitle>
+              <TitleContainer
+                onClick={() => this.setState({ isEditing: true })}
+              >
+                <CardTitle>{title}</CardTitle>
               </TitleContainer>
-              <ListReference>{`list ${this.props.list_id}`}</ListReference>
+              <ListReference>{`list ${list.title}`}</ListReference>
             </HeaderContainer>
           </ModalWrapper>
         </div>
@@ -181,7 +183,8 @@ const msp = state => {
   let revised = state.activeCard;
   //console.log(revised);
   let card = state.entities.cards[revised];
-  return card;
+  let lists = state.entities.lists;
+  return { card, lists };
 };
 
 const mdp = dispatch => ({
@@ -192,3 +195,31 @@ export default connect(
   msp,
   mdp
 )(ShowCardForm);
+
+// console.log(this.props);
+// const { title } = this.props;
+// if (this.state.isEditing === false) {
+//     return (
+//         <div>
+//             <ModalWrapper>
+//                 <HeaderContainer>
+//                     <TitleContainer>
+//                         <CardTitle onClick={() => this.setState({ isEditing: true })}>
+//                             {title}
+//                         </CardTitle>
+//                     </TitleContainer>
+//                     <ListReference>{`list ${this.props.list_id}`}</ListReference>
+//                 </HeaderContainer>
+//             </ModalWrapper>
+//         </div>
+//     );
+// } else {
+//     return (
+//         <ModalWrapper>
+//             <HeaderContainer>
+//                 <TitleContainer>{this.renderEditInput()}</TitleContainer>
+//             </HeaderContainer>
+//         </ModalWrapper>
+//     );
+// }
+//   }

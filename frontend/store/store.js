@@ -3,7 +3,9 @@ import thunk from "redux-thunk";
 import logger from "redux-logger";
 import * as APIUtil from "../util/board_api_util";
 import * as APBUtil from "../util/list_api_util";
+import * as APCUtil from "../util/card_api_util";
 import { receiveBoard } from "../actions/board_actions";
+import { updateCard } from "../actions/cards_actions";
 import { receiveList } from "../actions/lists_actions";
 
 import rootReducer from "../reducers/root_reducer";
@@ -16,7 +18,10 @@ const persistenceActionTypes = [
 // notPersistenceActionTypes = ['ADD_ITEM_TO_CART', 'REMOVE_ITEM_FROM_CART', 'NAVIGATE']
 
 const persistenceMiddleware = store => dispatch => action => {
+  //const oldState = store.getState();
+
   const result = dispatch(action);
+
   if (persistenceActionTypes.indexOf(action.type) > -1) {
     if (action.type === "RECEIVE_LIST") {
       let newState = store.getState();
@@ -38,6 +43,7 @@ const persistenceMiddleware = store => dispatch => action => {
         action.payload.droppableIdStart !== action.payload.droppableIdEnd &&
         action.payload.type === "card"
       ) {
+        //persistUpdatedCard(action, store);
         let newState = store.getState();
         sendToBackendDifferentLists(action, newState);
       }
@@ -45,6 +51,33 @@ const persistenceMiddleware = store => dispatch => action => {
   }
   return result;
 };
+
+// const persistUpdatedCard = (action, store) => {
+//   const listStart = store.getState().entities.lists[
+//     `list-${action.payload.droppableIdStart}`
+//   ];
+
+//   const cardID = listStart.card_positions.splice(
+//     action.payload.droppableIndexStart,
+//     1
+//   );
+//   const oldCard = store.getState().entities.cards[cardID];
+//   const listEnd = store.getState().entities.lists[
+//     `list-${action.payload.droppableIdEnd}`
+//   ];
+
+//   debugger;
+
+//   const newCard = Object.assingn(
+//     {},
+//     {
+//       id: oldCard.id,
+//       list_id: listEnd.id
+//     }
+//   );
+
+//   APCUtil.editCard(newCard);
+// };
 
 const saveUpdatedList = (action, newState) => {
   const updatedList3 = store.getState().entities.lists[
@@ -108,6 +141,24 @@ const sendToBackendDifferentLists = (action, newState) => {
 
   APBUtil.updateCardPositions(list);
   APBUtil.updateCardPositions(list2);
+
+  updatedList2.card_positions.forEach(id => {
+    let card2 = store.getState().entities.cards[id];
+
+    if (card2.list_id !== updatedList2.id) {
+      let newCard2 = Object.assign(
+        {},
+        {
+          id: card2.id,
+          list_id: updatedList2.id
+        }
+      );
+
+      APCUtil.editCard(newCard2).then(card => {
+        store.dispatch(updateCard(card));
+      });
+    }
+  });
 };
 
 const sendToBackendSameList = (action, newState) => {

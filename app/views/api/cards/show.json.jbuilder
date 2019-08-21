@@ -1,1 +1,1 @@
-json.extract! @card, :title, :list_id, :id 
+json.extract! @card, :title, :list_id, :id, :body 

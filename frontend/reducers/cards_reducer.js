@@ -1,4 +1,8 @@
-import { RECEIVE_CARD, RECEIVE_CARDS } from "../actions/cards_actions";
+import {
+  RECEIVE_CARD,
+  RECEIVE_CARDS,
+  UPDATE_CARD
+} from "../actions/cards_actions";
 import { RECEIVE_LIST } from "../actions/lists_actions";
 import { RECEIVE_BOARD, RECEIVE_BOARDS } from "../actions/board_actions";
 import merge from "lodash/merge";
@@ -21,12 +25,12 @@ const cardsReducer = (state = initialState, action) => {
         return state;
       }
     case RECEIVE_BOARDS:
-      const newReceivedCard3 = Object.keys(action.boards.lists.cards);
+      const newReceivedCard3 = Object.keys(action.boards.cards);
       const newCard3 = {};
       newReceivedCard3.forEach(ele => {
         let numEle = Number(ele);
         let newCardKey = `card-${ele}`;
-        newCard3[newCardKey] = action.boards.lists.cards[numEle];
+        newCard3[newCardKey] = action.boards.cards[numEle];
       });
       return merge({}, state, newCard3);
     case RECEIVE_LIST:
@@ -37,6 +41,9 @@ const cardsReducer = (state = initialState, action) => {
     case RECEIVE_CARD:
       let newCard = { [`card-${action.card.id}`]: action.card };
       return merge({}, state, newCard);
+    case UPDATE_CARD:
+      let newCard2 = { [`card-${action.card.id}`]: action.card };
+      return merge({}, state, newCard2);
     default:
       return state;
   }

@@ -11,15 +11,20 @@
                 json.extract! list, :id, :title, :board_id, :card_positions
                 end
 
-                json.cards do 
+              
+            end
+    end
+
+      json.cards do 
+                board.lists.each do |list|
+
                 list.cards.each do |card|
                  json.set! card.id do
                 json.extract! card, :id, :title, :list_id
                 end
 
+end
 
                 end
                 end
-            end
-    end
 end

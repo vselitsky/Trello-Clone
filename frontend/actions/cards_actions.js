@@ -3,6 +3,7 @@ import * as APIUtil from "../util/card_api_util";
 export const RECEIVE_CARD = "RECEIVE_CARD";
 export const RECEIVE_CARDS = "RECEIVE_CARDS";
 export const SET_ACTIVE_CARD = "SET_ACTIVE_CARD";
+export const UPDATE_CARD = "UPDATE_CARD";
 
 const receiveCard = card => ({
   type: RECEIVE_CARD,
@@ -17,11 +18,15 @@ export const fetchAllCards = () => dispatch => {
 };
 
 export const editCard = card => dispatch =>
-  APIUtil.editCard(card).then(card => dispatch(receiveCard(card)));
+  APIUtil.editCard(card).then(card => dispatch(updateCard(card)));
 
 export const receiveCards = cards => ({
   type: RECEIVE_CARDS,
   cards
+});
+export const updateCard = card => ({
+  type: UPDATE_CARD,
+  card
 });
 
 export const setActiveCard = id => {

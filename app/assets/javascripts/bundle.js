@@ -203,7 +203,7 @@ var setActiveBoard = function setActiveBoard(id) {
 /*!*******************************************!*\
   !*** ./frontend/actions/cards_actions.js ***!
   \*******************************************/
-/*! exports provided: RECEIVE_CARD, RECEIVE_CARDS, SET_ACTIVE_CARD, createCard, fetchAllCards, editCard, receiveCards, setActiveCard */
+/*! exports provided: RECEIVE_CARD, RECEIVE_CARDS, SET_ACTIVE_CARD, UPDATE_CARD, createCard, fetchAllCards, editCard, receiveCards, updateCard, setActiveCard */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -211,16 +211,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_CARD", function() { return RECEIVE_CARD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RECEIVE_CARDS", function() { return RECEIVE_CARDS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SET_ACTIVE_CARD", function() { return SET_ACTIVE_CARD; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UPDATE_CARD", function() { return UPDATE_CARD; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createCard", function() { return createCard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fetchAllCards", function() { return fetchAllCards; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "editCard", function() { return editCard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "receiveCards", function() { return receiveCards; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateCard", function() { return updateCard; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setActiveCard", function() { return setActiveCard; });
 /* harmony import */ var _util_card_api_util__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/card_api_util */ "./frontend/util/card_api_util.js");
 
 var RECEIVE_CARD = "RECEIVE_CARD";
 var RECEIVE_CARDS = "RECEIVE_CARDS";
 var SET_ACTIVE_CARD = "SET_ACTIVE_CARD";
+var UPDATE_CARD = "UPDATE_CARD";
 
 var receiveCard = function receiveCard(card) {
   return {
@@ -246,7 +249,7 @@ var fetchAllCards = function fetchAllCards() {
 var editCard = function editCard(card) {
   return function (dispatch) {
     return _util_card_api_util__WEBPACK_IMPORTED_MODULE_0__["editCard"](card).then(function (card) {
-      return dispatch(receiveCard(card));
+      return dispatch(updateCard(card));
     });
   };
 };
@@ -254,6 +257,12 @@ var receiveCards = function receiveCards(cards) {
   return {
     type: RECEIVE_CARDS,
     cards: cards
+  };
+};
+var updateCard = function updateCard(card) {
+  return {
+    type: UPDATE_CARD,
+    card: card
   };
 };
 var setActiveCard = function setActiveCard(id) {
@@ -950,7 +959,7 @@ function (_React$Component) {
   }, {
     key: "renderBoards",
     value: function renderBoards() {
-      var boards = this.props.boards.slice(0, -1);
+      var boards = this.props.boards.slice(0, -2);
       console.log(boards);
       return boards.map(function (board) {
         return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_board_index_item__WEBPACK_IMPORTED_MODULE_5__["default"], {
@@ -1514,7 +1523,7 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(ShowCardForm).call(this, props));
     _this.state = {
-      title: _this.props.title,
+      title: _this.props.card.title,
       isEditing: false
     };
     _this.handleFinishEditing = _this.handleFinishEditing.bind(_assertThisInitialized(_this));
@@ -1552,7 +1561,7 @@ function (_React$Component) {
       });
       this.props.editCard(newCard).then(this.setState({
         isEditing: false
-      }));
+      })); //   .then((this.props.title = this.state.title));
     }
   }, {
     key: "renderEditInput",
@@ -1575,8 +1584,8 @@ function (_React$Component) {
         autoFocus: true,
         onFocus: this.handleFocus,
         onBlur: this.handleCloseForm.bind(this),
-        onKeyPress: function onKeyPress(event) {
-          if (event.key === "Enter") {
+        onKeyDown: function onKeyDown(e) {
+          if (e.charCode == 13) {
             _this2.handleFinishEditing;
           }
         }
@@ -1588,16 +1597,17 @@ function (_React$Component) {
       var _this3 = this;
 
       console.log(this.props);
-      var title = this.props.title;
+      var title = this.props.card.title;
+      var list = this.props.lists["list-".concat(this.props.card.list_id)];
 
       if (this.state.isEditing === false) {
-        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ModalWrapper, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(HeaderContainer, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(TitleContainer, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(CardTitle, {
+        return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ModalWrapper, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(HeaderContainer, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(TitleContainer, {
           onClick: function onClick() {
             return _this3.setState({
               isEditing: true
             });
           }
-        }, title)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ListReference, null, "list ".concat(this.props.list_id)))));
+        }, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(CardTitle, null, title)), react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ListReference, null, "list ".concat(list.title)))));
       } else {
         return react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(ModalWrapper, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(HeaderContainer, null, react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(TitleContainer, null, this.renderEditInput())));
       }
@@ -1611,7 +1621,11 @@ var msp = function msp(state) {
   var revised = state.activeCard; //console.log(revised);
 
   var card = state.entities.cards[revised];
-  return card;
+  var lists = state.entities.lists;
+  return {
+    card: card,
+    lists: lists
+  };
 };
 
 var mdp = function mdp(dispatch) {
@@ -1622,7 +1636,33 @@ var mdp = function mdp(dispatch) {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(msp, mdp)(ShowCardForm));
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_0__["connect"])(msp, mdp)(ShowCardForm)); // console.log(this.props);
+// const { title } = this.props;
+// if (this.state.isEditing === false) {
+//     return (
+//         <div>
+//             <ModalWrapper>
+//                 <HeaderContainer>
+//                     <TitleContainer>
+//                         <CardTitle onClick={() => this.setState({ isEditing: true })}>
+//                             {title}
+//                         </CardTitle>
+//                     </TitleContainer>
+//                     <ListReference>{`list ${this.props.list_id}`}</ListReference>
+//                 </HeaderContainer>
+//             </ModalWrapper>
+//         </div>
+//     );
+// } else {
+//     return (
+//         <ModalWrapper>
+//             <HeaderContainer>
+//                 <TitleContainer>{this.renderEditInput()}</TitleContainer>
+//             </HeaderContainer>
+//         </ModalWrapper>
+//     );
+// }
+//   }
 
 /***/ }),
 
@@ -3423,7 +3463,8 @@ var boardsReducer = function boardsReducer() {
 
   switch (action.type) {
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_BOARDS"]:
-      return lodash_merge__WEBPACK_IMPORTED_MODULE_2___default()({}, action.boards);
+      var allBoards = action.boards;
+      return lodash_merge__WEBPACK_IMPORTED_MODULE_2___default()({}, allBoards);
 
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_0__["RECEIVE_BOARD"]:
       var newBoardtoReturn = _defineProperty({}, action.board.id, action.board);
@@ -3517,24 +3558,24 @@ var cardsReducer = function cardsReducer() {
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_2__["RECEIVE_BOARD"]:
       if (action.board.lists && action.board.lists.cards) {
         var newReceivedCard = Object.keys(action.board.lists.cards);
-        var newCard2 = {};
+        var _newCard = {};
         newReceivedCard.forEach(function (ele) {
           var numEle = Number(ele);
           var newCardKey = "card-".concat(ele);
-          newCard2[newCardKey] = action.board.lists.cards[numEle];
+          _newCard[newCardKey] = action.board.lists.cards[numEle];
         });
-        return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newCard2);
+        return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, _newCard);
       } else {
         return state;
       }
 
     case _actions_board_actions__WEBPACK_IMPORTED_MODULE_2__["RECEIVE_BOARDS"]:
-      var newReceivedCard3 = Object.keys(action.boards.lists.cards);
+      var newReceivedCard3 = Object.keys(action.boards.cards);
       var newCard3 = {};
       newReceivedCard3.forEach(function (ele) {
         var numEle = Number(ele);
         var newCardKey = "card-".concat(ele);
-        newCard3[newCardKey] = action.boards.lists.cards[numEle];
+        newCard3[newCardKey] = action.boards.cards[numEle];
       });
       return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newCard3);
 
@@ -3549,6 +3590,11 @@ var cardsReducer = function cardsReducer() {
       var newCard = _defineProperty({}, "card-".concat(action.card.id), action.card);
 
       return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newCard);
+
+    case _actions_cards_actions__WEBPACK_IMPORTED_MODULE_0__["UPDATE_CARD"]:
+      var newCard2 = _defineProperty({}, "card-".concat(action.card.id), action.card);
+
+      return lodash_merge__WEBPACK_IMPORTED_MODULE_3___default()({}, state, newCard2);
 
     default:
       return state;
@@ -3956,9 +4002,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var redux_logger__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(redux_logger__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _util_board_api_util__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../util/board_api_util */ "./frontend/util/board_api_util.js");
 /* harmony import */ var _util_list_api_util__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../util/list_api_util */ "./frontend/util/list_api_util.js");
-/* harmony import */ var _actions_board_actions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../actions/board_actions */ "./frontend/actions/board_actions.js");
-/* harmony import */ var _actions_lists_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../actions/lists_actions */ "./frontend/actions/lists_actions.js");
-/* harmony import */ var _reducers_root_reducer__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../reducers/root_reducer */ "./frontend/reducers/root_reducer.js");
+/* harmony import */ var _util_card_api_util__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/card_api_util */ "./frontend/util/card_api_util.js");
+/* harmony import */ var _actions_board_actions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../actions/board_actions */ "./frontend/actions/board_actions.js");
+/* harmony import */ var _actions_cards_actions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../actions/cards_actions */ "./frontend/actions/cards_actions.js");
+/* harmony import */ var _actions_lists_actions__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../actions/lists_actions */ "./frontend/actions/lists_actions.js");
+/* harmony import */ var _reducers_root_reducer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../reducers/root_reducer */ "./frontend/reducers/root_reducer.js");
+
+
 
 
 
@@ -3972,6 +4022,7 @@ var persistenceActionTypes = ["DRAG_HAPPENED", "RECEIVE_LIST", "RECEIVE_CARD"]; 
 var persistenceMiddleware = function persistenceMiddleware(store) {
   return function (dispatch) {
     return function (action) {
+      //const oldState = store.getState();
       var result = dispatch(action);
 
       if (persistenceActionTypes.indexOf(action.type) > -1) {
@@ -3992,6 +4043,7 @@ var persistenceMiddleware = function persistenceMiddleware(store) {
 
             sendToBackendSameList(action, _newState3);
           } else if (action.payload.droppableIdStart !== action.payload.droppableIdEnd && action.payload.type === "card") {
+            //persistUpdatedCard(action, store);
             var _newState4 = store.getState();
 
             sendToBackendDifferentLists(action, _newState4);
@@ -4002,7 +4054,29 @@ var persistenceMiddleware = function persistenceMiddleware(store) {
       return result;
     };
   };
-};
+}; // const persistUpdatedCard = (action, store) => {
+//   const listStart = store.getState().entities.lists[
+//     `list-${action.payload.droppableIdStart}`
+//   ];
+//   const cardID = listStart.card_positions.splice(
+//     action.payload.droppableIndexStart,
+//     1
+//   );
+//   const oldCard = store.getState().entities.cards[cardID];
+//   const listEnd = store.getState().entities.lists[
+//     `list-${action.payload.droppableIdEnd}`
+//   ];
+//   debugger;
+//   const newCard = Object.assingn(
+//     {},
+//     {
+//       id: oldCard.id,
+//       list_id: listEnd.id
+//     }
+//   );
+//   APCUtil.editCard(newCard);
+// };
+
 
 var saveUpdatedList = function saveUpdatedList(action, newState) {
   var updatedList3 = store.getState().entities.lists["list-".concat(action.card.list_id)];
@@ -4044,6 +4118,19 @@ var sendToBackendDifferentLists = function sendToBackendDifferentLists(action, n
   });
   _util_list_api_util__WEBPACK_IMPORTED_MODULE_4__["updateCardPositions"](list);
   _util_list_api_util__WEBPACK_IMPORTED_MODULE_4__["updateCardPositions"](list2);
+  updatedList2.card_positions.forEach(function (id) {
+    var card2 = store.getState().entities.cards[id];
+
+    if (card2.list_id !== updatedList2.id) {
+      var newCard2 = Object.assign({}, {
+        id: card2.id,
+        list_id: updatedList2.id
+      });
+      _util_card_api_util__WEBPACK_IMPORTED_MODULE_5__["editCard"](newCard2).then(function (card) {
+        store.dispatch(Object(_actions_cards_actions__WEBPACK_IMPORTED_MODULE_7__["updateCard"])(card));
+      });
+    }
+  });
 };
 
 var sendToBackendSameList = function sendToBackendSameList(action, newState) {
@@ -4067,7 +4154,7 @@ var sendToBackendBoard = function sendToBackendBoard(action, newState) {
   _util_board_api_util__WEBPACK_IMPORTED_MODULE_3__["updateBoard"](board) // .then(checkStatus)
   // .then(response => response.json())
   .then(function (board) {
-    store.dispatch(Object(_actions_board_actions__WEBPACK_IMPORTED_MODULE_5__["receiveBoard"])(board));
+    store.dispatch(Object(_actions_board_actions__WEBPACK_IMPORTED_MODULE_6__["receiveBoard"])(board));
   }); // .catch(error => {
   //   console.error(error);
   //   store.dispatch(actionCreators.receiveErrors(error));
@@ -4076,7 +4163,7 @@ var sendToBackendBoard = function sendToBackendBoard(action, newState) {
 
 var configureStore = function configureStore() {
   var preloadedState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_7__["default"], preloadedState, Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"], redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a, persistenceMiddleware));
+  return Object(redux__WEBPACK_IMPORTED_MODULE_0__["createStore"])(_reducers_root_reducer__WEBPACK_IMPORTED_MODULE_9__["default"], preloadedState, Object(redux__WEBPACK_IMPORTED_MODULE_0__["applyMiddleware"])(redux_thunk__WEBPACK_IMPORTED_MODULE_1__["default"], redux_logger__WEBPACK_IMPORTED_MODULE_2___default.a, persistenceMiddleware));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (configureStore);
