@@ -4,19 +4,13 @@ import styled from "styled-components";
 import Textarea from "react-textarea-autosize";
 import { editCard } from "../../actions/cards_actions";
 import CardDescriptionForm from "./card_description_form";
+import { Close } from "styled-icons/material/Close";
+import { closeModal } from "../../actions/modal_actions";
+import { CreditCard } from "styled-icons/boxicons-regular/CreditCard";
+
 const ModalWrapper = styled.div`
-  display: flex;
-  margin: 36px 8px;
-  height: 600px;
-  color: #172b4d;
-  background-color: #f4f5f7;
-  border-radius: 2px;
-  justify-content: start;
-  //   //   position: relative;
-  //   width: 600px;
-  //   z-index: 20;
-  box-sizing: border-box;
-  //   // justify-content: center;
+  margin-left: 40px;
+  margin-top: 8px;
 `;
 
 const HeaderContainer = styled.div`
@@ -24,11 +18,49 @@ const HeaderContainer = styled.div`
   min-height: 32px;
   position: relative;
   z-index: 1;
-  justify-content: start;
+
+  // justify-content: start;
+`;
+
+const CardIcon = styled(CreditCard)`
+  left: -30px;
+  top: 4px;
+  position: absolute;
+  color: #42526e;
+  height: 32px;
+  line-height: 20px;
+  width: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+  font-family: trellicons;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: bottom;
+`;
+
+const CloseButton = styled(Close)`
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 30px;
+  overflow: hidden;
+  padding: 4px;
+  margin: 4px;
+  width: 30px;
+  z-index: 2;
+  transition: background-color 0.1s, color 0.1s;
+  font-size: 24px;
+  line-height: 32px;
+  cursor: pointer;
+  color: #42526e;
 `;
 
 const CardTitle = styled.h2`
-  position: relative;
   margin-right: 4px;
   transition-property: background-color, border-color, box-shadow;
   transition-duration: 85ms;
@@ -56,11 +88,9 @@ const TitleContainer = styled.div`
   //   align-items: center;
   //   cursor: pointer;
 
-  position: relative;
-
   // margin: 12px 40px 8px 56px;
   min-height: 32px;
-  padding: 8px 0 0 8px;
+  padding: 8px 0 0;
   //   //cursor: pointer;
 
   margin: 4px 0 0;
@@ -88,11 +118,30 @@ const StyledInput = styled.input`
   box-shadow: inset 0 0 0 2px #dfe1e6;
 `;
 
+const MODAL_OPEN_CLASS = "window-up";
+
+// class Modal extends Component {
+//   componentDidMount() {
+//     document.body.classList.add(MODAL_OPEN_CLASS);
+//   }
+
+//   componentWillUnmount() {
+//     document.body.classList.remove(MODAL_OPEN_CLASS);
+//   }
+
 class ShowCardForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = { title: this.props.card.title, isEditing: false };
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
+  }
+
+  componentDidMount() {
+    document.body.classList.add(MODAL_OPEN_CLASS);
+  }
+
+  componentWillUnmount() {
+    document.body.classList.remove(MODAL_OPEN_CLASS);
   }
 
   handleCloseForm(e) {
@@ -156,24 +205,26 @@ class ShowCardForm extends React.Component {
     const { isEditing } = this.state;
 
     return (
-      <ModalWrapper>
+      <div>
+        <CloseButton onClick={this.props.closeModal} />
         <HeaderContainer>
+          <CardIcon size="10" />
           {isEditing ? (
             this.renderEditInput()
           ) : (
             <TitleContainer onClick={() => this.setState({ isEditing: true })}>
               {" "}
               <CardTitle>{title}</CardTitle>
+              <ListReference>{`in list ${list.title}`}</ListReference>
             </TitleContainer>
           )}
-          <ListReference>{`in list ${list.title}`}</ListReference>
-
+          <ModalWrapper />
           <CardDescriptionForm
             card={this.props.card}
             editCard={this.props.editCard}
           />
         </HeaderContainer>
-      </ModalWrapper>
+      </div>
     );
   }
 }
@@ -187,7 +238,8 @@ const msp = state => {
 };
 
 const mdp = dispatch => ({
-  editCard: card => dispatch(editCard(card))
+  editCard: card => dispatch(editCard(card)),
+  closeModal: () => dispatch(closeModal())
 });
 
 export default connect(

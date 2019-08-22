@@ -3,13 +3,31 @@ import styled from "styled-components";
 import Textarea from "react-textarea-autosize";
 import { editCard } from "../../actions/cards_actions";
 import TrelloButton from "../trello_button";
+import { MenuAltLeft } from "styled-icons/boxicons-regular/MenuAltLeft";
 
 const StyledTextArea = styled(Textarea)`
-  resize: none;
-  width: 100%;
   overflow: hidden;
-  outline: none;
-  border: none;
+  overflow-wrap: break-word;
+  resize: none;
+  height: 108px;
+  min-height: 108px;
+  background: #fff;
+  box-shadow: none;
+  border-color: rgba(9, 30, 66, 0.13);
+  margin-bottom: 4px;
+  width: 100%;
+`;
+
+const MenuIcon = styled(MenuAltLeft)`
+  top: 8px;
+  left: -40px;
+  position: absolute;
+  top: 2px;
+  color: #42526e;
+  height: 32px;
+  line-height: 30px;
+  width: 30px;
+  font-size: 24px;
 `;
 
 const FormWrapper = styled.div`
@@ -30,17 +48,18 @@ const HeaderTitle = styled.h3`
   margin: 0;
   min-height: 18px;
   min-width: 40px;
+  font-size: 16px;
+  line-height: 20px;
 `;
 
-const CardDescription = styled.div`
-  background-color: rgba(9, 30, 66, 0.04);
-  box-shadow: none;
-  border: none;
-  border-radius: 3px;
-  display: block;
-  min-height: 40px;
-  padding: 8px 12px;
-  text-decoration: none;
+const DescriptionContainer = styled.p``;
+
+const CardDescription = styled.p`
+  margin: 0 0 8px;
+`;
+
+const CardContainer = styled.div`
+  cursor: pointer;
 `;
 const BorderFormContainer = styled.div`
   background-color: rgba(9, 30, 66, 0.04);
@@ -102,6 +121,7 @@ class CardDescriptionForm extends React.Component {
     return (
       <div>
         <StyledTextArea
+          style={{ marginBottom: "4px" }}
           placeholder={placeholder}
           autoFocus
           value={text}
@@ -123,33 +143,42 @@ class CardDescriptionForm extends React.Component {
       return (
         <FormWrapper>
           <HeaderContainer>
+            <MenuIcon />
             <HeaderTitle>Description</HeaderTitle>
           </HeaderContainer>
-          {isEditing ? (
-            this.renderEditInput()
-          ) : (
-            <CardDescription onClick={() => this.setState({ isEditing: true })}>
-              {description}
-            </CardDescription>
-          )}
+          <div>
+            {isEditing ? (
+              this.renderEditInput()
+            ) : (
+              <CardContainer
+                dir="auto"
+                onClick={() => this.setState({ isEditing: true })}
+              >
+                <CardDescription dir="auto">{description}</CardDescription>
+              </CardContainer>
+            )}
+          </div>
         </FormWrapper>
       );
     } else {
       return (
-        <FormWrapper>
-          <HeaderContainer>
-            <HeaderTitle>Description</HeaderTitle>
-          </HeaderContainer>
-          {isEditing ? (
-            this.renderEditInput()
-          ) : (
-            <BorderFormContainer
-              onClick={() => this.setState({ isEditing: true })}
-            >
-              <TextContainer>Add a more detailed description</TextContainer>
-            </BorderFormContainer>
-          )}
-        </FormWrapper>
+        <div>
+          <FormWrapper>
+            <HeaderContainer>
+              <HeaderTitle>Description</HeaderTitle>
+            </HeaderContainer>
+
+            {isEditing ? (
+              this.renderEditInput()
+            ) : (
+              <BorderFormContainer
+                onClick={() => this.setState({ isEditing: true })}
+              >
+                <TextContainer>Add a more detailed description</TextContainer>
+              </BorderFormContainer>
+            )}
+          </FormWrapper>
+        </div>
       );
     }
   }

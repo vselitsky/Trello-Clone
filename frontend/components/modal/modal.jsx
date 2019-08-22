@@ -20,6 +20,7 @@ function Modal({ modal, closeModal }) {
       );
     case "show card form":
       component = <ShowCardFormContainer />;
+
       return (
         <div className="window-overlay" onClick={closeModal}>
           <div className="window-child" onClick={e => e.stopPropagation()}>
