@@ -9,8 +9,6 @@ import merge from "lodash/merge";
 import { DRAG_HAPPENED } from "../actions/lists_actions";
 
 const boardsReducer = (obj = {}, action) => {
-  Object.freeze(obj);
-
   switch (action.type) {
     case RECEIVE_BOARDS:
       let arr = ["cards", "lists"];
@@ -22,7 +20,7 @@ const boardsReducer = (obj = {}, action) => {
           allBoards[key] = action.boards[key];
         }
       });
-      return merge({}, allBoards);
+      return merge({}, obj, allBoards);
     case RECEIVE_BOARD:
       let newBoardtoReturn = { [action.board.id]: action.board };
       return merge({}, obj, newBoardtoReturn);

@@ -18,11 +18,27 @@ class SessionForm extends React.Component {
   }
 
   updateEmail(e) {
-    this.setState({ email: e.currentTarget.value });
+    this.setState({ email: e.currentTarget.value }, () => {
+      if (
+        this.state.password.length > 0 &&
+        this.state.username.length > 0 &&
+        this.state.email.length > 0
+      ) {
+        this.setState({ disabled: false });
+      }
+    });
   }
 
   updateUsername(e) {
-    this.setState({ username: e.currentTarget.value });
+    this.setState({ username: e.currentTarget.value }, () => {
+      if (
+        this.state.password.length > 0 &&
+        this.state.username.length > 0 &&
+        this.state.email.length > 0
+      ) {
+        this.setState({ disabled: false });
+      }
+    });
   }
 
   updatePassword(e) {
@@ -55,8 +71,14 @@ class SessionForm extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    const user = Object.assign({}, this.state);
-    this.props.processForm(user);
+    let { password, email, username } = this.state;
+    const newUser = {
+      password,
+      email,
+      username
+    };
+    const user2 = Object.assign({}, newUser);
+    this.props.processForm(user2);
   }
 
   renderErrors() {

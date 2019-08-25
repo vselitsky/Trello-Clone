@@ -6,6 +6,7 @@ export const REMOVE_BOARD = "REMOVE_BOARD";
 export const RECEIVE_BOARD_ERRORS = "RECEIVE_BOARD_ERRORS";
 export const CLEAR_BOARD_ERRORS = "CLEAR_BOARD_ERRORS";
 export const SET_ACTIVE_BOARD = "SET_ACTIVE_BOARD";
+export const UPDATE_MOST_RECENT_BOARDS = "UPDATE_MOST_RECENT_BOARDS";
 
 export const fetchAllBoards = () => dispatch =>
   APIUtil.fetchAllBoards().then(payload => dispatch(receiveBoards(payload)));
@@ -46,6 +47,10 @@ const receiveErrors = errors => ({
   type: RECEIVE_BOARD_ERRORS,
   errors
 });
+
+export const updateMostRecentBoards = recentBoards => {
+  return { type: UPDATE_MOST_RECENT_BOARDS, recentBoards };
+};
 
 export const clearErrors = () => ({
   errors: [],

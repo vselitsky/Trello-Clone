@@ -61,6 +61,18 @@ const CardDescription = styled.p`
 const CardContainer = styled.div`
   cursor: pointer;
 `;
+
+const TextContainer = styled.div`
+  margin-bottom: 0;
+  padding-bottom: 0;
+  display: block;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  margin: 0 0 8px;
+  cursor: pointer;
+`;
 const BorderFormContainer = styled.div`
   background-color: rgba(9, 30, 66, 0.04);
   box-shadow: none;
@@ -70,14 +82,24 @@ const BorderFormContainer = styled.div`
   min-height: 40px;
   padding: 8px 12px;
   text-decoration: none;
+  transition: background 0.1s ease-in;
+  ${TextContainer}:hover & {
+    background: #ccc;
+  }
 `;
-
-const TextContainer = styled.h4`
-  display: inline-block;
-  width: auto;
-  margin: 0;
-  min-height: 18px;
-  min-width: 40px;
+const BodyForm = styled.div`
+  // background-color: rgba(9, 30, 66, 0.04);
+  // box-shadow: none;
+  // border: none;
+  // border-radius: 3px;
+  display: block;
+  min-height: 40px;
+ // padding: 8px 12px;
+  text-decoration: none;
+  // transition: background 0.3s ease-in;
+  // ${TextContainer}:hover & {
+  //   background: #ccc;
+  // }
 `;
 
 class CardDescriptionForm extends React.Component {
@@ -115,7 +137,7 @@ class CardDescriptionForm extends React.Component {
   }
 
   renderEditInput() {
-    const placeholder = "Add more detailed description";
+    const placeholder = "Add more detailed description...";
     const text = this.state.description;
 
     return (
@@ -165,17 +187,20 @@ class CardDescriptionForm extends React.Component {
         <div>
           <FormWrapper>
             <HeaderContainer>
+              <MenuIcon />
               <HeaderTitle>Description</HeaderTitle>
             </HeaderContainer>
 
             {isEditing ? (
               this.renderEditInput()
             ) : (
-              <BorderFormContainer
-                onClick={() => this.setState({ isEditing: true })}
-              >
-                <TextContainer>Add a more detailed description</TextContainer>
-              </BorderFormContainer>
+              <TextContainer>
+                <BorderFormContainer
+                  onClick={() => this.setState({ isEditing: true })}
+                >
+                  <BodyForm>Add a more detailed description...</BodyForm>
+                </BorderFormContainer>
+              </TextContainer>
             )}
           </FormWrapper>
         </div>

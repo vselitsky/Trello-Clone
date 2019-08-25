@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
+import ls from "local-storage";
+import { update } from "../../util/session_api_util";
 
 const BoardThumbnail = styled.div`
   margin-right: 0;
@@ -45,11 +47,47 @@ class BoardIndexItem extends React.Component {
 
   handleClick() {
     const boardId = this.props.board.id;
+
+    if (this.props.recentBoards !== undefined) {
+      const receivedUser = this.props.user;
+      const userID = Number(Object.keys(receivedUser)[0]);
+      const currentBoards = this.props.recentBoards.slice(-4);
+      console.log(currentBoards);
+      //this.props.history.push(`/boards/${boardId}`);
+      if (currentBoards.indexOf(String(boardId)) === -1) {
+        if (currentBoards.length > 3) {
+          let currents = currentBoards.slice();
+          currents.shift();
+          let mostRecentBoards = [...currents, boardId];
+          let user = Object.assign(
+            {},
+            {
+              recent_boards: mostRecentBoards,
+              id: userID
+            }
+          );
+          this.props.update(user);
+          //this.props.updateMostRecentBoards(mostRecentBoards);
+        } else {
+          let mostRecentBoards2 = [...currentBoards, boardId];
+
+          let user = Object.assign(
+            {},
+            {
+              recent_boards: mostRecentBoards2,
+              id: userID
+            }
+          );
+          this.props.update(user);
+          //this.props.updateMostRecentBoards(mostRecentBoards2);
+        }
+      }
+    }
     this.props.history.push(`/boards/${boardId}`);
   }
 
   render() {
-    console.log(this.props.board.title);
+    console.log(this.props.board);
     return (
       <BoardThumbnail onClick={this.handleClick}>
         <BoardTitle>{this.props.board.title}</BoardTitle>

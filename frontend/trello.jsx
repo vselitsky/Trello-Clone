@@ -27,10 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     store = configureStore();
   }
-  // const store = configureStore();
 
   // TESTING START
-  // window.getState = store.getState;
+  window.getState = store.getState;
   // window.dispatch = store.dispatch;
   // window.createBoard = createBoard;
   // window.fetchAllBoards = fetchAllBoards;
@@ -40,9 +39,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // window.receiveBoard = receiveBoard;
   // TESTING END
   window.store = store;
-  window.fetchAllLists = fetchAllLists;
-  window.createCard = createCard;
+  // window.fetchAllLists = fetchAllLists;
+  // window.createCard = createCard;
 
   const root = document.getElementById("root");
+  console.log(store);
   ReactDOM.render(<Root store={store} />, root);
 });

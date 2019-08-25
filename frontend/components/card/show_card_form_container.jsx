@@ -10,7 +10,7 @@ import { CreditCard } from "styled-icons/boxicons-regular/CreditCard";
 
 const ModalWrapper = styled.div`
   margin-left: 40px;
-  margin-top: 8px;
+  margin-top: 15px;
 `;
 
 const HeaderContainer = styled.div`
@@ -23,7 +23,7 @@ const HeaderContainer = styled.div`
 `;
 
 const CardIcon = styled(CreditCard)`
-  left: -30px;
+  left: -35px;
   top: 4px;
   position: absolute;
   color: #42526e;
@@ -47,11 +47,11 @@ const CloseButton = styled(Close)`
   position: absolute;
   top: 0;
   right: 0;
-  height: 30px;
+  height: 22px;
   overflow: hidden;
   padding: 4px;
   margin: 4px;
-  width: 30px;
+  width: 22px;
   z-index: 2;
   transition: background-color 0.1s, color 0.1s;
   font-size: 24px;
@@ -118,8 +118,6 @@ const StyledInput = styled.input`
   box-shadow: inset 0 0 0 2px #dfe1e6;
 `;
 
-const MODAL_OPEN_CLASS = "window-up";
-
 // class Modal extends Component {
 //   componentDidMount() {
 //     document.body.classList.add(MODAL_OPEN_CLASS);
@@ -134,14 +132,6 @@ class ShowCardForm extends React.Component {
     super(props);
     this.state = { title: this.props.card.title, isEditing: false };
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
-  }
-
-  componentDidMount() {
-    document.body.classList.add(MODAL_OPEN_CLASS);
-  }
-
-  componentWillUnmount() {
-    document.body.classList.remove(MODAL_OPEN_CLASS);
   }
 
   handleCloseForm(e) {

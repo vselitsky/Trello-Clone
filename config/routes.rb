@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do 
     patch '/update_pos/:id', to: "lists#update_pos"
     
-    resources :users, only: [:create, :show]
+    resources :users, only: [:create, :show, :update]
     resource :session, only: [:create, :destroy]
     resources :boards 
 

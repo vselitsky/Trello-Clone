@@ -1,7 +1,10 @@
 import { connect } from "react-redux";
-import { fetchAllBoards } from "../../actions/board_actions";
+import {
+  fetchAllBoards,
+  updateMostRecentBoards
+} from "../../actions/board_actions";
 import { openModal, closeModal } from "../../actions/modal_actions";
-import { logout } from "../../actions/session_actions";
+import { logout, update } from "../../actions/session_actions";
 import { fetchAllLists } from "../../actions/lists_actions";
 import { fetchAllCards } from "../../actions/cards_actions";
 import React from "react";
@@ -73,14 +76,20 @@ const BoardTitleCreate = styled.h3`
 `;
 
 const msp = state => ({
-  boards: Object.values(state.entities.boards)
+  // boards: Object.values(state.entities.boards),
+  boards: state.entities.boards,
+  recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,
+  user: state.entities.users
 });
 
 const mdp = dispatch => ({
   fetchAllBoards: () => dispatch(fetchAllBoards()),
   fetchAllLists: () => dispatch(fetchAllLists()),
   fetchAllCards: () => dispatch(fetchAllCards()),
+  update: user => dispatch(update(user)),
   logout: () => dispatch(logout()),
+  updateMostRecentBoards: recentBoards =>
+    dispatch(updateMostRecentBoards(recentBoards)),
   createNewBoard: (
     <BoardThumbnailCreate
       onClick={() => dispatch(openModal("create new board"))}

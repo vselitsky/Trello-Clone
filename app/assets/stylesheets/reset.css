@@ -30,10 +30,8 @@ nav {
   box-sizing: content-box; */
 }
 
-body,
 button,
-html,
-input,
+html input,
 select,
 textarea {
   color: #172b4d;
