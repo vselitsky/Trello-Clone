@@ -50,6 +50,11 @@ const HeaderTitle = styled.h3`
   min-width: 40px;
   font-size: 16px;
   line-height: 20px;
+  margin-right: 4px;
+  transition-property: background-color, border-color, box-shadow;
+  transition-duration: 85ms;
+  transition-timing-function: ease;
+  font-family: Helvetica Neue, sans-serif;
 `;
 
 const DescriptionContainer = styled.p``;

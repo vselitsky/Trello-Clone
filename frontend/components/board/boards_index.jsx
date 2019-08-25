@@ -100,6 +100,10 @@ class BoardsIndex extends React.Component {
   renderBoards() {
     const boards = Object.values(this.props.boards);
 
+    if (boards.length === 0) {
+      return;
+    }
+
     return boards.map(board => {
       return (
         <BoardIndexItem
@@ -117,8 +121,8 @@ class BoardsIndex extends React.Component {
   renderMostActiveBoards() {
     const recents = this.state.recentBoards;
     const allBoards = this.props.boards;
-    if (Object.values(allBoards).length === 0) {
-      return;
+    if (Object.values(allBoards).length < recents.length) {
+      return <p>Loading...</p>;
     }
     return recents.map((id, idx) => {
       let board = allBoards[id];

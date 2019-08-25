@@ -16,15 +16,81 @@ import TrelloCreate from "../trello_create";
 import { sort } from "../../actions/lists_actions";
 import { Tgch } from "styled-icons/crypto";
 
+const Content = styled.div`
+  flex-grow: 1;
+  position: relative;
+  overflow-y: auto;
+  outline: none;
+  height: 100%;
+
+  // height: 700px;
+  background: #2d90cb;
+  z-index: 2;
+`;
+
+const PageWrapper = styled.div`
+  height: 100%;
+  position: absolute;
+  // overflow-y: auto;
+  width: 100%;
+  z-index: 0;
+  // background: #2d90cb;
+  overflow: hidden;
+`;
+
+const BoardWrapper = styled.div`
+  position: absolute;
+  left: 0;
+  right: 20px;
+  top: 60px;
+  bottom: 0;
+`;
+
 const ListsContainer = styled.div`
   display: flex;
   flex-direction: row;
+  position: absolute;
+  top: 50px;
 `;
 
 const StyledWrapper = styled.div`
-  overflow-x: scroll;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 0;
+  position: relative;
+  transition: margin 0.1s ease-in;
+  margin-bottom: 8px;
+  overflow-x: auto;
   overflow-y: hidden;
+  padding-bottom: 8px;
+  margin-left: 10px;
+`;
+
+const BoardHeader = styled.div`
+  height: auto;
+  position: relative;
+  background: transparent;
+  padding: 8px 4px 4px 8px;
+  // bottom: 10px;
+  // transition: padding 0.1s ease -in 0s;
+`;
+
+const BoardTitle = styled.h2`
+  background: transparent;
+  cursor: default;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 32px;
+  padding: 0;
+  text-decoration: none;
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  border-radius: 3px;
+  color: #fff;
+  position: relative;
 `;
 
 class BoardShow extends React.Component {
@@ -120,46 +186,58 @@ class BoardShow extends React.Component {
     console.log(this.props);
     const allCards = this.props.cards;
     return (
-      <div>
-        <NavBarContainer />
-        <DragDropContext onDragEnd={this.onDragEnd.bind(this)}>
-          <Link to="/boards">Go Back</Link>
-          <h2>{board.title}</h2>
-          <Droppable droppableId="all-lists" direction="horizontal" type="list">
-            {provided => (
-              <ListsContainer
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {listOrder.map((listID, index) => {
-                  const list = this.props.lists[listID];
-                  if (list) {
-                    console.log(list);
-                    const cards = list.card_positions.map(pos => {
-                      return this.props.cards[pos];
-                    });
-                    console.log(cards);
-                    return (
-                      <TrelloList
-                        listID={list.id}
-                        key={list.id}
-                        title={list.title}
-                        cardPositions={list.card_positions}
-                        //allCards={allCards}
-                        cards={cards}
-                        index={index}
-                      />
-                    );
-                  }
-                })}
-                {provided.placeholder}
+      <PageWrapper>
+        <Content>
+          <NavBarContainer />
+          <BoardWrapper>
+            <StyledWrapper>
+              <DragDropContext onDragEnd={this.onDragEnd.bind(this)}>
+                <BoardHeader>
+                  {/* <Link to="/boards">Go Back</Link> */}
+                  <h2 className="listTitle">{board.title}</h2>
+                </BoardHeader>
+                <Droppable
+                  droppableId="all-lists"
+                  direction="horizontal"
+                  type="list"
+                >
+                  {provided => (
+                    <ListsContainer
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {listOrder.map((listID, index) => {
+                        const list = this.props.lists[listID];
+                        if (list) {
+                          console.log(list);
+                          const cards = list.card_positions.map(pos => {
+                            return this.props.cards[pos];
+                          });
+                          console.log(cards);
+                          return (
+                            <TrelloList
+                              listID={list.id}
+                              key={list.id}
+                              title={list.title}
+                              cardPositions={list.card_positions}
+                              //allCards={allCards}
+                              cards={cards}
+                              index={index}
+                            />
+                          );
+                        }
+                      })}
+                      {provided.placeholder}
 
-                <TrelloCreate list />
-              </ListsContainer>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
+                      <TrelloCreate list />
+                    </ListsContainer>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </StyledWrapper>
+          </BoardWrapper>
+        </Content>
+      </PageWrapper>
     );
   }
 }
