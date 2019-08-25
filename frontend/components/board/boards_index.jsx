@@ -4,30 +4,95 @@ import styled from "styled-components";
 import CreateNewBoardContainer from "./create_new_board_container";
 import NavBarContainer from "../nav_bar/nav_bar_container";
 import BoardIndexItem from "./board_index_item";
+import { Clock } from "styled-icons/fa-regular/Clock";
+import { User } from "styled-icons/boxicons-regular/User";
 import ls from "local-storage";
 
 const HomeWrapper = styled.div`
-  display: flex;
-  align-items: flex-center;
-  justify-content: center;
-  flex-direction: column;
-  box-sizing: border-box;
-  // min-height: calc(100vh - 40px);
-`;
+  // display: flex;
+  // align-items: center;
+  // padding-left: 64px;
+  // justify-content: center;
+  // flex-direction: column;
+  // box-sizing: border-box;
+  // // min-height: calc(100vh - 40px);
 
-const AllBoards = styled.div`
-  padding-left: 20px;
+  width: 860px;
+  flex: 1 1 100%;
+  // min-width: 352px;
+  padding-left: 400px;
   padding-right: 20px;
   margin-top: 40px;
-  margin-left: 200px;
-  margin-right: 200px;
+  position: relative
+
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: center;
+`;
+
+const ClockIcon = styled(Clock)`
+  left: -40px;
+  position: absolute;
+  top: 0;
+  height: 30px;
+  line-height: 32px;
+  width: 30px;
+  color: #42526e;
+`;
+
+const UserIcon = styled(User)`
+  left: -40px;
+  position: absolute;
+  top: 0;
+  height: 30px;
+  line-height: 32px;
+  width: 30px;
+  color: #42526e;
+`;
+
+const RecentViewsContainer = styled.div`
+  margin: 10px auto;
+  max-width: 1250px;
+  padding-left: 90px;
+  position: relative;
+  // padding: 0 0 20px;
+
+  //top: 15px;
+`;
+
+const AllBoardsContainer = styled.div`
+  margin: 10px auto;
+  max-width: 1250px;
+  padding: 0 0 20px;
+  padding-left: 90px;
+  // position: absolute;
+
+  //top: 15px;
+`;
+
+const RecentTitleContainer = styled.div`
+  margin: 0 0 0 40px;
+  padding: 0 0 11px;
+  position: relative;
+  display: flex;
+`;
+const AllBoards = styled.div`
+  // padding-left: 20px;
+  // padding-right: 20px;
+  // margin-top: 40px;
+  // margin-left: 200px;
+  // margin-right: 200px;
   flex: 1 1 100%;
   height: 50%;
-  margin: 0 auto;
+  // margin: 0 auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: start;
+  min-width: 352px;
+  // padding-left: 20px;
+  padding-right: 20px;
+  // padding-left: 64px;
 
   // width: 0;
   // flex: 1 1 100%;
@@ -147,16 +212,28 @@ class BoardsIndex extends React.Component {
     console.log(this.props);
     console.log(ls.get("recentBoards"));
     return (
-      <HomeWrapper>
-        <h3>Recent Boards</h3>
-        <AllBoards>{this.renderMostActiveBoards()}</AllBoards>
-
-        <h3>All Boards</h3>
-        <AllBoards>
-          {this.renderBoards()}
-          {this.props.createNewBoard}
-        </AllBoards>
-      </HomeWrapper>
+      <div>
+        <NavBarContainer />
+        <HomeWrapper>
+          <RecentViewsContainer>
+            <RecentTitleContainer>
+              <h3>Recently Viewed</h3>
+              <ClockIcon />
+            </RecentTitleContainer>
+            <AllBoards>{this.renderMostActiveBoards()}</AllBoards>
+          </RecentViewsContainer>
+          <AllBoardsContainer>
+            <RecentTitleContainer>
+              <h3>All Boards</h3>
+              <UserIcon />
+            </RecentTitleContainer>
+            <AllBoards>
+              {this.renderBoards()}
+              {this.props.createNewBoard}
+            </AllBoards>
+          </AllBoardsContainer>
+        </HomeWrapper>
+      </div>
     );
   }
 }

@@ -6,7 +6,7 @@ import { LogOut } from "styled-icons/boxicons-regular/LogOut";
 const NavContainer = styled.div`
     box-sizing: border-box;
     display: flex;
-    min-height: 40px;
+    min-height: 50px;
     justify-content: space-between
     overflow: hidden;
     padding: 4px;
@@ -30,9 +30,9 @@ const LogOutIcon = styled(LogOut)`
   color: #fff;
   display: flex;
   font-weight: 700;
-  height: 32px;
-  line-height: 32px;
-  margin: 0 4px 0 0;
+  height: 35px;
+  line-height: 35px;
+  margin: 0 8px 0 0;
   padding: 0;
   transition: 0.1s ease;
   white-space: nowrap;
@@ -51,9 +51,9 @@ const HomeIcon = styled(HomeAlt)`
   color: #fff;
   display: flex;
   font-weight: 700;
-  height: 32px;
-  line-height: 32px;
-  margin: 0 4px 0 0;
+  height: 35px;
+  line-height: 35px;
+  margin: 0 8px 0 0;
   padding: 0;
   transition: 0.1s ease;
   white-space: nowrap;
@@ -84,6 +84,12 @@ class NavBar extends React.Component {
             <LogOutIcon />
           </MenuLink>
         </NavLeft>
+        <div className="center-nav">
+          <Link className="center-logo" to={`/`}>
+            <i class="fab fa-trello" />
+            Yello
+          </Link>
+        </div>
       </NavContainer>
     );
   }

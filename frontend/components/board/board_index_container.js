@@ -27,7 +27,7 @@ const BoardThumbnailCreate = styled.div`
   // transition-timing-function: ease;
   // cursor: pointer;
   // margin-right: 0;
-  // border-radius: 3px;
+ border-radius: 3px;
   // // display: block;
   // background-size: cover;
   // background-position: 50%;
@@ -36,8 +36,8 @@ const BoardThumbnailCreate = styled.div`
   // padding: 8px;
   // position: relative;
   text-decoration: none;
-  width: inherit;
-  // height: 80px;
+  width: 22%;
+  height: inherit;
   display: flex;
   font-size: 22px;
  // padding: 10px;
@@ -71,6 +71,7 @@ const BoardTitleCreate = styled.h3`
   line-height: 80px;
   text-align: center;
   display: flex;
+  padding-left: 10px
  justify-content: center;
   // margin-top: 0px;
 `;

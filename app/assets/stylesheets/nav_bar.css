@@ -77,6 +77,8 @@
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
   top: 5px;
+  line-height: 35px;
+  height: 35px;
 }
 
 .listTitle {
