@@ -4,11 +4,21 @@ export const RECEIVE_LIST = "RECEIVE_LIST";
 export const DRAG_HAPPENED = "DRAG_HAPPENED";
 export const RECEIVE_LISTS = "RECEIVE_LISTS";
 export const UPDATE_LIST = "UPDATE_LIST";
+export const REMOVE_LIST = "REMOVE_LIST";
 
 export const receiveList = list => ({
   type: RECEIVE_LIST,
   list
 });
+
+const removeList = (listId, boardId) => ({
+  type: REMOVE_LIST,
+  listId,
+  boardId
+});
+
+export const deleteList = (listId, boardId) => dispatch =>
+  APIUtil.deleteList(listId).then(() => dispatch(removeList(listId, boardId)));
 
 export const updateList = list => ({
   type: UPDATE_LIST,

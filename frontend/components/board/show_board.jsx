@@ -170,7 +170,7 @@ class BoardShow extends React.Component {
   // }
 
   render() {
-    const { board } = this.props;
+    const board = this.props.board;
     if (!board) {
       return <p>Board not found</p>;
     }
@@ -194,7 +194,7 @@ class BoardShow extends React.Component {
               <DragDropContext onDragEnd={this.onDragEnd.bind(this)}>
                 <BoardHeader>
                   {/* <Link to="/boards">Go Back</Link> */}
-                  <h2 className="listTitle">{board.title}</h2>
+                  <div className="listTitle">{board.title}</div>
                 </BoardHeader>
                 <Droppable
                   droppableId="all-lists"
@@ -223,6 +223,7 @@ class BoardShow extends React.Component {
                               //allCards={allCards}
                               cards={cards}
                               index={index}
+                              boardId={this.props.match.params.boardId}
                             />
                           );
                         }

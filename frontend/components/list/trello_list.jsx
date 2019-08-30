@@ -5,7 +5,7 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import CreateListContainer from "./create_list_container";
-import { editList } from "../../actions/lists_actions";
+import { editList, deleteList } from "../../actions/lists_actions";
 import Icon from "@material-ui/core/Icon";
 import { openModal } from "../../actions/modal_actions";
 
@@ -61,6 +61,8 @@ const TrelloList = ({
   cards,
   showCardForm,
   editList,
+  boardId,
+  deleteList,
   dispatch
 }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -106,7 +108,7 @@ const TrelloList = ({
   };
 
   const handleDeleteList = () => {
-    dispatch(deleteList(listID));
+    deleteList(listID, boardId);
   };
 
   console.log(allCards);
@@ -171,7 +173,8 @@ const msp = state => {
 
 const mdp = dispatch => ({
   showCardForm: () => dispatch(openModal("show card form")),
-  editList: list => dispatch(editList(list))
+  editList: list => dispatch(editList(list)),
+  deleteList: (listId, boardId) => dispatch(deleteList(listId, boardId))
 });
 
 export default connect(

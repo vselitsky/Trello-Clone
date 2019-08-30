@@ -14,7 +14,8 @@ const persistenceActionTypes = [
   "DRAG_HAPPENED",
   "RECEIVE_LIST",
   "RECEIVE_CARD",
-  "REMOVE_CARD"
+  "REMOVE_CARD",
+  "REMOVE_LIST"
 ];
 // notPersistenceActionTypes = ['ADD_ITEM_TO_CART', 'REMOVE_ITEM_FROM_CART', 'NAVIGATE']
 
@@ -24,7 +25,10 @@ const persistenceMiddleware = store => dispatch => action => {
   const result = dispatch(action);
 
   if (persistenceActionTypes.indexOf(action.type) > -1) {
-    if (action.type === "REMOVE_CARD") {
+    if (action.type === "REMOVE_LIST") {
+      let newState = store.getState();
+      removeListfromBoard(action, newState);
+    } else if (action.type === "REMOVE_CARD") {
       let newState = store.getState();
       removeCardfromList(action, newState);
     } else if (action.type === "RECEIVE_LIST") {
@@ -110,6 +114,18 @@ const removeCardfromList = (action, newState) => {
 
   APBUtil.updateCardPositions(list4);
 };
+const removeListfromBoard = (action, newState) => {
+  const updatedBoard4 = store.getState().entities.boards[action.boardId];
+  const board4 = Object.assign(
+    {},
+    {
+      id: updatedBoard4.id,
+      list_positions: updatedBoard4.list_positions
+    }
+  );
+
+  APIUtil.updateListPositions(board4);
+};
 
 const saveUpdatedBoard = (action, newState) => {
   const updatedBoard1 = store.getState().entities.boards[action.list.board_id];
@@ -121,7 +137,7 @@ const saveUpdatedBoard = (action, newState) => {
     }
   );
   // déjà vu
-  APIUtil.updateBoard(board1);
+  APIUtil.updateListPositions(board1);
   // .then(checkStatus)
   // .then(response => response.json())
   // .then(board => {
@@ -207,7 +223,7 @@ const sendToBackendBoard = (action, newState) => {
     }
   );
   // déjà vu
-  APIUtil.updateBoard(board)
+  APIUtil.updateListPositions(board)
     // .then(checkStatus)
     // .then(response => response.json())
     .then(board => {

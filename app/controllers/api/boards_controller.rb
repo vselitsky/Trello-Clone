@@ -36,8 +36,22 @@ class Api::BoardsController < ApplicationController
     head :no_content
     end
 
+    def update_lists_pos  
+    @board = Board.find(params[:id])
+    
+    if params[:board].key?(:list_positions)
 
-    private
+        @board.list_positions = params[:board][:list_positions]
+        @board.save
+    else 
+        @board.list_positions = []
+        @board.save
+    end
+    render :show
+  end
+
+
+    
     def board_params
     params.require(:board).permit(:title, {:list_positions => []}, :id)
 

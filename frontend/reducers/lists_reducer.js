@@ -2,7 +2,8 @@ import {
   RECEIVE_LIST,
   RECEIVE_LISTS,
   DRAG_HAPPENED,
-  UPDATE_LIST
+  UPDATE_LIST,
+  REMOVE_LIST
 } from "../actions/lists_actions";
 import { RECEIVE_BOARD, RECEIVE_BOARDS } from "../actions/board_actions";
 import { RECEIVE_CARD, REMOVE_CARD } from "../actions/cards_actions";
@@ -103,6 +104,11 @@ const listsReducer = (state = {}, action) => {
         };
       }
       return state;
+
+    case REMOVE_LIST:
+      let newState = merge({}, state);
+      delete newState[`list-${action.listId}`];
+      return newState;
 
     case REMOVE_CARD:
       const list3 = state[`list-${action.listId}`];

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: 'static_pages#root'
   namespace :api, defaults: {format: :json} do 
     patch '/update_pos/:id', to: "lists#update_pos"
+    patch '/update_lists_pos/:id', to: "boards#update_lists_pos"
     
     resources :users, only: [:create, :show, :update]
     resource :session, only: [:create, :destroy]

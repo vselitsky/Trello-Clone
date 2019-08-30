@@ -31,7 +31,7 @@ class Api::ListsController < ApplicationController
      end
   end
 
-  def destoy
+  def destroy
     @list = List.find(params[:id])
     @list.destroy
     head :no_content

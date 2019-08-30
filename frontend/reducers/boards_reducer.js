@@ -4,7 +4,7 @@ import {
   REMOVE_BOARD
 } from "../actions/board_actions";
 
-import { RECEIVE_LIST } from "../actions/lists_actions";
+import { RECEIVE_LIST, REMOVE_LIST } from "../actions/lists_actions";
 import merge from "lodash/merge";
 import { DRAG_HAPPENED } from "../actions/lists_actions";
 
@@ -28,6 +28,12 @@ const boardsReducer = (obj = {}, action) => {
       let nextState = merge({}, obj);
       delete nextState[action.boardId];
       return nextState;
+    case REMOVE_LIST:
+      const board3 = obj[action.boardId];
+      const listIdx = board3.list_positions.indexOf(`list-${action.listId}`);
+      board3.list_positions.splice(listIdx, 1);
+      const updatedBoard3 = { [board3.id]: board3 };
+      return merge({}, obj, updatedBoard3);
     case RECEIVE_LIST:
       const board = obj[action.list.board_id];
       // const newList = action.list.id;

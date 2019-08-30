@@ -24,6 +24,13 @@ export const createBoard = board =>
     data: { board }
   });
 
+export const updateListPositions = board =>
+  $.ajax({
+    method: "Patch",
+    url: `/api/update_lists_pos/${board.id}`,
+    data: { board }
+  });
+
 export const deleteBoard = id =>
   $.ajax({
     method: "DELETE",
