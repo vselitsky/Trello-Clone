@@ -39,9 +39,9 @@ const cardsReducer = (state = initialState, action) => {
       } else {
         return state;
       }
-    case RECEIVE_LIST:
-      const allCards = action.list.cards;
-      return merge({}, state, allCards);
+    // case RECEIVE_LIST:
+    //   const allCards = action.list.cards;
+    //   return merge({}, state, allCards);
     case RECEIVE_CARDS:
       return merge({}, action.cards);
     case RECEIVE_CARD:
