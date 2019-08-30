@@ -1,7 +1,8 @@
 import {
   RECEIVE_CARD,
   RECEIVE_CARDS,
-  UPDATE_CARD
+  UPDATE_CARD,
+  REMOVE_CARD
 } from "../actions/cards_actions";
 import { RECEIVE_LIST } from "../actions/lists_actions";
 import { RECEIVE_BOARD, RECEIVE_BOARDS } from "../actions/board_actions";
@@ -49,6 +50,10 @@ const cardsReducer = (state = initialState, action) => {
     case UPDATE_CARD:
       let newCard2 = { [`card-${action.card.id}`]: action.card };
       return merge({}, state, newCard2);
+    case REMOVE_CARD:
+      let newState = merge({}, state);
+      delete newState[`card-${action.cardId}`];
+      return newState;
     default:
       return state;
   }

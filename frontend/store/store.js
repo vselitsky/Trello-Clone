@@ -5,7 +5,7 @@ import * as APIUtil from "../util/board_api_util";
 import * as APBUtil from "../util/list_api_util";
 import * as APCUtil from "../util/card_api_util";
 import { receiveBoard } from "../actions/board_actions";
-import { updateCard } from "../actions/cards_actions";
+import { updateCard, removeCard } from "../actions/cards_actions";
 import { receiveList } from "../actions/lists_actions";
 
 import rootReducer from "../reducers/root_reducer";
@@ -13,7 +13,8 @@ import rootReducer from "../reducers/root_reducer";
 const persistenceActionTypes = [
   "DRAG_HAPPENED",
   "RECEIVE_LIST",
-  "RECEIVE_CARD"
+  "RECEIVE_CARD",
+  "REMOVE_CARD"
 ];
 // notPersistenceActionTypes = ['ADD_ITEM_TO_CART', 'REMOVE_ITEM_FROM_CART', 'NAVIGATE']
 
@@ -23,7 +24,10 @@ const persistenceMiddleware = store => dispatch => action => {
   const result = dispatch(action);
 
   if (persistenceActionTypes.indexOf(action.type) > -1) {
-    if (action.type === "RECEIVE_LIST") {
+    if (action.type === "REMOVE_CARD") {
+      let newState = store.getState();
+      removeCardfromList(action, newState);
+    } else if (action.type === "RECEIVE_LIST") {
       let newState = store.getState();
       saveUpdatedBoard(action, newState);
     } else if (action.type === "RECEIVE_CARD") {
@@ -92,6 +96,19 @@ const saveUpdatedList = (action, newState) => {
   );
 
   APBUtil.updateCardPositions(list3);
+};
+
+const removeCardfromList = (action, newState) => {
+  const updatedList4 = store.getState().entities.lists[`list-${action.listId}`];
+  const list4 = Object.assign(
+    {},
+    {
+      id: updatedList4.id,
+      card_positions: updatedList4.card_positions
+    }
+  );
+
+  APBUtil.updateCardPositions(list4);
 };
 
 const saveUpdatedBoard = (action, newState) => {

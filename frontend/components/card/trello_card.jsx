@@ -6,7 +6,7 @@ import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import Icon from "@material-ui/core/Icon";
 import TrelloForm from "../trello_form";
-// import { editCard, deleteCard } from "../actions";
+import { editCard, deleteCard } from "../../actions/cards_actions";
 import { connect } from "react-redux";
 import TrelloButton from "../trello_button";
 import ShowCardFormContainer from "./show_card_form_container";
@@ -34,26 +34,27 @@ const EditButton = styled(Icon)`
   }
 `;
 
-// const DeleteButton = styled(Icon)`
-//   position: absolute;
-//   display: none;
-//   right: 5px;
-//   bottom: 5px;
-//   opacity: 0.5;
-//   ${CardContainer}:hover & {
-//     display: block;
-//     cursor: pointer;
-//   }
-//   &:hover {
-//     opacity: 0.8;
-//   }
-// `;
+const DeleteButton = styled(Icon)`
+  position: absolute;
+  display: none;
+  right: 5px;
+  bottom: 5px;
+  opacity: 0.5;
+  ${CardContainer}:hover & {
+    display: block;
+    cursor: pointer;
+  }
+  &:hover {
+    opacity: 0.8;
+  }
+`;
 
 const TrelloCard = React.memo(
   ({ title, id, listID, index, showCardForm, dispatch }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [cardText, setText] = useState(title);
     const [activeCardID, setActiveCardID] = useState(id);
+    console.log(id);
 
     const closeForm = e => {
       setIsEditing(false);
@@ -78,7 +79,7 @@ const TrelloCard = React.memo(
       showCardForm();
     };
 
-    const handleDeleteCard = e => {
+    const handleDeleteCard = (id, listID) => {
       dispatch(deleteCard(id, listID));
     };
 
@@ -102,7 +103,6 @@ const TrelloCard = React.memo(
               {...provided.draggableProps}
               {...provided.dragHandleProps}
               ref={provided.innerRef}
-              onClick={() => handleClick(id)}
             >
               <Card>
                 <EditButton
@@ -111,11 +111,14 @@ const TrelloCard = React.memo(
                 >
                   edit
                 </EditButton>
-                {/* <DeleteButton fontSize="small" onMouseDown={handleDeleteCard}>
-                delete
-              </DeleteButton> */}
+                <DeleteButton
+                  fontSize="small"
+                  onClick={() => handleDeleteCard(id, listID)}
+                >
+                  delete
+                </DeleteButton>
 
-                <CardContent>
+                <CardContent onClick={() => handleClick(id)}>
                   <Typography>{title}</Typography>
                 </CardContent>
               </Card>

@@ -24,16 +24,18 @@ class Api::CardsController < ApplicationController
         
         @card = Card.find(params[:id])
       
-            if @card.update(card_params)
+        if @card.update(card_params)
                 render :show 
-            else
+        else
                 render json: @card.errors.full_messages, status: 422 
-     end
-  end
+        end
+    end
 
-  def destoy
+    def destroy
+   
     @card = Card.find(params[:id])
-    @list.destroy
+   
+    @card.destroy
     head :no_content
     end
 

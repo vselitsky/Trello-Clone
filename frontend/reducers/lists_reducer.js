@@ -4,7 +4,7 @@ import {
   DRAG_HAPPENED
 } from "../actions/lists_actions";
 import { RECEIVE_BOARD, RECEIVE_BOARDS } from "../actions/board_actions";
-import { RECEIVE_CARD } from "../actions/cards_actions";
+import { RECEIVE_CARD, REMOVE_CARD } from "../actions/cards_actions";
 import merge from "lodash/merge";
 
 const listsReducer = (state = {}, action) => {
@@ -97,6 +97,13 @@ const listsReducer = (state = {}, action) => {
         };
       }
       return state;
+
+    case REMOVE_CARD:
+      const list3 = state[`list-${action.listId}`];
+      const cardIdx = list3.card_positions.indexOf(`card-${action.cardId}`);
+      list3.card_positions.splice(cardIdx, 1);
+      const updatedList3 = { [`list-${list3.id}`]: list3 };
+      return merge({}, state, updatedList3);
 
     default:
       return state;
