@@ -25,8 +25,10 @@ export const updateBoard = board => dispatch =>
     errors => dispatch(receiveErrors(errors))
   );
 
-export const deleteBoard = boardId => dispatch =>
-  APIUtil.deleteBoard(boardId).then(board => dispatch(removeBoard(boardId)));
+export const deleteBoard = (boardId, userId) => dispatch =>
+  APIUtil.deleteBoard(boardId).then(() =>
+    dispatch(removeBoard(boardId, userId))
+  );
 
 export const receiveBoards = boards => ({
   type: RECEIVE_BOARDS,
@@ -38,9 +40,10 @@ export const receiveBoard = board => ({
   board
 });
 
-const removeBoard = boardId => ({
+const removeBoard = (boardId, userId) => ({
   type: REMOVE_BOARD,
-  boardId
+  boardId,
+  userId
 });
 
 const receiveErrors = errors => ({

@@ -12,10 +12,10 @@ export const signup = user =>
     data: { user }
   });
 
-export const update = user =>
+export const updateRecentBoards = user =>
   $.ajax({
     method: "PATCH",
-    url: `/api/users/${user.id}`,
+    url: `/api/update_recent_boards/${user.id}`,
     data: { user }
   });
 

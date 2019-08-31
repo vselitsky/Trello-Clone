@@ -170,7 +170,6 @@ class ShowCardForm extends React.Component {
     return (
       <form onSubmit={this.handleFinishEditing}>
         <StyledInput
-          style={styles}
           dir="auto"
           type="text"
           value={this.state.title}

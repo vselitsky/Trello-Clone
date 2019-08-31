@@ -5,6 +5,13 @@ export const LOGOUT_CURRENT_USER = "LOGOUT_CURRENT_USER";
 export const RECEIVE_SESSION_ERRORS = "RECEIVE_SESSION_ERRORS";
 export const CLEAR_SESSION_ERRORS = "CLEAR_SESSION_ERRORS";
 
+// export const UPDATE_RECENT_BOARDS = "UPDATE_RECENT_BOARDS";
+
+// export const updateRecentBoards = user => ({
+//   type: UPDATE_RECENT_BOARDS,
+//   user
+// });
+
 export const receiveCurrentUser = currentUser => ({
   type: RECEIVE_CURRENT_USER,
   currentUser
@@ -20,7 +27,7 @@ export const receiveErrors = errors => ({
 });
 
 export const update = user => dispatch =>
-  APIUtil.update(user).then(
+  APIUtil.updateRecentBoards(user).then(
     user => dispatch(receiveCurrentUser(user)),
     errors => dispatch(receiveErrors(errors))
   );

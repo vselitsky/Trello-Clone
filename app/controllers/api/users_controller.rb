@@ -22,6 +22,19 @@ class Api::UsersController < ApplicationController
      end
   end
 
+  def update_recent_boards  
+   @user = User.find(params[:id])
+    
+    if params[:user].key?(:recent_boards)
+
+        @user.recent_boards = params[:user][:recent_boards]
+        @user.save
+    else 
+        @user.recent_boards = []
+        @user.save
+    end
+    render :show
+  end
 
 
   def user_params

@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: {format: :json} do 
     patch '/update_pos/:id', to: "lists#update_pos"
     patch '/update_lists_pos/:id', to: "boards#update_lists_pos"
+    patch '/update_recent_boards/:id', to: "users#update_recent_boards"
     
     resources :users, only: [:create, :show, :update]
     resource :session, only: [:create, :destroy]

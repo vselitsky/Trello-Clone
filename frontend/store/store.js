@@ -4,6 +4,7 @@ import logger from "redux-logger";
 import * as APIUtil from "../util/board_api_util";
 import * as APBUtil from "../util/list_api_util";
 import * as APCUtil from "../util/card_api_util";
+import * as APSUtil from "../util/session_api_util";
 import { receiveBoard } from "../actions/board_actions";
 import { updateCard, removeCard } from "../actions/cards_actions";
 import { receiveList } from "../actions/lists_actions";
@@ -15,7 +16,8 @@ const persistenceActionTypes = [
   "RECEIVE_LIST",
   "RECEIVE_CARD",
   "REMOVE_CARD",
-  "REMOVE_LIST"
+  "REMOVE_LIST",
+  "REMOVE_BOARD"
 ];
 // notPersistenceActionTypes = ['ADD_ITEM_TO_CART', 'REMOVE_ITEM_FROM_CART', 'NAVIGATE']
 
@@ -25,7 +27,10 @@ const persistenceMiddleware = store => dispatch => action => {
   const result = dispatch(action);
 
   if (persistenceActionTypes.indexOf(action.type) > -1) {
-    if (action.type === "REMOVE_LIST") {
+    if (action.type === "REMOVE_BOARD") {
+      let newState = store.getState();
+      updateUser(action, newState);
+    } else if (action.type === "REMOVE_LIST") {
       let newState = store.getState();
       removeListfromBoard(action, newState);
     } else if (action.type === "REMOVE_CARD") {
@@ -100,6 +105,18 @@ const saveUpdatedList = (action, newState) => {
   );
 
   APBUtil.updateCardPositions(list3);
+};
+
+const updateUser = (action, newState) => {
+  const user = store.getState().entities.users[action.userId];
+  const user3 = Object.assign(
+    {},
+    {
+      id: user.id,
+      recent_boards: user.recent_boards
+    }
+  );
+  APSUtil.updateRecentBoards(user3);
 };
 
 const removeCardfromList = (action, newState) => {

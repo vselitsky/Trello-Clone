@@ -4,8 +4,15 @@ import { connect } from "react-redux";
 import {
   fetchBoard,
   setActiveBoard,
-  updateBoard
+  updateBoard,
+  deleteBoard,
+  updateMostRecentBoards
 } from "../../actions/board_actions";
+import {
+  logout,
+  update,
+  updateRecentBoards
+} from "../../actions/session_actions";
 import { fetchAllLists } from "../../actions/lists_actions";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import CreateListContainer from "../list/create_list_container";
@@ -15,6 +22,7 @@ import styled from "styled-components";
 import TrelloCreate from "../trello_create";
 import { sort } from "../../actions/lists_actions";
 import { Tgch } from "styled-icons/crypto";
+import { Delete } from "styled-icons/feather/Delete";
 
 const Content = styled.div`
   flex-grow: 1;
@@ -53,6 +61,20 @@ const ListsContainer = styled.div`
   top: 50px;
 `;
 
+const DeleteIcon = styled(Delete)`
+  background-clip: content-box;
+  background-origin: content-box;
+  color: rgb(255, 255, 255);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 6px;
+  height: 20px;
+  font-size: 16px;
+  line-height: 20px;
+  width: 20px;
+`;
+
 const StyledWrapper = styled.div`
   height: 100%;
   display: flex;
@@ -71,9 +93,12 @@ const BoardHeader = styled.div`
   height: auto;
   position: relative;
   background: transparent;
+  display: flex;
+  justify-content: start
+
   padding: 8px 4px 4px 8px;
-  // bottom: 10px;
-  // transition: padding 0.1s ease -in 0s;
+  bottom: 10px;
+  transition: padding 0.1s ease -in 0s;
 `;
 
 const BoardTitle = styled.h2`
@@ -92,40 +117,57 @@ const BoardTitle = styled.h2`
   color: #fff;
   position: relative;
 `;
+const StyledInput = styled.input`
+  background: transparent;
+  cursor: default;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 32px;
+  padding: 0;
+  text-decoration: none;
+  max-width: calc(100% - 24px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const MenuLink = styled.a`
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  float: left;
+  margin-left: 30px;
+  font-size: 14px;
+  height: 32px;
+  line-height: 32px;
+  padding-left: 32px;
+  position: relative;
+  border-radius: 3px;
+  margin: 0px 4px 4px 0px;
+  overflow: hidden;
+  text-decoration: none;
+`;
 
 class BoardShow extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.state = {
-    //   title: this.props.board.title,
-    //   list_positions: this.props.board.list_positions,
-    //   id: this.props.board.id
-    // };
+    this.state = {
+      isEditing: false
+    };
+
+    this.handleFinishEditing = this.handleFinishEditing.bind(this);
   }
 
   componentDidMount() {
-    this.props.fetchBoard(this.props.match.params.boardId);
-    // .then(() => this.props.setActiveBoard(this.props.match.params.boardId));
+    this.props.fetchBoard(this.props.match.params.boardId).then(board =>
+      this.setState({
+        title: board.title,
+        isEditing: false
+      })
+    );
 
     // this.props.fetchAllLists(this.props.match.params.boardId);
   }
-
-  // componentWillUnmount() {
-  //   const board = this.props.board;
-  //   console.log(board);
-
-  //   this.props.updateBoard(board);
-  // }
-
-  // componentDidUpdate(prevProps) {
-  //   if (
-  //     prevProps.board &&
-  //     prevProps.board.id != this.props.match.params.boardId
-  //   ) {
-  //     this.props.fetchBoard(this.props.match.params.boardId);
-  //   }
-  // }
 
   onDragEnd(result) {
     const { destination, source, draggableId, type } = result;
@@ -155,19 +197,70 @@ class BoardShow extends React.Component {
     return cards;
   }
 
-  //   compare(a, b) {
-  //   // Use toUpperCase() to ignore character casing
-  //   const idA = a.id
-  //   const idB = b.id
+  handleDeleteBoard(e) {
+    const boardId = this.props.board.id;
+    const receivedUser = this.props.user;
+    const userID = Number(Object.keys(receivedUser)[0]);
+    console.log(userID);
+    const currentBoards = this.props.recentActiveBoards.slice();
+    this.props
+      .deleteBoard(boardId, userID)
+      .then(() => this.props.history.push(`/boards/`));
+  }
 
-  //   let comparison = 0;
-  //   if (idA & gt; idB) {
-  //     comparison = 1;
-  //   } else if (idB & lt; idA) {
-  //     comparison = -1;
-  //   }
-  //   return comparison;
-  // }
+  handleChange(e) {
+    e.preventDefault();
+    this.setState({ title: e.currentTarget.value });
+  }
+
+  handleCloseForm(e) {
+    // e.preventDefault();
+    this.setState({ isEditing: false });
+  }
+
+  handleFocus(e) {
+    e.target.select();
+  }
+
+  handleFinishEditing(e) {
+    e.preventDefault();
+    const newBoard = Object.assign(
+      {},
+      {
+        title: this.state.title,
+        id: this.props.board.id
+      }
+    );
+    this.props.updateBoard(newBoard).then(this.setState({ isEditing: false }));
+    //   .then((this.props.title = this.state.title));
+  }
+
+  renderEditInput() {
+    let styles = {
+      overflow: "hidden",
+      overflowWrap: "break-word",
+      height: "32px"
+    };
+    return (
+      <form onSubmit={this.handleFinishEditing}>
+        <StyledInput
+          style={styles}
+          dir="auto"
+          type="text"
+          value={this.state.title}
+          onChange={this.handleChange.bind(this)}
+          autoFocus
+          onFocus={this.handleFocus}
+          onBlur={this.handleCloseForm.bind(this)}
+          onKeyDown={e => {
+            if (e.charCode == 13) {
+              this.handleFinishEditing;
+            }
+          }}
+        />
+      </form>
+    );
+  }
 
   render() {
     const board = this.props.board;
@@ -175,27 +268,36 @@ class BoardShow extends React.Component {
       return <p>Board not found</p>;
     }
 
-    // const sortedLists = board.lists.sort((a, b) =>
-    //   a.position > b.position ? 1 : -1
-    // );
-
     const listOrder = board.list_positions;
     //console.log(sortedLists);
     console.log(listOrder);
     console.log(this.props.board);
     console.log(this.props);
     const allCards = this.props.cards;
+
     return (
       <PageWrapper>
         <Content>
           <NavBarContainer />
           <BoardWrapper>
             <StyledWrapper>
+              <BoardHeader>
+                {this.state.isEditing ? (
+                  this.renderEditInput()
+                ) : (
+                  <BoardTitle
+                    onClick={() => this.setState({ isEditing: true })}
+                  >
+                    {board.title}
+                  </BoardTitle>
+                )}{" "}
+                <MenuLink>
+                  <DeleteIcon
+                    onClick={this.handleDeleteBoard.bind(this)}
+                  ></DeleteIcon>
+                </MenuLink>
+              </BoardHeader>
               <DragDropContext onDragEnd={this.onDragEnd.bind(this)}>
-                <BoardHeader>
-                  {/* <Link to="/boards">Go Back</Link> */}
-                  <div className="listTitle">{board.title}</div>
-                </BoardHeader>
                 <Droppable
                   droppableId="all-lists"
                   direction="horizontal"
@@ -246,16 +348,22 @@ class BoardShow extends React.Component {
 const msp = (state, ownProps) => {
   return {
     board: state.entities.boards[ownProps.match.params.boardId],
+    recentActiveBoards: Object.values(state.entities.users)[0].recent_boards,
     lists: state.entities.lists,
-    cards: state.entities.cards
+    cards: state.entities.cards,
+    user: state.entities.users
   };
 };
 
 const mdp = dispatch => ({
   fetchBoard: id => dispatch(fetchBoard(id)),
   updateBoard: board => dispatch(updateBoard(board)),
+  deleteBoard: (boardId, userId) => dispatch(deleteBoard(boardId, userId)),
   fetchAllLists: id => dispatch(fetchAllLists(id)),
+  update: user => dispatch(update(user)),
   setActiveBoard: id => dispatch(setActiveBoard(id)),
+  updateMostRecentBoards: recentBoards =>
+    dispatch(updateMostRecentBoards(recentBoards)),
   sort: (
     droppableIdStart,
     droppableIdEnd,
