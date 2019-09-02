@@ -60,6 +60,14 @@ const RecentViewsContainer = styled.div`
   //top: 15px;
 `;
 
+const AllWraper = styled.div`
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: 0;
+  overflow: hidden;
+`;
+
 const AllBoardsContainer = styled.div`
   margin: 10px auto;
   max-width: 1250px;
@@ -212,7 +220,7 @@ class BoardsIndex extends React.Component {
     console.log(this.props);
     console.log(ls.get("recentBoards"));
     return (
-      <div>
+      <AllWraper>
         <NavBarContainer />
         <HomeWrapper>
           <RecentViewsContainer>
@@ -233,7 +241,7 @@ class BoardsIndex extends React.Component {
             </AllBoards>
           </AllBoardsContainer>
         </HomeWrapper>
-      </div>
+      </AllWraper>
     );
   }
 }

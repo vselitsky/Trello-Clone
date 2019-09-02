@@ -1,6 +1,22 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
 import ls from "local-storage";
+import { Close } from "styled-icons/material/Close";
+import styled from "styled-components";
+
+const CloseButton = styled(Close)`
+  float: right;
+  position: relative;
+  right: -2px;
+  top: -2px;
+  z-index: 2;
+  height: 20px;
+  font-size: 16px;
+  line-height: 20px;
+  width: 20px;
+  color: white;
+  cursor: pointer;
+`;
 
 class BoardForm extends React.Component {
   constructor(props) {
@@ -60,15 +76,26 @@ class BoardForm extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="newboard">
+        <CloseButton onClick={() => this.props.closeModal()}></CloseButton>
         <form onSubmit={this.handleSubmit}>
+          <div className="boardWrapper">
+            <input
+              id="subtleStyle"
+              type="text"
+              onChange={this.updateTitle.bind(this)}
+              value={this.state.title}
+              placeholder="Add Board Title"
+            />
+          </div>
+
           <input
-            type="text"
-            onChange={this.updateTitle.bind(this)}
-            value={this.state.title}
-            placeholder="Add Board Title"
+            className="disabled"
+            id="formButton"
+            type="submit"
+            disabled={this.state.title ? "" : "disabled"}
+            value="Create Board"
           />
-          <input type="submit" value="Create Board" />
         </form>
       </div>
     );
