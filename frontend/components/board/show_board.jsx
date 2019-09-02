@@ -61,20 +61,6 @@ const ListsContainer = styled.div`
   top: 50px;
 `;
 
-const DeleteIcon = styled(Delete)`
-  background-clip: content-box;
-  background-origin: content-box;
-  color: rgb(255, 255, 255);
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  padding: 6px;
-  height: 20px;
-  font-size: 16px;
-  line-height: 20px;
-  width: 20px;
-`;
-
 const StyledWrapper = styled.div`
   height: 100%;
   display: flex;
@@ -99,11 +85,13 @@ const BoardHeader = styled.div`
   padding: 8px 4px 4px 8px;
   bottom: 10px;
   transition: padding 0.1s ease -in 0s;
+
+
 `;
 
-const BoardTitle = styled.h2`
+const BoardTitle = styled.div`
   background: transparent;
-  cursor: default;
+  margin-right: 2px
   font-size: 18px;
   font-weight: 700;
   line-height: 32px;
@@ -115,27 +103,48 @@ const BoardTitle = styled.h2`
   white-space: nowrap;
   border-radius: 3px;
   color: #fff;
+
   position: relative;
 `;
+
+const BoardTitleForm = styled.span`
+  padding: 0 12px;
+  cursor: default;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  // margin-left: 2px
+
+  line-height: 32px;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  ${BoardTitle}:hover & {
+    background: rgba(0, 0, 0, 0.18);
+  }
+`;
+
 const StyledInput = styled.input`
-  background: transparent;
+  background: white;
   cursor: default;
   font-size: 18px;
   font-weight: 700;
   line-height: 32px;
   padding: 0;
+  width: 250px;
   text-decoration: none;
-  max-width: calc(100% - 24px);
+  // max-width: calc(100% - 24px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
 const MenuLink = styled.a`
-  color: rgb(255, 255, 255);
+  // color: rgb(255, 255, 255);
   cursor: pointer;
   float: left;
   margin-left: 30px;
+  color: #172b4d;
   font-size: 14px;
   height: 32px;
   line-height: 32px;
@@ -144,7 +153,25 @@ const MenuLink = styled.a`
   border-radius: 3px;
   margin: 0px 4px 4px 0px;
   overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.08);
   text-decoration: none;
+`;
+
+const DeleteIcon = styled(Delete)`
+  background-clip: content-box;
+  background-origin: content-box;
+  color: rgb(255, 255, 255);
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 6px;
+  height: 20px;
+  font-size: 16px;
+  line-height: 20px;
+  width: 20px;
+  ${MenuLink}:hover & {
+    background: rgba(0, 0, 0, 0.08);
+  }
 `;
 
 class BoardShow extends React.Component {
@@ -286,9 +313,10 @@ class BoardShow extends React.Component {
                   this.renderEditInput()
                 ) : (
                   <BoardTitle
+                    dir="auto"
                     onClick={() => this.setState({ isEditing: true })}
                   >
-                    {board.title}
+                    <BoardTitleForm>{board.title}</BoardTitleForm>
                   </BoardTitle>
                 )}{" "}
                 <MenuLink>

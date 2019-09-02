@@ -4,8 +4,8 @@ import styled from "styled-components";
 
 const TrelloOpenForm = ({ list, children, onClick }) => {
   const buttonTextOpacity = list ? 1 : 0.5;
-  const buttonTextColor = list ? "white" : "inherit";
-  const buttonTextBackground = list ? "rgba(0,0,0,.15)" : "inherit";
+  const buttonTextColor = list ? "#172b4d" : "inherit";
+  const buttonTextBackground = list ? "rgba(0,0,0,.08)" : "inherit";
 
   const OpenFormButton = styled.div`
     display: flex;
@@ -15,6 +15,10 @@ const TrelloOpenForm = ({ list, children, onClick }) => {
     height: 36px;
     margin-left: 8px;
     width: 300px;
+    font-family: Helvetica Neue, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    // line-height: 24px;
     padding-left: 10px;
     padding-right: 10px;
     opacity: ${buttonTextOpacity};

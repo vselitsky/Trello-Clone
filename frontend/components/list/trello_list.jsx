@@ -46,6 +46,12 @@ const DeleteButton = styled(Icon)`
 `;
 
 const ListTitle = styled.h4`
+  color: #172b4d;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
   transition: background 0.3s ease-in;
   ${TitleContainer}:hover & {
     background: #ccc;

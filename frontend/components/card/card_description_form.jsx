@@ -15,6 +15,7 @@ const StyledTextArea = styled(Textarea)`
   box-shadow: none;
   border-color: rgba(9, 30, 66, 0.13);
   margin-bottom: 4px;
+  margin-right: 10px
   width: 100%;
 `;
 
@@ -61,6 +62,10 @@ const DescriptionContainer = styled.p``;
 
 const CardDescription = styled.p`
   margin: 0 0 8px;
+  line-height: 20px;
+  font-weight: 400;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
 `;
 
 const CardContainer = styled.div`
@@ -74,6 +79,7 @@ const TextContainer = styled.div`
   margin-block-start: 1em;
   margin-block-end: 1em;
   margin-inline-start: 0px;
+
   margin-inline-end: 0px;
   margin: 0 0 8px;
   cursor: pointer;
@@ -98,6 +104,10 @@ const BodyForm = styled.div`
   // border: none;
   // border-radius: 3px;
   display: block;
+      font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Noto Sans,Ubuntu,Droid Sans,Helvetica Neue,sans-serif;
   min-height: 40px;
  // padding: 8px 12px;
   text-decoration: none;
