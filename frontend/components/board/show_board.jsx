@@ -179,7 +179,8 @@ class BoardShow extends React.Component {
     super(props);
 
     this.state = {
-      isEditing: false
+      isEditing: false,
+      title: ""
     };
 
     this.handleFinishEditing = this.handleFinishEditing.bind(this);
@@ -188,7 +189,7 @@ class BoardShow extends React.Component {
   componentDidMount() {
     this.props.fetchBoard(this.props.match.params.boardId).then(board =>
       this.setState({
-        title: board.title,
+        title: this.props.board.title,
         isEditing: false
       })
     );
@@ -316,7 +317,7 @@ class BoardShow extends React.Component {
                     dir="auto"
                     onClick={() => this.setState({ isEditing: true })}
                   >
-                    <BoardTitleForm>{board.title}</BoardTitleForm>
+                    <BoardTitleForm dir="auto">{board.title}</BoardTitleForm>
                   </BoardTitle>
                 )}{" "}
                 <MenuLink>

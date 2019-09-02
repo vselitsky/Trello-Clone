@@ -3,6 +3,7 @@ import { closeModal } from "../../actions/modal_actions";
 import { connect } from "react-redux";
 import CreateNewBoardContainer from "../board/create_new_board_container";
 import ShowCardFormContainer from "../card/show_card_form_container";
+import NavMenuContainer from "../nav_bar/nav_menu_container";
 function Modal({ modal, closeModal }) {
   if (!modal) {
     return null;
@@ -24,6 +25,16 @@ function Modal({ modal, closeModal }) {
       return (
         <div className="window-overlay" onClick={closeModal}>
           <div className="window-child" onClick={e => e.stopPropagation()}>
+            {component}
+          </div>
+        </div>
+      );
+    case "show nav menu":
+      component = <NavMenuContainer />;
+
+      return (
+        <div className="nav-modal-background" onClick={closeModal}>
+          <div className="nav-modal" onClick={e => e.stopPropagation()}>
             {component}
           </div>
         </div>

@@ -6,7 +6,6 @@ import NavBarContainer from "../nav_bar/nav_bar_container";
 import BoardIndexItem from "./board_index_item";
 import { Clock } from "styled-icons/fa-regular/Clock";
 import { User } from "styled-icons/boxicons-regular/User";
-import ls from "local-storage";
 
 const HomeWrapper = styled.div`
   // display: flex;
@@ -33,7 +32,7 @@ const HomeWrapper = styled.div`
 const ClockIcon = styled(Clock)`
   left: -40px;
   position: absolute;
-  top: 0;
+  top: -8px;
   height: 30px;
   line-height: 32px;
   width: 30px;
@@ -43,7 +42,7 @@ const ClockIcon = styled(Clock)`
 const UserIcon = styled(User)`
   left: -40px;
   position: absolute;
-  top: 0;
+  top: -8px;
   height: 30px;
   line-height: 32px;
   width: 30px;
@@ -55,6 +54,11 @@ const RecentViewsContainer = styled.div`
   max-width: 1250px;
   padding-left: 90px;
   position: relative;
+  font-size: 16px;
+  color: #172b4d;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  font-weight: 700;
   // padding: 0 0 20px;
 
   //top: 15px;
@@ -73,6 +77,11 @@ const AllBoardsContainer = styled.div`
   max-width: 1250px;
   padding: 0 0 20px;
   padding-left: 90px;
+  font-size: 16px;
+  color: #172b4d;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
+    Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
+  font-weight: 700;
   // position: absolute;
 
   //top: 15px;
@@ -216,9 +225,6 @@ class BoardsIndex extends React.Component {
   // );
 
   render() {
-    console.log(this.state);
-    console.log(this.props);
-    console.log(ls.get("recentBoards"));
     return (
       <AllWraper>
         <NavBarContainer />
