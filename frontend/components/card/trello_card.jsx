@@ -83,6 +83,18 @@ const TrelloCard = React.memo(
       dispatch(deleteCard(id, listID));
     };
 
+    const renderEditForm = () => {
+      return (
+        <TrelloForm
+          text={cardText}
+          onChange={handleChange}
+          closeForm={closeForm}
+        >
+          <TrelloButton onClick={saveCard}>Save</TrelloButton>
+        </TrelloForm>
+      );
+    };
+
     const renderCard = () => {
       return (
         <Draggable draggableId={String(id)} index={index}>
@@ -93,7 +105,10 @@ const TrelloCard = React.memo(
               ref={provided.innerRef}
             >
               <Card>
-                <EditButton onClick={() => showCardForm()} fontSize="small">
+                <EditButton
+                  onMouseDown={() => setIsEditing(true)}
+                  fontSize="small"
+                >
                   edit
                 </EditButton>
                 <DeleteButton
@@ -113,7 +128,7 @@ const TrelloCard = React.memo(
       );
     };
 
-    return renderCard();
+    return isEditing ? renderEditForm() : renderCard();
   }
 );
 
