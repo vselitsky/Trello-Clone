@@ -97,7 +97,7 @@ const TrelloCard = React.memo(
 
     const renderCard = () => {
       return (
-        <Draggable draggableId={String(id)} index={index}>
+        <Draggable draggableId={`card-${id}`} index={index}>
           {provided => (
             <CardContainer
               {...provided.draggableProps}
@@ -105,10 +105,7 @@ const TrelloCard = React.memo(
               ref={provided.innerRef}
             >
               <Card>
-                <EditButton
-                  onMouseDown={() => setIsEditing(true)}
-                  fontSize="small"
-                >
+                <EditButton onClick={() => handleClick(id)} fontSize="small">
                   edit
                 </EditButton>
                 <DeleteButton

@@ -92,7 +92,7 @@
 }
 
 .newboard {
-  background-color: aqua;
+  background-color: rgb(0, 174, 204);
   box-sizing: border-box;
   height: 96px;
   margin: 0;
@@ -115,7 +115,7 @@
   height: auto;
   width: auto;
   vertical-align: top;
-  background: turquoise;
+  background: rgb(0, 174, 204);
   color: black;
   cursor: pointer;
 

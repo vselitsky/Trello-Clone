@@ -138,7 +138,7 @@ class NavBar extends React.Component {
   }
 
   render() {
-    const initial = this.props.username.slice(0, 1);
+    const initial = this.props.username.slice(0, 1).toUpperCase();
     return (
       <NavContainer>
         <NavLeft>
@@ -146,9 +146,9 @@ class NavBar extends React.Component {
             <HomeIcon />
           </MenuLink>
 
-          <MenuLink onClick={this.props.logout}>
+          {/* <MenuLink onClick={this.props.logout}>
             <LogOutIcon />
-          </MenuLink>
+          </MenuLink> */}
         </NavLeft>
         <div className="center-nav">
           <Link className="center-logo" to={`/`}>

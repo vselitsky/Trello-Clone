@@ -19,6 +19,7 @@ const ListContainer = styled.div`
 `;
 
 const StyledInput = styled.input`
+  box-sizing: border-box;
   width: 100%;
   border: none;
   outline-color: blue;
@@ -28,6 +29,7 @@ const StyledInput = styled.input`
 `;
 
 const TitleContainer = styled.div`
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   display: flex;
