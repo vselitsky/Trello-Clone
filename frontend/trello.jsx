@@ -43,6 +43,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // window.createCard = createCard;
 
   const root = document.getElementById("root");
-  console.log(store);
+
   ReactDOM.render(<Root store={store} />, root);
 });

@@ -131,7 +131,7 @@ const AllBoards = styled.div`
 class BoardsIndex extends React.Component {
   constructor(props) {
     super(props);
-    console.log(this.props);
+
     this.state = { recentBoards: this.props.recentActiveBoards || [] };
   }
 

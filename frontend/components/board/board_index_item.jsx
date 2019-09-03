@@ -52,7 +52,7 @@ class BoardIndexItem extends React.Component {
       const receivedUser = this.props.user;
       const userID = Number(Object.keys(receivedUser)[0]);
       const currentBoards = this.props.recentBoards.slice(-4);
-      console.log(currentBoards);
+
       //this.props.history.push(`/boards/${boardId}`);
       if (currentBoards.indexOf(String(boardId)) === -1) {
         if (currentBoards.length > 3) {
@@ -87,7 +87,6 @@ class BoardIndexItem extends React.Component {
   }
 
   render() {
-    console.log(this.props.board);
     return (
       <BoardThumbnail onClick={this.handleClick}>
         <BoardTitle>{this.props.board.title}</BoardTitle>

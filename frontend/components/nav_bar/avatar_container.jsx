@@ -21,7 +21,6 @@ const useStyles = makeStyles({
 });
 
 export default function LetterAvatars(props) {
-  console.log(props);
   const classes = useStyles();
 
   return (

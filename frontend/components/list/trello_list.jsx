@@ -73,7 +73,6 @@ const TrelloList = ({
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [listTitle, setListTitle] = useState(title);
-  console.log(showCardForm);
 
   const renderEditInput = () => {
     return (
@@ -109,7 +108,7 @@ const TrelloList = ({
         id: listID
       }
     );
-    console.log(newList);
+
     editList(newList);
   };
 
@@ -117,13 +116,9 @@ const TrelloList = ({
     deleteList(listID, boardId);
   };
 
-  console.log(allCards);
-
   const cards2 = cardPositions.map(pos => {
     return allCards[pos];
   });
-
-  console.log(cards2);
 
   return (
     <Draggable draggableId={String(listID)} index={index}>

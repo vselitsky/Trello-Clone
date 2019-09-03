@@ -200,7 +200,7 @@ class BoardShow extends React.Component {
   onDragEnd(result) {
     const { destination, source, draggableId, type } = result;
     const boardID = this.props.match.params.boardId;
-    console.log(boardID);
+
     if (!destination) {
       return;
     }
@@ -229,7 +229,7 @@ class BoardShow extends React.Component {
     const boardId = this.props.board.id;
     const receivedUser = this.props.user;
     const userID = Number(Object.keys(receivedUser)[0]);
-    console.log(userID);
+
     const currentBoards = this.props.recentActiveBoards.slice();
     this.props
       .deleteBoard(boardId, userID)
@@ -298,9 +298,7 @@ class BoardShow extends React.Component {
 
     const listOrder = board.list_positions;
     //console.log(sortedLists);
-    console.log(listOrder);
-    console.log(this.props.board);
-    console.log(this.props);
+
     const allCards = this.props.cards;
 
     return (
@@ -340,11 +338,10 @@ class BoardShow extends React.Component {
                       {listOrder.map((listID, index) => {
                         const list = this.props.lists[listID];
                         if (list) {
-                          console.log(list);
                           const cards = list.card_positions.map(pos => {
                             return this.props.cards[pos];
                           });
-                          console.log(cards);
+
                           return (
                             <TrelloList
                               listID={list.id}

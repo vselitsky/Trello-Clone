@@ -188,7 +188,6 @@ class ShowCardForm extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     const { title } = this.props.card;
     const list = this.props.lists[`list-${this.props.card.list_id}`];
     const { isEditing } = this.state;
