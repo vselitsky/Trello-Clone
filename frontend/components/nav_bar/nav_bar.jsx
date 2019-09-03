@@ -138,7 +138,7 @@ class NavBar extends React.Component {
   }
 
   render() {
-    const initial = this.props.username.slice(0, 1);
+    const initial = this.props.username.slice(0, 1).toUpperCase();
     return (
       <NavContainer>
         <NavLeft>
