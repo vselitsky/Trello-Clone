@@ -48,14 +48,13 @@ ActiveRecord::Schema.define(version: 2019_08_25_015454) do
   create_table "users", force: :cascade do |t|
     t.string "username", null: false
     t.string "session_token", null: false
-    t.string "password_digest", null: false
     t.string "email"
+    t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "recent_boards", default: [], array: true
     t.index ["recent_boards"], name: "index_users_on_recent_boards", using: :gin
-    t.index ["session_token"], name: "index_users_on_session_token", unique: true
-    t.index ["username"], name: "index_users_on_username", unique: true
+    t.index ["session_token"], name: "index_users_on_session_token"
   end
 
 end
