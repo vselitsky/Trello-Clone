@@ -9,6 +9,7 @@ class AddTimestamps < ActiveRecord::Migration[5.2]
       t.timestamps
       
   end
-  add_index :users, :session_token, :username
+  add_index :users, :session_token
+  add_index :users, :username
 end
 end
