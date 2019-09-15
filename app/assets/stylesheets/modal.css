@@ -162,8 +162,6 @@
 }
 
 .nav-modal {
-  left: 1120px;
-  top: 42px;
   width: 304px;
   height: 350px;
   max-height: 774px;
@@ -175,6 +173,8 @@
   outline: 0;
   overflow: hidden;
   position: relative;
+  float: right;
+  margin: 25px 25px 0 20px;
   /* display: flex; */
 
   z-index: 26;
