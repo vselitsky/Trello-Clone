@@ -60,7 +60,7 @@ class NavMenuModal extends React.Component {
       <div>
         <UsernameContainer>{this.props.username}</UsernameContainer>
         <LinksContainer>
-          <LinkCont>
+          {/* <LinkCont>
             <Links>Profile and Visibility</Links>
           </LinkCont>
           <LinkCont>
@@ -68,7 +68,7 @@ class NavMenuModal extends React.Component {
           </LinkCont>
           <LinkCont>
             <Links>Activity</Links>
-          </LinkCont>
+          </LinkCont> */}
           <LinkCont>
             <Links onClick={this.props.logout}>Log Out</Links>
           </LinkCont>
@@ -87,7 +87,4 @@ const mdp = dispatch => ({
   logout: () => dispatch(logout())
 });
 
-export default connect(
-  msp,
-  mdp
-)(NavMenuModal);
+export default connect(msp, mdp)(NavMenuModal);
