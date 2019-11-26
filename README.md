@@ -19,7 +19,7 @@ Yello, a Trello clone, is an app where users can create multiple boards where th
 
 ## Features
 
-![image](https://user-images.githubusercontent.com/41927284/69610656-17d33f80-0fe1-11ea-8559-d5fc00ee43ca.png){:height="50%" width="50%"}
+<img width="605" alt="Screen Shot 2019-11-26 at 12 08 43 AM" src="https://user-images.githubusercontent.com/41927284/69610656-17d33f80-0fe1-11ea-8559-d5fc00ee43ca.png">
 
 ### Lists & Cards
 
