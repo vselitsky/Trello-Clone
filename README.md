@@ -8,7 +8,7 @@
 
 **Yello** is a single-page, full stack web application **(SPA)** inspired by Trello where users can create, manage and organize their personal boards, lists and cards.
 
-![trello_v2](https://user-images.githubusercontent.com/41927284/69694458-b0bf9480-108d-11ea-89e2-a68f2304726c.gif)
+![trelloa-v3](https://user-images.githubusercontent.com/41927284/69694802-ea44cf80-108e-11ea-84ae-a880198ca47d.gif)
 
 ## Technologies Used
 
