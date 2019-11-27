@@ -2,11 +2,13 @@
 
 # Yello
 
-[Live Site](https://yello-fsp.herokuapp.com/#/)
+### [View the live site](https://yello-fsp.herokuapp.com/#/)
 
 ## Description
 
-Yello, a Trello clone, is an app where users can create multiple boards where they will keep track of a single projects lists and cards.
+**Yello** is a single-page, full stack web application **(SPA)** inspired by Trello where users can create, manage and organize their personal boards, lists and cards.
+
+![trello_gif](https://user-images.githubusercontent.com/41927284/69692663-9be00280-1087-11ea-9878-8651dea0dca8.gif)
 
 ## Technologies Used
 
