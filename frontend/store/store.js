@@ -22,8 +22,6 @@ const persistenceActionTypes = [
 // notPersistenceActionTypes = ['ADD_ITEM_TO_CART', 'REMOVE_ITEM_FROM_CART', 'NAVIGATE']
 
 const persistenceMiddleware = store => dispatch => action => {
-  //const oldState = store.getState();
-
   const result = dispatch(action);
 
   if (persistenceActionTypes.indexOf(action.type) > -1) {
@@ -64,33 +62,6 @@ const persistenceMiddleware = store => dispatch => action => {
   }
   return result;
 };
-
-// const persistUpdatedCard = (action, store) => {
-//   const listStart = store.getState().entities.lists[
-//     `list-${action.payload.droppableIdStart}`
-//   ];
-
-//   const cardID = listStart.card_positions.splice(
-//     action.payload.droppableIndexStart,
-//     1
-//   );
-//   const oldCard = store.getState().entities.cards[cardID];
-//   const listEnd = store.getState().entities.lists[
-//     `list-${action.payload.droppableIdEnd}`
-//   ];
-
-//   debugger;
-
-//   const newCard = Object.assingn(
-//     {},
-//     {
-//       id: oldCard.id,
-//       list_id: listEnd.id
-//     }
-//   );
-
-//   APCUtil.editCard(newCard);
-// };
 
 const saveUpdatedList = (action, newState) => {
   const updatedList3 = store.getState().entities.lists[

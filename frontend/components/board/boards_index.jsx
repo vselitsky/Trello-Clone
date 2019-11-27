@@ -136,48 +136,8 @@ class BoardsIndex extends React.Component {
   }
 
   componentDidMount() {
-    //localStorage.clear();
     this.props.fetchAllBoards();
-    //   .then(() => {
-    //     let recents = ls.get("recentBoards") || [];
-    //     console.log(recents);
-    //     this.props.updateMostRecentBoards(recents);
-    //   })
-    //   .then(() =>
-    //     this.setState({
-    //       recentBoards: this.props.recentActiveBoards
-    //     })
-    //   );
-    // //   .then(() => this.props.updateMostRecentBoards(this.state.recentBoards));
-
-    // .then(() => this.props.fetchAllLists())
-    // .then(() => this.props.fetchAllCards());
   }
-
-  // handleMostRecentBoards(boardId) {
-  //   console.log(this.state);
-  //   const currentBoards = this.state.recentBoards.slice(-4);
-  //   if (!currentBoards) {
-  //     return;
-  //   }
-
-  //   if (currentBoards.indexOf(boardId) === 0) {
-  //     let newBoards = currentBoards.slice(1);
-  //     let mostRecentBoards = [...newBoards, boardId];
-
-  //     this.setState({ recentBoards: mostRecentBoards });
-  //     ls.set("recentBoards", mostRecentBoards);
-  //   }
-  // }
-
-  // fetch(URL)
-  //   .then(response => response.json())
-  //   .then(json => this.setState({
-  //   articles: json.results,
-  //   readNow: ls.get('readNow') || [],
-  //   readLater: ls.get('readLater') || [],
-  //   likedSections: ls.get('likedSections') || []
-  // }));
 
   renderBoards() {
     const boards = Object.values(this.props.boards);
@@ -211,18 +171,6 @@ class BoardsIndex extends React.Component {
       return <BoardIndexItem board={board} key={idx} />;
     });
   }
-
-  // const BenchIndex = ({ benches }) => (
-  //   <div>
-  //     <h1>Benches: </h1>
-  //     {benches.map(bench => (
-  //       <BenchIndexItem
-  //         bench={bench}
-  //         key={bench.id}
-  //       />
-  //     ))}
-  //   </div>
-  // );
 
   render() {
     return (
