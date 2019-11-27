@@ -54,7 +54,6 @@ const persistenceMiddleware = store => dispatch => action => {
         action.payload.droppableIdStart !== action.payload.droppableIdEnd &&
         action.payload.type === "card"
       ) {
-        //persistUpdatedCard(action, store);
         let newState = store.getState();
         sendToBackendDifferentLists(action, newState);
       }

@@ -112,8 +112,8 @@ class BoardsIndex extends React.Component {
 
 ### Lists and Cards
 
-- User can create, edit and delete their lists and cards
-- User can drag and drop their lists and cards and Redux middleware will persist the updated order to backend
+- User can create, edit and delete their lists and cards.
+- User can drag and drop their lists and cards and Redux middleware will persist the updated order to backend.
 
 ```javascript
 const persistenceMiddleware = store => dispatch => action => {
