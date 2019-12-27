@@ -96,7 +96,11 @@ class SessionForm extends React.Component {
       <section>
         <div className="section-wrapper">
           <div className="quick-switch">
-            <h1>{this.props.formType}</h1>
+            <h1>
+              {this.props.formType === "Create a Trello Account"
+                ? "Create a Yello Account"
+                : "Log in to Yello"}
+            </h1>
             <span className="create-account">{this.props.navlink}</span>
             {this.renderErrors()}
             <div className="sign-up-container">
